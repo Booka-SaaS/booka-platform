@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { LojaService } from '../../services/loja.service';
 import { AuthService } from '../../services/auth.service';
 import { FooterComponent } from '../../components/footer/footer.component';
+import { ModalService } from '../../services/modal.service';
 
 @Component({
   selector: 'app-agendar',
@@ -64,7 +65,8 @@ export class AgendarComponent implements OnInit {
     private route: ActivatedRoute, 
     private router: Router,
     private lojaService: LojaService,
-    private authService: AuthService
+    private authService: AuthService,
+    private modalService: ModalService
   ) {
     this.route.paramMap.subscribe(params => {
       this.idLoja = params.get('idLoja');
@@ -111,15 +113,16 @@ export class AgendarComponent implements OnInit {
 
   finalizarAgendamento() {
     if (!this.servicoSelecionado || !this.dataSelecionada || !this.horarioSelecionado) {
-      alert("Selecione um serviço, uma data e um horário para continuar.");
+      this.modalService.alert("Atenção", "Selecione um serviço, uma data e um horário para continuar.");
       return;
     }
 
     if (!this.authService.isLoggedIn()) {
       this.router.navigate(['/cadastro']);
     } else {
-      alert('Agendamento confirmado com sucesso!');
-      this.router.navigate(['/dashboard']);
+      this.modalService.alert('Sucesso!', 'Agendamento confirmado com sucesso!', 'Ver Agenda', () => {
+        this.router.navigate(['/dashboard']);
+      });
     }
   }
 }

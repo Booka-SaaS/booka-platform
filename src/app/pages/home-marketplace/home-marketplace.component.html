@@ -1,79 +1,31 @@
 <!-- Injetando as classes do body via container wrapper -->
 <div class="bg-surface font-body text-on-surface antialiased bg-[#f7f9fb] min-h-screen">
-    <header class="fixed top-0 w-full z-50 bg-[#f7f9fb]/90 glass-nav shadow-sm border-b border-slate-200/60">
-        <nav class="flex justify-between items-center px-8 h-20 max-w-7xl mx-auto w-full font-['Inter'] antialiased tracking-tight">
-            <div class="flex items-center gap-2">
-                <svg class="w-8 h-8" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-                    <rect fill="#004ac6" height="64" rx="18" width="64"></rect>
-                    <g transform="translate(8, 8)">
-                        <path clip-rule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="#FFFFFF" fill-rule="evenodd"></path>
-                    </g>
-                </svg>
-                <span class="text-2xl font-black tracking-tighter text-[#004ac6]">Booka</span>
-            </div>
-            <div class="hidden md:flex items-center gap-8">
-                <a [routerLink]="['/explorar']" class="text-[#004ac6] font-bold border-b-2 border-[#004ac6] pb-1 hover:scale-105 transition-transform duration-200">Explorar</a>
-                <a *ngIf="isLoggedIn" [routerLink]="['/meus-agendamentos']" class="text-slate-600 hover:text-[#004ac6] hover:scale-105 transition-transform duration-200">Minhas Reservas</a>
-                <a [routerLink]="['/cadastro']" class="text-slate-600 hover:text-[#004ac6] hover:scale-105 transition-transform duration-200">Seja um Profissional</a>
-            </div>
-            <div class="flex items-center gap-4">
-                <ng-container *ngIf="!isLoggedIn">
-                    <button [routerLink]="['/login']" class="text-slate-600 font-medium px-4 py-2 hover:text-[#004ac6] transition-colors scale-95 transition-all w-none border-none bg-transparent">Entrar</button>
-                    <button [routerLink]="['/cadastro']" class="bg-[#004ac6] text-white font-bold px-6 py-2.5 rounded-full hover:scale-105 transition-all shadow-md">Cadastrar</button>
-                </ng-container>
-                <ng-container *ngIf="isLoggedIn">
-                    <div class="relative group">
-                        <button class="bg-slate-100 text-slate-700 font-bold px-6 py-2.5 rounded-full hover:bg-slate-200 transition-all shadow-sm flex items-center gap-2">
-                            <span class="material-symbols-outlined text-[20px]">person</span> Meu Perfil
-                        </button>
-                        <div class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 transform origin-top-right group-hover:translate-y-1">
-                            <div class="p-2 space-y-1 flex flex-col">
-                                <a [routerLink]="isProfissional ? ['/dashboard'] : ['/meus-agendamentos']" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-[#004ac6] rounded-lg transition-colors cursor-pointer">
-                                    <span class="material-symbols-outlined text-lg">{{ isProfissional ? 'dashboard' : 'calendar_today' }}</span>
-                                    {{ isProfissional ? 'Painel de Controle' : 'Minhas Reservas' }}
-                                </a>
-                                <a class="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-[#004ac6] rounded-lg transition-colors cursor-pointer">
-                                    <span class="material-symbols-outlined text-lg">settings</span>
-                                    Configurações
-                                </a>
-                                <div class="h-px bg-slate-100 my-1"></div>
-                                <a (click)="logout()" class="flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer">
-                                    <span class="material-symbols-outlined text-lg">logout</span>
-                                    Sair da Conta
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </ng-container>
-            </div>
-        </nav>
-    </header>
+    <app-navbar></app-navbar>
     <main class="pt-20">
         <!-- Hero Section -->
-        <section class="bg-surface py-20 lg:py-32 overflow-hidden">
+        <section class="bg-surface pt-20 pb-16 lg:pt-32 lg:pb-24 overflow-hidden">
             <div class="max-w-7xl mx-auto px-8 flex flex-col items-center text-center">
                 <h1
-                    class="text-5xl lg:text-7xl font-extrabold text-on-surface text-editorial-hero mb-6 max-w-4xl leading-[1.1] text-slate-800">
-                    Encontre os melhores profissionais para o que você precisa.
+                    class="text-5xl lg:text-6xl font-extrabold text-on-surface text-editorial-hero mb-6 max-w-4xl leading-[1.1] text-slate-800">
+                    Encontre o espaço ou serviço perfeito para o seu momento.
                 </h1>
                 <p class="text-lg lg:text-xl text-on-surface-variant max-w-2xl mb-12 leading-relaxed text-slate-600">
-                    Conectamos você aos talentos mais qualificados do mercado para transformar seus projetos em
-                    realidade, com segurança e praticidade.
+                    Conectamos você aos melhores ambientes e especialistas. De hubs de inovação a profissionais qualificados, agende o que você precisa com segurança.
                 </p>
                 <!-- Search Bar Container -->
                 <div
-                    class="w-full max-w-3xl bg-surface-container-lowest bg-white p-2 rounded-2xl shadow-lg flex flex-col md:flex-row gap-2 border border-outline-variant/10">
-                    <div class="flex-1 flex items-center px-4 gap-3">
+                    class="w-full max-w-4xl bg-surface-container-lowest bg-white p-2 rounded-2xl shadow-lg flex flex-col md:flex-row gap-2 border border-outline-variant/10">
+                    <div class="flex-[1.5] flex items-center px-4 gap-3">
                         <span class="material-symbols-outlined text-outline text-slate-400">search</span>
                         <input
-                            class="w-full bg-transparent border-none focus:ring-0 text-on-surface placeholder:text-outline py-4"
+                            class="w-full bg-transparent border-none focus:ring-0 text-on-surface placeholder:text-outline py-4 text-base"
                             placeholder="O que você está procurando hoje?" type="text" [(ngModel)]="termoBusca" />
                     </div>
                     <div class="hidden md:block w-px h-10 bg-outline-variant/30 self-center bg-slate-200"></div>
                     <div class="flex-1 flex items-center px-4 gap-3">
                         <span class="material-symbols-outlined text-outline text-slate-400">location_on</span>
                         <input
-                            class="w-full bg-transparent border-none focus:ring-0 text-on-surface placeholder:text-outline py-4"
+                            class="w-full bg-transparent border-none focus:ring-0 text-on-surface placeholder:text-outline py-4 text-base"
                             placeholder="São Paulo, SP" type="text" [(ngModel)]="cidadeBusca" />
                     </div>
                     <button (click)="buscarServico()"
@@ -82,13 +34,15 @@
                     </button>
                 </div>
                 <!-- Trusted Badges -->
-                <div class="mt-12 flex flex-wrap justify-center gap-8 opacity-60 grayscale text-slate-600">
-                    <div class="flex items-center gap-2 font-medium"><span
-                            class="material-symbols-outlined">verified</span> Milhares de profissionais</div>
-                    <div class="flex items-center gap-2 font-medium"><span
-                            class="material-symbols-outlined">security</span> Pagamento Seguro</div>
-                    <div class="flex items-center gap-2 font-medium"><span
-                            class="material-symbols-outlined">support_agent</span> Suporte 24/7</div>
+                <div class="mt-8 flex flex-wrap justify-center gap-6 opacity-60 grayscale text-slate-500 scale-90">
+                    <div class="flex items-center gap-2 font-medium text-xs"><span
+                            class="material-symbols-outlined text-lg">verified</span> Espaços e Especialistas</div>
+                    <div class="flex items-center gap-2 font-medium text-xs"><span
+                            class="material-symbols-outlined text-lg">security</span> Pagamento Seguro</div>
+                    <div class="flex items-center gap-2 font-medium text-xs"><span
+                            class="material-symbols-outlined text-lg">support_agent</span> Suporte 24/7</div>
+                    <div class="flex items-center gap-2 font-medium text-xs"><span
+                            class="material-symbols-outlined text-lg">calendar_month</span> Agendamento Simplificado</div>
                 </div>
             </div>
         </section>
@@ -161,10 +115,9 @@
                     <div class="max-w-2xl">
                         <span
                             class="text-teal-700 font-bold tracking-[0.05em] text-sm uppercase mb-2 block">Destaques</span>
-                        <h2 class="text-3xl lg:text-4xl font-extrabold text-slate-800 tracking-tight">Profissionais
+                        <h2 class="text-3xl lg:text-4xl font-extrabold text-slate-800 tracking-tight">Destaques
                             recomendados para você</h2>
-                        <p class="text-slate-600 mt-2">Selecionamos especialistas com as melhores avaliações na sua
-                            região.</p>
+                        <p class="text-slate-600 mt-2">Selecionamos os melhores espaços e especialistas na sua região.</p>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -246,43 +199,42 @@
                                 Perfil</button>
                         </div>
                     </div>
-                    <!-- Professional Card 3 -->
+                    <!-- Professional Card 3 (Espaço/Hub) -->
                     <div
                         class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-2xl transition-all duration-300 border border-slate-100">
                         <div class="flex items-start justify-between mb-6">
                             <div class="flex items-center gap-4">
                                 <img alt="" class="w-16 h-16 rounded-full object-cover"
-                                    data-alt="professional headshot of a smiling male contractor in a clean workshop setting with warm directional light"
-                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZWy57Dkx_S9Y_fnfixVeaBiBWw9Zo745BZrmFkYW2xhHTrk7K1MMcLJ7JVyMHOK3GvicXf4EuBNMidxRzFo27kqbiS-dIrJVn0IYQUo1iHXqXEzqPREe_kC58D5iNv6fGobGGsMb9Qz5JDjVh7hw4D0CtP6CouRU-4_vkJCxqMTBWITGn4i7Ceg-x6vco2RWl4Q1iJRfelHO3MYLbJE7fD1z-rEVza5Q6SDUKu50lbCU459IBrnVb_T_sGptLzyNBK8PyCRcf2OE" />
+                                    src="https://images.unsplash.com/photo-1527192491265-7e15c55b1ed2?w=800&q=80" />
                                 <div>
-                                    <h3 class="font-bold text-lg text-slate-800">Ricardo Alves</h3>
-                                    <p class="text-sm text-slate-500">Eletricista Residencial</p>
+                                    <h3 class="font-bold text-lg text-slate-800">Hub Acadêmico</h3>
+                                    <p class="text-sm text-slate-500">Espaço Coworking / Hub</p>
                                 </div>
                             </div>
                             <div class="bg-teal-50 px-3 py-1 rounded-full flex items-center gap-1">
                                 <span class="material-symbols-outlined text-teal-600 text-xs"
                                     style="font-variation-settings: 'FILL' 1;">star</span>
-                                <span class="text-teal-700 text-xs font-bold">4.8</span>
+                                <span class="text-teal-700 text-xs font-bold">4.9</span>
                             </div>
                         </div>
                         <div class="space-y-3 mb-6">
                             <div class="flex items-center gap-2 text-sm text-slate-500">
                                 <span class="material-symbols-outlined text-lg">verified</span>
-                                <span>Verificado pela Booka</span>
+                                <span>Ambiente Certificado</span>
                             </div>
                             <div class="flex items-center gap-2 text-sm text-slate-500">
-                                <span class="material-symbols-outlined text-lg">bolt</span>
-                                <span>Atendimento de emergência</span>
+                                <span class="material-symbols-outlined text-lg">wifi</span>
+                                <span>Internet de Alta Velocidade</span>
                             </div>
                         </div>
                         <div class="pt-6 border-t border-slate-100 flex items-center justify-between">
                             <div>
                                 <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">A partir de</p>
-                                <p class="text-xl font-black text-slate-800">R$ 95,00</p>
+                                <p class="text-xl font-black text-slate-800">R$ 150,00</p>
                             </div>
-                            <button routerLink="/agendar/1"
+                            <button routerLink="/agendar/5"
                                 class="border-2 border-[#004ac6] text-[#004ac6] font-bold px-4 py-2 rounded-xl hover:bg-[#004ac6] hover:text-white transition-all text-sm">Ver
-                                Perfil</button>
+                                Detalhes</button>
                         </div>
                     </div>
                 </div>
@@ -298,13 +250,11 @@
                 <div
                     class="absolute bottom-0 left-0 w-64 h-64 bg-teal-400/20 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl">
                 </div>
-                <h2 class="text-4xl lg:text-5xl font-black text-white mb-8 relative z-10">Você é um
-                    profissional?<br />Comece a faturar hoje.</h2>
-                <p class="text-blue-100/90 text-lg mb-10 max-w-xl relative z-10 leading-relaxed">Junte-se a milhares de
-                    especialistas e encontre novos clientes todos os dias. Cadastro simples e rápido.</p>
+                <h2 class="text-4xl lg:text-5xl font-black text-white mb-8 relative z-10">Tem um espaço ou oferece um serviço?<br />Maximize seus agendamentos.</h2>
+                <p class="text-blue-100/90 text-lg mb-10 max-w-xl relative z-10 leading-relaxed">Simplifique sua gestão. Ideal para hubs, clínicas, estúdios e profissionais que desejam atrair clientes todos os dias.</p>
                 <button routerLink="/cadastro"
                     class="bg-white text-[#004ac6] font-black px-10 py-5 rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-xl text-lg relative z-10 border-none">Cadastrar
-                    meu Perfil</button>
+                    meu Negócio</button>
             </div>
         </section>
     </main>

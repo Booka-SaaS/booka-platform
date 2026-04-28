@@ -3,13 +3,15 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { FooterComponent } from '../../components/footer/footer.component';
+import { NavbarComponent } from '../../components/navbar/navbar.component';
 
 import { AuthService } from '../../services/auth.service';
+import { ModalService } from '../../services/modal.service';
 
 @Component({
   selector: 'app-home-marketplace',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, FooterComponent],
+  imports: [CommonModule, RouterModule, FormsModule, FooterComponent, NavbarComponent],
   templateUrl: './home-marketplace.component.html',
   styles: [`
     .material-symbols-outlined {
@@ -28,7 +30,7 @@ export class HomeMarketplaceComponent {
   termoBusca: string = '';
   cidadeBusca: string = '';
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(private router: Router, private authService: AuthService, private modalService: ModalService) {}
 
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
@@ -39,8 +41,15 @@ export class HomeMarketplaceComponent {
   }
 
   logout() {
-    this.authService.logout();
-    this.router.navigate(['/']);
+    this.modalService.confirm(
+      'Sair da Conta', 
+      'Tem certeza que deseja sair?', 
+      () => {
+        this.authService.logout();
+        this.router.navigate(['/']);
+      },
+      'Sair'
+    );
   }
 
   buscarServico() {

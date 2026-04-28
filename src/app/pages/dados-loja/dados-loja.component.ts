@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { TopbarComponent } from '../../components/topbar/topbar.component';
+import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
 import { LojaService } from '../../services/loja.service';
 import { Loja } from '../../models';
@@ -10,7 +11,7 @@ import { Loja } from '../../models';
 @Component({
   selector: 'app-dados-loja',
   standalone: true,
-  imports: [SidebarComponent, TopbarComponent, RouterModule, CommonModule, FormsModule],
+  imports: [SidebarComponent, TopbarComponent, NavbarComponent, RouterModule, CommonModule, FormsModule],
   templateUrl: './dados-loja.component.html',
   styleUrl: './dados-loja.component.css'
 })

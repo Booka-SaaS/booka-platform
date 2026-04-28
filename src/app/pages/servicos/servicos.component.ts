@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { TopbarComponent } from '../../components/topbar/topbar.component';
+import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { ServicoService } from '../../services/servico.service';
 import { Servico } from '../../models';
 
 @Component({
   selector: 'app-servicos',
   standalone: true,
-  imports: [SidebarComponent, TopbarComponent, CommonModule, FormsModule],
+  imports: [SidebarComponent, TopbarComponent, NavbarComponent, CommonModule, FormsModule],
   templateUrl: './servicos.component.html',
   styleUrl: './servicos.component.css'
 })

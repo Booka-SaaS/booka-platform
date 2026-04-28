@@ -1,77 +1,25 @@
 <div class="bg-[#f8fafc] text-slate-800 antialiased min-h-screen flex flex-col font-['Inter']">
-    <!-- Navbar Padronizada -->
-    <nav class="fixed top-0 w-full z-50 bg-[#f7f9fb]/90 backdrop-blur-md shadow-sm border-b border-slate-200/60">
-        <div class="flex items-center justify-between px-8 h-20 max-w-7xl mx-auto w-full font-['Inter'] antialiased tracking-tight">
-            <!-- Logo -->
-            <div class="flex items-center gap-2 shrink-0 cursor-pointer" routerLink="/">
-                <svg class="w-8 h-8" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-                    <rect fill="#004ac6" height="64" rx="18" width="64"></rect>
-                    <g transform="translate(8, 8)">
-                        <path clip-rule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z"
-                            fill="#FFFFFF" fill-rule="evenodd"></path>
-                    </g>
-                </svg>
-                <span class="text-2xl font-black tracking-tighter text-[#004ac6]">Booka</span>
-            </div>
-            
-            <div class="hidden md:flex items-center gap-8">
-                <a [routerLink]="['/explorar']" class="text-[#004ac6] font-bold border-b-2 border-[#004ac6] pb-1 hover:scale-105 transition-transform duration-200">Explorar</a>
-                <a *ngIf="isLoggedIn" [routerLink]="['/meus-agendamentos']" class="text-slate-600 hover:text-[#004ac6] hover:scale-105 transition-transform duration-200">Minhas Reservas</a>
-                <a [routerLink]="['/cadastro']" class="text-slate-600 hover:text-[#004ac6] hover:scale-105 transition-transform duration-200">Seja um Profissional</a>
-            </div>
-
-            <!-- Right Actions -->
-            <div class="flex items-center gap-4">
-                <ng-container *ngIf="!isLoggedIn">
-                    <button [routerLink]="['/login']" class="text-slate-600 font-medium px-4 py-2 hover:text-[#004ac6] transition-colors scale-95 transition-all w-none border-none bg-transparent">Entrar</button>
-                    <button [routerLink]="['/cadastro']" class="bg-[#004ac6] text-white font-bold px-6 py-2.5 rounded-full hover:scale-105 transition-all shadow-md">Cadastrar</button>
-                </ng-container>
-                <ng-container *ngIf="isLoggedIn">
-                    <div class="relative group">
-                        <button class="bg-slate-100 text-slate-700 font-bold px-6 py-2.5 rounded-full hover:bg-slate-200 transition-all shadow-sm flex items-center gap-2">
-                            <span class="material-symbols-outlined text-[20px]">person</span> Meu Perfil
-                        </button>
-                        <div class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 transform origin-top-right group-hover:translate-y-1">
-                            <div class="p-2 space-y-1 flex flex-col">
-                                <a [routerLink]="isProfissional ? ['/dashboard'] : ['/meus-agendamentos']" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-[#004ac6] rounded-lg transition-colors cursor-pointer">
-                                    <span class="material-symbols-outlined text-lg">{{ isProfissional ? 'dashboard' : 'calendar_today' }}</span>
-                                    {{ isProfissional ? 'Painel de Controle' : 'Minhas Reservas' }}
-                                </a>
-                                <a class="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-[#004ac6] rounded-lg transition-colors cursor-pointer">
-                                    <span class="material-symbols-outlined text-lg">settings</span>
-                                    Configurações
-                                </a>
-                                <div class="h-px bg-slate-100 my-1"></div>
-                                <a (click)="logout()" class="flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer">
-                                    <span class="material-symbols-outlined text-lg">logout</span>
-                                    Sair da Conta
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </ng-container>
-            </div>
-        </div>
-    </nav>
+    <!-- Navbar -->
+    <app-navbar class="fixed top-0 w-full z-50"></app-navbar>
 
     <main class="pt-24 flex-grow">
-        <!-- Search Bar do Corpo da Página -->
-        <div class="max-w-7xl mx-auto px-6 mb-6">
-            <div class="flex items-center bg-white border border-slate-200 rounded-xl px-3 py-2 shadow-sm focus-within:border-[#004ac6] focus-within:ring-1 focus-within:ring-[#004ac6] transition-all w-full max-w-3xl">
-                <div class="flex items-center gap-2 border-r border-slate-200 pr-3 grow">
-                    <span class="material-symbols-outlined text-slate-400 text-lg">search</span>
-                    <input class="bg-transparent border-none focus:ring-0 text-sm font-medium w-full placeholder:text-slate-400 outline-none" placeholder="O que busca?" type="text" [(ngModel)]="termoBusca" />
+        <!-- Search Bar (Rola com a página agora) -->
+        <div class="max-w-7xl mx-auto px-6 mb-10">
+            <div class="flex items-center bg-white border border-slate-200 rounded-2xl px-4 py-3 shadow-sm focus-within:border-[#004ac6] focus-within:ring-2 focus-within:ring-blue-50 transition-all w-full max-w-4xl mx-auto md:mx-0">
+                <div class="flex items-center gap-3 border-r border-slate-100 pr-4 grow">
+                    <span class="material-symbols-outlined text-slate-400 text-xl">search</span>
+                    <input class="bg-transparent border-none focus:ring-0 text-sm font-bold w-full placeholder:text-slate-400 outline-none" placeholder="O que busca?" type="text" [(ngModel)]="termoBusca" />
                 </div>
-                <div class="flex items-center gap-2 pl-3 grow">
-                    <span class="material-symbols-outlined text-slate-400 text-lg">location_on</span>
-                    <input class="bg-transparent border-none focus:ring-0 text-sm font-medium w-full placeholder:text-slate-400 outline-none" placeholder="Onde?" type="text" [(ngModel)]="cidadeBusca" />
+                <div class="flex items-center gap-3 pl-4 grow">
+                    <span class="material-symbols-outlined text-slate-400 text-xl">location_on</span>
+                    <input class="bg-transparent border-none focus:ring-0 text-sm font-bold w-full placeholder:text-slate-400 outline-none" placeholder="Onde?" type="text" [(ngModel)]="cidadeBusca" />
                 </div>
             </div>
         </div>
 
-        <div class="max-w-7xl mx-auto px-6 pb-20 grid lg:grid-cols-[260px_1fr] gap-8">
-            <!-- Sidebar (Esquerda) Super Completa -->
-            <aside class="hidden lg:block sticky top-28 h-[calc(100vh-120px)] overflow-y-auto overscroll-contain hide-scrollbar self-start bg-white p-5 rounded-2xl shadow-sm border border-slate-200/60">
+        <div class="max-w-7xl mx-auto px-6 pb-20 grid lg:grid-cols-[280px_1fr] gap-10">
+            <!-- Sidebar (Esquerda) - Fixa com rolagem interna -->
+            <aside class="hidden lg:block sticky top-24 h-[calc(100vh-120px)] overflow-y-auto overscroll-contain hide-scrollbar self-start bg-white p-6 rounded-2xl shadow-sm border border-slate-200/60">
                 <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
                     <h2 class="text-base font-black text-slate-900">Filtros</h2>
                     <button class="text-xs font-bold text-[#004ac6] hover:underline">Limpar</button>
@@ -85,28 +33,28 @@
                             <label
                                 class="relative flex cursor-pointer rounded-xl border p-3 shadow-sm hover:bg-slate-50 focus:outline-none transition-all"
                                 [ngClass]="categorias['Consultoria'] ? 'border-[#004ac6] ring-1 ring-[#004ac6] bg-blue-50/20' : 'border-slate-200'">
-                                <input type="checkbox" [(ngModel)]="categorias['Consultoria']" class="sr-only" />
+                                <input type="checkbox" [(ngModel)]="categorias['Consultoria']" (change)="onFilterChange()" class="sr-only" />
                                 <span class="text-sm font-bold text-slate-900">Consultoria</span>
                             </label>
 
                             <label
                                 class="relative flex cursor-pointer rounded-xl border p-3 shadow-sm hover:bg-slate-50 focus:outline-none transition-all"
                                 [ngClass]="categorias['Educação'] ? 'border-[#004ac6] ring-1 ring-[#004ac6] bg-blue-50/20' : 'border-slate-200'">
-                                <input type="checkbox" [(ngModel)]="categorias['Educação']" class="sr-only" />
+                                <input type="checkbox" [(ngModel)]="categorias['Educação']" (change)="onFilterChange()" class="sr-only" />
                                 <span class="text-sm font-bold text-slate-900">Educação e Aulas</span>
                             </label>
 
                             <label
                                 class="relative flex cursor-pointer rounded-xl border p-3 shadow-sm hover:bg-slate-50 focus:outline-none transition-all"
                                 [ngClass]="categorias['Bem-Estar e Saúde'] ? 'border-[#004ac6] ring-1 ring-[#004ac6] bg-blue-50/20' : 'border-slate-200'">
-                                <input type="checkbox" [(ngModel)]="categorias['Bem-Estar e Saúde']" class="sr-only" />
+                                <input type="checkbox" [(ngModel)]="categorias['Bem-Estar e Saúde']" (change)="onFilterChange()" class="sr-only" />
                                 <span class="text-sm font-bold text-slate-900">Bem-Estar e Saúde</span>
                             </label>
 
                             <label
                                 class="relative flex cursor-pointer rounded-xl border p-3 shadow-sm hover:bg-slate-50 focus:outline-none transition-all"
                                 [ngClass]="categorias['Casa'] ? 'border-[#004ac6] ring-1 ring-[#004ac6] bg-blue-50/20' : 'border-slate-200'">
-                                <input type="checkbox" [(ngModel)]="categorias['Casa']" class="sr-only" />
+                                <input type="checkbox" [(ngModel)]="categorias['Casa']" (change)="onFilterChange()" class="sr-only" />
                                 <span class="text-sm font-bold text-slate-900">Casa e Reparos</span>
                             </label>
                         </div>
@@ -117,7 +65,7 @@
                         <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">Preço Máximo
                         </h3>
                         <div class="w-full">
-                            <input [(ngModel)]="precomax"
+                            <input [(ngModel)]="precomax" (change)="onFilterChange()"
                                 class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#004ac6]"
                                 max="500" min="0" type="range" />
                         </div>
@@ -182,14 +130,14 @@
                             <label
                                 class="relative flex cursor-pointer rounded-xl border p-3 shadow-sm hover:bg-slate-50 focus:outline-none transition-all"
                                 [ngClass]="tiposVendedor['Autônomo'] ? 'border-[#004ac6] ring-1 ring-[#004ac6] bg-blue-50/20' : 'border-slate-200'">
-                                <input type="checkbox" [(ngModel)]="tiposVendedor['Autônomo']" class="sr-only" />
+                                <input type="checkbox" [(ngModel)]="tiposVendedor['Autônomo']" (change)="onFilterChange()" class="sr-only" />
                                 <span class="text-sm font-bold text-slate-900">Freelancers (Autônomos)</span>
                             </label>
 
                             <label
                                 class="relative flex cursor-pointer rounded-xl border p-3 shadow-sm hover:bg-slate-50 focus:outline-none transition-all"
                                 [ngClass]="tiposVendedor['Empresa'] ? 'border-[#004ac6] ring-1 ring-[#004ac6] bg-blue-50/20' : 'border-slate-200'">
-                                <input type="checkbox" [(ngModel)]="tiposVendedor['Empresa']" class="sr-only" />
+                                <input type="checkbox" [(ngModel)]="tiposVendedor['Empresa']" (change)="onFilterChange()" class="sr-only" />
                                 <span class="text-sm font-bold text-slate-900">Agências (Empresas)</span>
                             </label>
                         </div>
