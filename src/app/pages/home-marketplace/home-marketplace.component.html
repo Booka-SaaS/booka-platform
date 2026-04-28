@@ -12,12 +12,39 @@
                 <span class="text-2xl font-black tracking-tighter text-[#004ac6]">Booka</span>
             </div>
             <div class="hidden md:flex items-center gap-8">
-                <a class="text-[#004ac6] font-bold border-b-2 border-[#004ac6] pb-1 hover:scale-105 transition-transform duration-200" href="#">Explorar</a>
-                <a class="text-slate-600 hover:text-[#004ac6] hover:scale-105 transition-transform duration-200" href="#">Seja um Profissional</a>
+                <a [routerLink]="['/explorar']" class="text-[#004ac6] font-bold border-b-2 border-[#004ac6] pb-1 hover:scale-105 transition-transform duration-200">Explorar</a>
+                <a *ngIf="isLoggedIn" [routerLink]="['/meus-agendamentos']" class="text-slate-600 hover:text-[#004ac6] hover:scale-105 transition-transform duration-200">Minhas Reservas</a>
+                <a [routerLink]="['/cadastro']" class="text-slate-600 hover:text-[#004ac6] hover:scale-105 transition-transform duration-200">Seja um Profissional</a>
             </div>
             <div class="flex items-center gap-4">
-                <button class="text-slate-600 font-medium px-4 py-2 hover:text-[#004ac6] transition-colors scale-95 transition-all w-none border-none bg-transparent">Entrar</button>
-                <button class="bg-[#004ac6] text-white font-bold px-6 py-2.5 rounded-full hover:scale-105 transition-all shadow-md">Cadastrar</button>
+                <ng-container *ngIf="!isLoggedIn">
+                    <button [routerLink]="['/login']" class="text-slate-600 font-medium px-4 py-2 hover:text-[#004ac6] transition-colors scale-95 transition-all w-none border-none bg-transparent">Entrar</button>
+                    <button [routerLink]="['/cadastro']" class="bg-[#004ac6] text-white font-bold px-6 py-2.5 rounded-full hover:scale-105 transition-all shadow-md">Cadastrar</button>
+                </ng-container>
+                <ng-container *ngIf="isLoggedIn">
+                    <div class="relative group">
+                        <button class="bg-slate-100 text-slate-700 font-bold px-6 py-2.5 rounded-full hover:bg-slate-200 transition-all shadow-sm flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[20px]">person</span> Meu Perfil
+                        </button>
+                        <div class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 transform origin-top-right group-hover:translate-y-1">
+                            <div class="p-2 space-y-1 flex flex-col">
+                                <a [routerLink]="isProfissional ? ['/dashboard'] : ['/meus-agendamentos']" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-[#004ac6] rounded-lg transition-colors cursor-pointer">
+                                    <span class="material-symbols-outlined text-lg">{{ isProfissional ? 'dashboard' : 'calendar_today' }}</span>
+                                    {{ isProfissional ? 'Painel de Controle' : 'Minhas Reservas' }}
+                                </a>
+                                <a class="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-[#004ac6] rounded-lg transition-colors cursor-pointer">
+                                    <span class="material-symbols-outlined text-lg">settings</span>
+                                    Configurações
+                                </a>
+                                <div class="h-px bg-slate-100 my-1"></div>
+                                <a (click)="logout()" class="flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer">
+                                    <span class="material-symbols-outlined text-lg">logout</span>
+                                    Sair da Conta
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
             </div>
         </nav>
     </header>
@@ -75,13 +102,13 @@
                         <h2 class="text-3xl font-extrabold text-on-surface tracking-tight text-slate-800">Explore por
                             áreas de interesse</h2>
                     </div>
-                    <a class="text-[#004ac6] font-semibold flex items-center gap-1 hover:underline" href="#">Ver tudo
+                    <a [routerLink]="['/explorar']" class="text-[#004ac6] font-semibold flex items-center gap-1 hover:underline">Ver tudo
                         <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
                 </div>
                 <div class="grid grid-cols-2 md:grid-cols-5 gap-6">
                     <!-- Consultoria -->
                     <div
-                        class="group bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all hover:-translate-y-2 cursor-pointer flex flex-col items-center text-center">
+                        class="group bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all cursor-pointer flex flex-col items-center text-center">
                         <div
                             class="w-16 h-16 rounded-2xl bg-blue-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                             <span class="material-symbols-outlined text-[#004ac6] text-3xl">query_stats</span>
@@ -90,7 +117,7 @@
                     </div>
                     <!-- Aulas -->
                     <div
-                        class="group bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all hover:-translate-y-2 cursor-pointer flex flex-col items-center text-center">
+                        class="group bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all cursor-pointer flex flex-col items-center text-center">
                         <div
                             class="w-16 h-16 rounded-2xl bg-indigo-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                             <span class="material-symbols-outlined text-indigo-700 text-3xl">school</span>
@@ -99,7 +126,7 @@
                     </div>
                     <!-- Beleza -->
                     <div
-                        class="group bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all hover:-translate-y-2 cursor-pointer flex flex-col items-center text-center">
+                        class="group bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all cursor-pointer flex flex-col items-center text-center">
                         <div
                             class="w-16 h-16 rounded-2xl bg-teal-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                             <span class="material-symbols-outlined text-teal-700 text-3xl">face</span>
@@ -108,7 +135,7 @@
                     </div>
                     <!-- Manutenção -->
                     <div
-                        class="group bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all hover:-translate-y-2 cursor-pointer flex flex-col items-center text-center">
+                        class="group bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all cursor-pointer flex flex-col items-center text-center">
                         <div
                             class="w-16 h-16 rounded-2xl bg-red-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                             <span class="material-symbols-outlined text-red-600 text-3xl">handyman</span>
@@ -117,7 +144,7 @@
                     </div>
                     <!-- Saúde -->
                     <div
-                        class="group bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all hover:-translate-y-2 cursor-pointer flex flex-col items-center text-center">
+                        class="group bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all cursor-pointer flex flex-col items-center text-center">
                         <div
                             class="w-16 h-16 rounded-2xl bg-green-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                             <span class="material-symbols-outlined text-green-700 text-3xl">medical_services</span>

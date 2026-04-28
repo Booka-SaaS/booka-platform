@@ -16,6 +16,7 @@ import { OnboardingComponent } from './pages/onboarding/onboarding.component';
 import { NovaSenhaComponent } from './pages/nova-senha/nova-senha.component';
 import { HomeMarketplaceComponent } from './pages/home-marketplace/home-marketplace.component';
 import { ExplorarComponent } from './pages/explorar/explorar.component';
+import { MeusAgendamentosComponent } from './pages/meus-agendamentos/meus-agendamentos.component';
 import { authGuard } from './guards/auth.guard';
 
 
@@ -34,6 +35,7 @@ export const routes: Routes = [
   { path: 'recuperar-senha', component: RecuperarSenhaComponent }, // Rota Nova livre
   { path: 'nova-senha', component: NovaSenhaComponent }, // Rota Nova livre
   { path: 'perfil', component: PerfilComponent, canActivate: [authGuard] },
+  { path: 'meus-agendamentos', component: MeusAgendamentosComponent, canActivate: [authGuard] }, // Reativar quando o auth estiver pronto
   { path: 'cadastro', component: CadastroComponent }, // Rota Nova livre
   { path: 'onboarding', component: OnboardingComponent, canActivate: [authGuard] }, // ROTA FINAL privada
   { path: 'notificacoes', component: NotificacoesComponent, canActivate: [authGuard] }

@@ -23,6 +23,11 @@ export class AuthService {
       );
   }
 
+  loginTeste(tipo: 'CLIENTE' | 'PROFISSIONAL') {
+    localStorage.setItem('token', 'fake-jwt-token-para-teste');
+    localStorage.setItem('role', tipo);
+  }
+
   register(nome: string, email: string, senha: string, role: string) {
     return this.http.post<{ token: string, usuario?: any }>(`${this.apiUrl}/auth/register`, { nome, email, senha, role })
       .pipe(
@@ -45,7 +50,7 @@ export class AuthService {
     if (typeof window === 'undefined') return false; // Compatibilidade SSR
     return !!localStorage.getItem('token');
   }
-  
+
   getRole(): string {
     if (typeof window === 'undefined') return 'CLIENTE';
     return localStorage.getItem('role') || 'CLIENTE';

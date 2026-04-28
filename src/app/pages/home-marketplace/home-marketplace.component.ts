@@ -4,6 +4,8 @@ import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { FooterComponent } from '../../components/footer/footer.component';
 
+import { AuthService } from '../../services/auth.service';
+
 @Component({
   selector: 'app-home-marketplace',
   standalone: true,
@@ -26,7 +28,20 @@ export class HomeMarketplaceComponent {
   termoBusca: string = '';
   cidadeBusca: string = '';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService) {}
+
+  get isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
+  }
+
+  get isProfissional(): boolean {
+    return this.authService.getRole() === 'PROFISSIONAL';
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/']);
+  }
 
   buscarServico() {
     this.router.navigate(['/explorar'], { queryParams: { q: this.termoBusca, local: this.cidadeBusca } });

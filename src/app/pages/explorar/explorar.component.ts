@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { FooterComponent } from '../../components/footer/footer.component';
+
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-explorar',
@@ -23,7 +25,8 @@ export class ExplorarComponent implements OnInit {
     'Consultoria': false,
     'Educação': false,
     'Casa': false,
-    'Saúde': false
+    'Saúde': false,
+    'Espaços': false
   };
 
   tiposVendedor: { [key: string]: boolean } = {
@@ -36,14 +39,16 @@ export class ExplorarComponent implements OnInit {
     { id: 1, nome: 'João Silva', profissao: 'Consultor de TI', preco: 80, rating: 4.9, categoria: 'Consultoria', modalidade: 'Online', vendedor: 'Autônomo', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBlmfgo6Kxn_z7ZBiZT9Uto-k4k3Bcl-sC1AqA11Vk2PtEXhgebXNzPFDh-q_EgrLXT7GTDah5udAwMFct_ZRi6beBAB4tfcfGfGp7s-4tpkxZVzOY-BtNwWaPwhaz6wCNowAWlzV3xWJOYZ6-zKlFicEAYJvby83AkBqkGBSOCEBspaif1uv_W1ZutG05Wr5AO3Mj1Q6H0_8Slh2QUPGSWtcYQb3nxBlsJSmyJQHrU3VigeNrcu6Db8zI27Q1EX8X6xK4pXudIfhI' },
     { id: 2, nome: 'Maria Oliveira', profissao: 'Professora de Inglês', preco: 120, rating: 5.0, categoria: 'Educação', modalidade: 'Online', vendedor: 'Autônomo', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDw5qUrR6xy_y0L6qNbCdcNSP844riBNyfDx_n3EXjAeWOj2jL30UUZnG4j9L8JMEjjg41TOvcqybo3ibQgF5MS618nSNyMX8b7Ah3-_UZh6ndnMmI_VjUepvsQTJzH2lBZk2q0RVijJDdHmnAsqUb80SlKRUBhwh14qisDdB8e_SqtSPfc1sL86d8avzMFnYPJAcaZR4Ze_kA9oGQQ2IED73o_Ncvgb62qyEqtCnIfO6eggbnO4hSCSSV5gDb0Lb2EuXEPaTQjPco' },
     { id: 3, nome: 'Ricardo Alves', profissao: 'Eletricista Residencial', preco: 95, rating: 4.8, categoria: 'Casa', modalidade: 'Presencial', vendedor: 'Empresa', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDZWy57Dkx_S9Y_fnfixVeaBiBWw9Zo745BZrmFkYW2xhHTrk7K1MMcLJ7JVyMHOK3GvicXf4EuBNMidxRzFo27kqbiS-dIrJVn0IYQUo1iHXqXEzqPREe_kC58D5iNv6fGobGGsMb9Qz5JDjVh7hw4D0CtP6CouRU-4_vkJCxqMTBWITGn4i7Ceg-x6vco2RWl4Q1iJRfelHO3MYLbJE7fD1z-rEVza5Q6SDUKu50lbCU459IBrnVb_T_sGptLzyNBK8PyCRcf2OE' },
-    { id: 4, nome: 'Clínica Bem-Estar', profissao: 'Dermatologista Estética', preco: 250, rating: 4.5, categoria: 'Saúde', modalidade: 'Presencial', vendedor: 'Empresa', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDw5qUrR6xy_y0L6qNbCdcNSP844riBNyfDx_n3EXjAeWOj2jL30UUZnG4j9L8JMEjjg41TOvcqybo3ibQgF5MS618nSNyMX8b7Ah3-_UZh6ndnMmI_VjUepvsQTJzH2lBZk2q0RVijJDdHmnAsqUb80SlKRUBhwh14qisDdB8e_SqtSPfc1sL86d8avzMFnYPJAcaZR4Ze_kA9oGQQ2IED73o_Ncvgb62qyEqtCnIfO6eggbnO4hSCSSV5gDb0Lb2EuXEPaTQjPco' }
+    { id: 4, nome: 'Clínica Bem-Estar', profissao: 'Dermatologista Estética', preco: 250, rating: 4.5, categoria: 'Saúde', modalidade: 'Presencial', vendedor: 'Empresa', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDw5qUrR6xy_y0L6qNbCdcNSP844riBNyfDx_n3EXjAeWOj2jL30UUZnG4j9L8JMEjjg41TOvcqybo3ibQgF5MS618nSNyMX8b7Ah3-_UZh6ndnMmI_VjUepvsQTJzH2lBZk2q0RVijJDdHmnAsqUb80SlKRUBhwh14qisDdB8e_SqtSPfc1sL86d8avzMFnYPJAcaZR4Ze_kA9oGQQ2IED73o_Ncvgb62qyEqtCnIfO6eggbnO4hSCSSV5gDb0Lb2EuXEPaTQjPco' },
+    { id: 5, nome: 'Hub Acadêmico de Inovação', profissao: 'Espaço Coworking / Hub', preco: 150, rating: 4.9, categoria: 'Espaços', modalidade: 'Presencial', vendedor: 'Empresa', img: 'https://images.unsplash.com/photo-1527192491265-7e15c55b1ed2?w=800&q=80' }
   ];
 
   get profissionaisFiltrados() {
     return this.profissionais.filter(p => {
       // 1. Busca textual
-      const termo = this.termoBusca.toLowerCase();
-      const bateTermo = !termo || p.nome.toLowerCase().includes(termo) || p.profissao.toLowerCase().includes(termo);
+      const normalizar = (str: string) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      const termo = normalizar(this.termoBusca);
+      const bateTermo = !termo || normalizar(p.nome).includes(termo) || normalizar(p.profissao).includes(termo);
       
       // 2. Preço Máximo
       const batePreco = p.preco <= this.precomax;
@@ -73,7 +78,20 @@ export class ExplorarComponent implements OnInit {
     this.modalidade = this.modalidade === val ? 'todas' : val;
   }
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService) {}
+
+  get isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
+  }
+
+  get isProfissional(): boolean {
+    return this.authService.getRole() === 'PROFISSIONAL';
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/']);
+  }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {

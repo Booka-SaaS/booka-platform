@@ -79,6 +79,19 @@ export class AgendarComponent implements OnInit {
     });
   }
 
+  get isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
+  }
+
+  get isProfissional(): boolean {
+    return this.authService.getRole() === 'PROFISSIONAL';
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/']);
+  }
+
   selecionarServico(servico: any) {
     this.servicoSelecionado = servico;
   }

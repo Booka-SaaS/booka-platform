@@ -24,11 +24,11 @@ export class AgendaComponent implements OnInit {
   carregarAgendamentos() {
     this.isLoading = true;
     this.agendamentoService.listar().subscribe({
-      next: (dados) => {
+      next: (dados: Agendamento[]) => {
         this.agendamentos = dados;
         this.isLoading = false;
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error(err);
         this.isLoading = false;
       }

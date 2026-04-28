@@ -14,13 +14,23 @@ import { AuthService } from '../../services/auth.service';
 export class LoginComponent {
   email = '';
   password = '';
-  
+
   private authService = inject(AuthService);
   private router = inject(Router);
 
   onSubmit() {
     if (!this.email || !this.password) {
       alert('Por favor, preencha todos os campos!');
+      return;
+    }
+
+    // Interceptar login de teste
+    if (this.email === 'cliente@booka.com' && this.password === 'teste123') {
+      this.loginTeste('CLIENTE');
+      return;
+    }
+    if (this.email === 'profissional@booka.com' && this.password === 'teste123') {
+      this.loginTeste('PROFISSIONAL');
       return;
     }
 
@@ -38,5 +48,14 @@ export class LoginComponent {
         console.error(err);
       }
     });
+  }
+
+  loginTeste(tipo: 'CLIENTE' | 'PROFISSIONAL') {
+    this.authService.loginTeste(tipo);
+    if (tipo === 'PROFISSIONAL') {
+      this.router.navigate(['/dashboard']);
+    } else {
+      this.router.navigate(['/explorar']);
+    }
   }
 }
