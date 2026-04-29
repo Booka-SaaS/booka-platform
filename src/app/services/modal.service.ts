@@ -2,7 +2,7 @@ import { Injectable, signal } from '@angular/core';
 
 export interface ModalState {
   isOpen: boolean;
-  type: 'alert' | 'confirm';
+  type: 'alert' | 'confirm' | 'success';
   title: string;
   message: string;
   confirmText: string;
@@ -32,6 +32,18 @@ export class ModalService {
     this._state.set({
       isOpen: true,
       type: 'alert',
+      title,
+      message,
+      confirmText,
+      cancelText: '',
+      onConfirm
+    });
+  }
+
+  success(title: string, message: string, confirmText: string = 'OK', onConfirm?: () => void) {
+    this._state.set({
+      isOpen: true,
+      type: 'success',
       title,
       message,
       confirmText,

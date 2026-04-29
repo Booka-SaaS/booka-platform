@@ -30,7 +30,7 @@ import { ModalService } from '../../services/modal.service';
                     <a [routerLink]="['/agenda']" routerLinkActive="text-[#004ac6] font-bold border-b-[#004ac6]" class="text-slate-600 hover:text-[#004ac6] transition-all pb-1 border-b-2 border-transparent">Minha Agenda</a>
                 </ng-container>
                 <a *ngIf="isLoggedIn && !isProfissional" [routerLink]="['/meus-agendamentos']" routerLinkActive="text-[#004ac6] font-bold border-b-[#004ac6]" class="text-slate-600 hover:text-[#004ac6] transition-all pb-1 border-b-2 border-transparent">Minhas Reservas</a>
-                <a *ngIf="!isProfissional" [routerLink]="['/cadastro']" class="text-slate-600 hover:text-[#004ac6] transition-all pb-1 border-b-2 border-transparent">Cadastre seu Negócio</a>
+                <a *ngIf="!isLoggedIn" [routerLink]="['/cadastro']" class="text-slate-600 hover:text-[#004ac6] transition-all pb-1 border-b-2 border-transparent">Cadastre seu Negócio</a>
             </div>
 
             <!-- Right: Actions/Profile -->
@@ -53,7 +53,7 @@ import { ModalService } from '../../services/modal.service';
                                     <span class="material-symbols-outlined text-lg">{{ isProfissional ? 'dashboard' : 'calendar_today' }}</span>
                                     {{ isProfissional ? 'Painel de Controle' : 'Minhas Reservas' }}
                                 </a>
-                                <a [routerLink]="['/configuracoes']" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-[#004ac6] rounded-lg transition-colors cursor-pointer">
+                                <a [routerLink]="isProfissional ? ['/configuracoes'] : ['/perfil']" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-[#004ac6] rounded-lg transition-colors cursor-pointer">
                                     <span class="material-symbols-outlined text-lg">settings</span>
                                     Configurações
                                 </a>

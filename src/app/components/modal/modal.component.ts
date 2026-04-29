@@ -27,10 +27,13 @@ import { ModalService } from '../../services/modal.service';
             <div *ngIf="modalService.state().type === 'confirm'" class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
               <span class="material-symbols-outlined text-2xl">help</span>
             </div>
+            <div *ngIf="modalService.state().type === 'success'" class="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center text-green-600 animate-bounce">
+              <span class="material-symbols-outlined text-4xl">check_circle</span>
+            </div>
           </div>
 
           <h3 class="text-xl font-black text-center text-slate-900 mb-2">{{ modalService.state().title }}</h3>
-          <p class="text-sm text-center text-slate-500 font-medium">{{ modalService.state().message }}</p>
+          <p class="text-sm text-center text-slate-500 font-medium leading-relaxed" [innerHTML]="modalService.state().message"></p>
         </div>
 
         <div class="bg-slate-50 p-4 border-t border-slate-100 flex flex-col-reverse sm:flex-row gap-3 justify-end">

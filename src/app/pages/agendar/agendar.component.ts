@@ -120,8 +120,9 @@ export class AgendarComponent implements OnInit {
     if (!this.authService.isLoggedIn()) {
       this.router.navigate(['/cadastro']);
     } else {
-      this.modalService.alert('Sucesso!', 'Agendamento confirmado com sucesso!', 'Ver Agenda', () => {
-        this.router.navigate(['/dashboard']);
+      const msg = `Seu agendamento foi registrado com sucesso!<br><br>Enviamos uma confirmação para seu <b>e-mail</b> e para o <b>WhatsApp</b> cadastrado.`;
+      this.modalService.success('Agendamento Confirmado!', msg, 'Ver Agenda', () => {
+        this.router.navigate(['/meus-agendamentos']);
       });
     }
   }

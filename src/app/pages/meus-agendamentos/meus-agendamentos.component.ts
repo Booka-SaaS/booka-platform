@@ -4,11 +4,12 @@ import { RouterModule, Router } from '@angular/router';
 import { AgendamentoService } from '../../services/agendamento.service';
 import { AuthService } from '../../services/auth.service';
 import { Agendamento } from '../../models/Agendamento';
+import { NavbarComponent } from '../../components/navbar/navbar.component';
 
 @Component({
     selector: 'app-meus-agendamentos',
     standalone: true,
-    imports: [CommonModule, RouterModule],
+    imports: [CommonModule, RouterModule, NavbarComponent],
     templateUrl: './meus-agendamentos.component.html'
 })
 export class MeusAgendamentosComponent implements OnInit {
@@ -21,18 +22,7 @@ export class MeusAgendamentosComponent implements OnInit {
     error = false;
     cancelandoId: string | number | null = null;
 
-    get isLoggedIn(): boolean {
-        return this.authService.isLoggedIn();
-    }
 
-    get isProfissional(): boolean {
-        return this.authService.getRole() === 'PROFISSIONAL';
-    }
-
-    logout() {
-        this.authService.logout();
-        this.router.navigate(['/']);
-    }
 
     ngOnInit() {
         this.carregarAgendamentos();
