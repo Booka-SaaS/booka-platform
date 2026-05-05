@@ -612,6 +612,35 @@ const schemas = {
     },
     required: ['data', 'horarios'],
   },
+  BloqueioAgenda: {
+    type: 'object',
+    properties: {
+      id: { type: 'string', format: 'uuid' },
+      inicio: { type: 'string', format: 'date-time' },
+      fim: { type: 'string', format: 'date-time' },
+      motivo: { type: 'string', nullable: true, example: 'Almoco' },
+      createdAt: { type: 'string', format: 'date-time' },
+      updatedAt: { type: 'string', format: 'date-time' },
+    },
+    required: ['id', 'inicio', 'fim', 'motivo', 'createdAt', 'updatedAt'],
+  },
+  BloqueioAgendaInput: {
+    type: 'object',
+    properties: {
+      inicio: { type: 'string', format: 'date-time', example: '2026-04-20T12:00:00.000Z' },
+      fim: { type: 'string', format: 'date-time', example: '2026-04-20T13:00:00.000Z' },
+      motivo: { type: 'string', nullable: true, example: 'Almoco' },
+    },
+    required: ['inicio', 'fim'],
+  },
+  BloqueioAgendaUpdateInput: {
+    type: 'object',
+    properties: {
+      inicio: { type: 'string', format: 'date-time', example: '2026-04-20T12:00:00.000Z' },
+      fim: { type: 'string', format: 'date-time', example: '2026-04-20T13:00:00.000Z' },
+      motivo: { type: 'string', nullable: true, example: 'Almoco' },
+    },
+  },
   DashboardProximoAgendamento: {
     type: 'object',
     nullable: true,
@@ -1452,6 +1481,166 @@ const paths = {
       },
     },
   },
+  '/bloqueios': {
+    get: {
+      tags: ['Bloqueios'],
+      summary: 'Lista bloqueios da agenda da loja autenticada',
+      security: [{ bearerAuth: [] }],
+      responses: {
+        200: {
+          description: 'Lista de bloqueios',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'array',
+                items: {
+                  $ref: '#/components/schemas/BloqueioAgenda',
+                },
+              },
+            },
+          },
+        },
+        401: {
+          $ref: '#/components/responses/UnauthorizedError',
+        },
+        403: {
+          $ref: '#/components/responses/ForbiddenError',
+        },
+      },
+    },
+    post: {
+      tags: ['Bloqueios'],
+      summary: 'Cria um bloqueio de agenda',
+      security: [{ bearerAuth: [] }],
+      requestBody: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/BloqueioAgendaInput',
+            },
+          },
+        },
+      },
+      responses: {
+        201: {
+          description: 'Bloqueio criado com sucesso',
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/BloqueioAgenda',
+              },
+            },
+          },
+        },
+        400: {
+          $ref: '#/components/responses/ValidationError',
+        },
+        401: {
+          $ref: '#/components/responses/UnauthorizedError',
+        },
+        403: {
+          $ref: '#/components/responses/ForbiddenError',
+        },
+      },
+    },
+  },
+  '/bloqueios/{id}': {
+    get: {
+      tags: ['Bloqueios'],
+      summary: 'Busca um bloqueio por id',
+      security: [{ bearerAuth: [] }],
+      parameters: [{ $ref: '#/components/parameters/UuidPathId' }],
+      responses: {
+        200: {
+          description: 'Bloqueio encontrado',
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/BloqueioAgenda',
+              },
+            },
+          },
+        },
+        401: {
+          $ref: '#/components/responses/UnauthorizedError',
+        },
+        403: {
+          $ref: '#/components/responses/ForbiddenError',
+        },
+        404: {
+          $ref: '#/components/responses/NotFoundError',
+        },
+      },
+    },
+    put: {
+      tags: ['Bloqueios'],
+      summary: 'Atualiza um bloqueio',
+      security: [{ bearerAuth: [] }],
+      parameters: [{ $ref: '#/components/parameters/UuidPathId' }],
+      requestBody: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/BloqueioAgendaUpdateInput',
+            },
+          },
+        },
+      },
+      responses: {
+        200: {
+          description: 'Bloqueio atualizado com sucesso',
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/BloqueioAgenda',
+              },
+            },
+          },
+        },
+        400: {
+          $ref: '#/components/responses/ValidationError',
+        },
+        401: {
+          $ref: '#/components/responses/UnauthorizedError',
+        },
+        403: {
+          $ref: '#/components/responses/ForbiddenError',
+        },
+        404: {
+          $ref: '#/components/responses/NotFoundError',
+        },
+      },
+    },
+    delete: {
+      tags: ['Bloqueios'],
+      summary: 'Remove um bloqueio',
+      security: [{ bearerAuth: [] }],
+      parameters: [{ $ref: '#/components/parameters/UuidPathId' }],
+      responses: {
+        200: {
+          description: 'Bloqueio removido com sucesso',
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/SuccessResponse',
+              },
+            },
+          },
+        },
+        401: {
+          $ref: '#/components/responses/UnauthorizedError',
+        },
+        403: {
+          $ref: '#/components/responses/ForbiddenError',
+        },
+        404: {
+          $ref: '#/components/responses/NotFoundError',
+        },
+      },
+    },
+  },
   '/dashboard/resumo': {
     get: {
       tags: ['Dashboard'],
@@ -1504,6 +1693,7 @@ export const openApiDocument = {
     { name: 'Clientes' },
     { name: 'Agendamentos' },
     { name: 'Profissionais' },
+    { name: 'Bloqueios' },
     { name: 'Dashboard' },
   ],
   components: {

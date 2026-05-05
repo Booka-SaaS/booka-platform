@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 enum UserRole {
@@ -69,79 +70,79 @@ model PerfilProfissional {
 }
 
 model Loja {
-  id                  String                  @id @default(uuid()) @db.Uuid
-  usuarioId           String                  @unique @db.Uuid
-  perfilProfissionalId String?                @unique @db.Uuid
-  nome                String
-  slug                String                  @unique
-  email               String?
-  telefone            String?
-  endereco            String?
-  cidade              String?
-  descricao           String?
-  imagemUrl           String?
-  onboardingConcluido Boolean                 @default(false)
-  createdAt           DateTime                @default(now())
-  updatedAt           DateTime                @updatedAt
-  usuario             Usuario                 @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
-  perfilProfissional  PerfilProfissional?     @relation(fields: [perfilProfissionalId], references: [id], onDelete: SetNull)
-  servicos            Servico[]
-  clientes            Cliente[]
-  agendamentos        Agendamento[]
-  disponibilidades    DisponibilidadeSemanal[]
-  bloqueios           BloqueioAgenda[]
+  id                   String                   @id @default(uuid()) @db.Uuid
+  usuarioId            String                   @unique @db.Uuid
+  perfilProfissionalId String?                  @unique @db.Uuid
+  nome                 String
+  slug                 String                   @unique
+  email                String?
+  telefone             String?
+  endereco             String?
+  cidade               String?
+  descricao            String?
+  imagemUrl            String?
+  onboardingConcluido  Boolean                  @default(false)
+  createdAt            DateTime                 @default(now())
+  updatedAt            DateTime                 @updatedAt
+  usuario              Usuario                  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  perfilProfissional   PerfilProfissional?      @relation(fields: [perfilProfissionalId], references: [id], onDelete: SetNull)
+  servicos             Servico[]
+  clientes             Cliente[]
+  agendamentos         Agendamento[]
+  disponibilidades     DisponibilidadeSemanal[]
+  bloqueios            BloqueioAgenda[]
 
   @@index([nome])
 }
 
 model Servico {
-  id              String         @id @default(uuid()) @db.Uuid
-  lojaId          String         @db.Uuid
-  nome            String
-  descricao       String?
-  duracaoMinutos  Int
-  precoCentavos   Int
-  ativo           Boolean        @default(true)
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
-  loja            Loja           @relation(fields: [lojaId], references: [id], onDelete: Cascade)
-  agendamentos    Agendamento[]
+  id             String        @id @default(uuid()) @db.Uuid
+  lojaId         String        @db.Uuid
+  nome           String
+  descricao      String?
+  duracaoMinutos Int
+  precoCentavos  Int
+  ativo          Boolean       @default(true)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  loja           Loja          @relation(fields: [lojaId], references: [id], onDelete: Cascade)
+  agendamentos   Agendamento[]
 
-  @@index([lojaId, ativo])
   @@unique([lojaId, nome])
+  @@index([lojaId, ativo])
 }
 
 model Cliente {
-  id            String         @id @default(uuid()) @db.Uuid
-  lojaId        String         @db.Uuid
-  nome          String
-  email         String?
-  telefone      String
-  anotacoes     String?
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  loja          Loja           @relation(fields: [lojaId], references: [id], onDelete: Cascade)
-  agendamentos  Agendamento[]
+  id           String        @id @default(uuid()) @db.Uuid
+  lojaId       String        @db.Uuid
+  nome         String
+  email        String?
+  telefone     String
+  anotacoes    String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  loja         Loja          @relation(fields: [lojaId], references: [id], onDelete: Cascade)
+  agendamentos Agendamento[]
 
-  @@index([lojaId, nome])
   @@unique([lojaId, telefone])
+  @@index([lojaId, nome])
 }
 
 model Agendamento {
-  id           String             @id @default(uuid()) @db.Uuid
-  lojaId       String             @db.Uuid
-  clienteId    String             @db.Uuid
-  servicoId    String             @db.Uuid
-  inicio       DateTime
-  fim          DateTime
-  status       StatusAgendamento  @default(PENDENTE)
-  origem       OrigemAgendamento  @default(PAINEL)
-  observacoes  String?
-  createdAt    DateTime           @default(now())
-  updatedAt    DateTime           @updatedAt
-  loja         Loja               @relation(fields: [lojaId], references: [id], onDelete: Cascade)
-  cliente      Cliente            @relation(fields: [clienteId], references: [id], onDelete: Restrict)
-  servico      Servico            @relation(fields: [servicoId], references: [id], onDelete: Restrict)
+  id          String            @id @default(uuid()) @db.Uuid
+  lojaId      String            @db.Uuid
+  clienteId   String            @db.Uuid
+  servicoId   String            @db.Uuid
+  inicio      DateTime
+  fim         DateTime
+  status      StatusAgendamento @default(PENDENTE)
+  origem      OrigemAgendamento @default(PAINEL)
+  observacoes String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  loja        Loja              @relation(fields: [lojaId], references: [id], onDelete: Cascade)
+  cliente     Cliente           @relation(fields: [clienteId], references: [id], onDelete: Restrict)
+  servico     Servico           @relation(fields: [servicoId], references: [id], onDelete: Restrict)
 
   @@index([lojaId, inicio])
   @@index([clienteId])
@@ -149,30 +150,30 @@ model Agendamento {
 }
 
 model DisponibilidadeSemanal {
-  id               String    @id @default(uuid()) @db.Uuid
-  lojaId           String    @db.Uuid
+  id               String   @id @default(uuid()) @db.Uuid
+  lojaId           String   @db.Uuid
   diaSemana        Int
   horaInicio       String
   horaFim          String
   intervaloMinutos Int
-  ativo            Boolean   @default(true)
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
-  loja             Loja      @relation(fields: [lojaId], references: [id], onDelete: Cascade)
+  ativo            Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  loja             Loja     @relation(fields: [lojaId], references: [id], onDelete: Cascade)
 
-  @@index([lojaId, diaSemana])
   @@unique([lojaId, diaSemana])
+  @@index([lojaId, diaSemana])
 }
 
 model BloqueioAgenda {
-  id         String    @id @default(uuid()) @db.Uuid
-  lojaId     String    @db.Uuid
-  inicio     DateTime
-  fim        DateTime
-  motivo     String?
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  loja       Loja      @relation(fields: [lojaId], references: [id], onDelete: Cascade)
+  id        String   @id @default(uuid()) @db.Uuid
+  lojaId    String   @db.Uuid
+  inicio    DateTime
+  fim       DateTime
+  motivo    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  loja      Loja     @relation(fields: [lojaId], references: [id], onDelete: Cascade)
 
   @@index([lojaId, inicio, fim])
 }

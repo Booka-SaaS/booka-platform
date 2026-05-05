@@ -1,5 +1,9 @@
 import { z } from 'zod';
 
+export const clienteIdParamSchema = z.object({
+  id: z.string().uuid(),
+});
+
 export const createClienteSchema = z.object({
   nome: z.string().trim().min(2),
   email: z.string().trim().email().nullable().optional(),

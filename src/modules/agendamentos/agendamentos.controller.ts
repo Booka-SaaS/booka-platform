@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { requireAuth, AuthenticatedRequest } from '../../middleware/auth';
 import { requireRole } from '../../middleware/role';
 import {
+  agendamentoIdParamSchema,
   createAgendamentoPublicoSchema,
   createAgendamentoSchema,
   listAgendamentosQuerySchema,
@@ -55,8 +56,9 @@ export function buildAgendamentosRouter() {
   router.put('/:id', async (request, response, next) => {
     try {
       const authenticatedRequest = request as AuthenticatedRequest;
+      const { id } = agendamentoIdParamSchema.parse(request.params);
       const payload = updateAgendamentoSchema.parse(request.body);
-      const result = await updateAgendamento(authenticatedRequest.auth!.userId, request.params.id, payload);
+      const result = await updateAgendamento(authenticatedRequest.auth!.userId, id, payload);
       response.json(result);
     } catch (error) {
       next(error);
@@ -66,7 +68,8 @@ export function buildAgendamentosRouter() {
   router.delete('/:id', async (request, response, next) => {
     try {
       const authenticatedRequest = request as AuthenticatedRequest;
-      const result = await deleteAgendamento(authenticatedRequest.auth!.userId, request.params.id);
+      const { id } = agendamentoIdParamSchema.parse(request.params);
+      const result = await deleteAgendamento(authenticatedRequest.auth!.userId, id);
       response.json(result);
     } catch (error) {
       next(error);

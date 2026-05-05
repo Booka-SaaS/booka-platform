@@ -1,5 +1,9 @@
 import { z } from 'zod';
 
+export const agendamentoIdParamSchema = z.object({
+  id: z.string().uuid(),
+});
+
 export const listAgendamentosQuerySchema = z.object({
   data: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
   status: z.enum(['PENDENTE', 'CONFIRMADO', 'CANCELADO', 'CONCLUIDO']).optional(),

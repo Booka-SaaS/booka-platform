@@ -14,6 +14,7 @@ Escopo coberto hoje:
 - CRUD de clientes
 - CRUD de agendamentos do painel
 - criacao publica de agendamento
+- CRUD de bloqueios de agenda
 - listagem publica de profissionais
 - detalhe publico do profissional
 - disponibilidade publica por data
@@ -57,6 +58,7 @@ Valores padrao:
 PORT=3001
 CLIENT_ORIGIN=http://localhost:4200
 DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5434/booka_v2?schema=public
+DIRECT_URL=postgresql://postgres:postgres@127.0.0.1:5434/booka_v2?schema=public
 JWT_SECRET=booka-v2-local-secret-change-me
 JWT_TTL_SECONDS=604800
 ```
@@ -65,6 +67,8 @@ Observacoes:
 
 - `JWT_SECRET` precisa ter pelo menos 16 caracteres.
 - `CLIENT_ORIGIN` precisa bater com a origem do frontend local.
+- `DATABASE_URL` e usada pela API em runtime.
+- `DIRECT_URL` e usada pelo Prisma para migrations e comandos administrativos.
 - `JWT_TTL_SECONDS=604800` equivale a 7 dias.
 
 ## Como rodar pela primeira vez
@@ -174,50 +178,8 @@ Rotas privadas principais:
 - `/servicos`
 - `/clientes`
 - `/agendamentos`
+- `/bloqueios`
 - `/dashboard/resumo`
-
-## Teste rapido manual
-
-### 1. Healthcheck
-
-PowerShell:
-
-```powershell
-Invoke-RestMethod http://localhost:3001/health
-```
-
-### 2. Login
-
-PowerShell:
-
-```powershell
-$body = @{
-  email = 'profissional@booka.local'
-  password = '12345678'
-} | ConvertTo-Json
-
-Invoke-RestMethod `
-  -Method Post `
-  -Uri 'http://localhost:3001/auth/login' `
-  -ContentType 'application/json' `
-  -Body $body
-```
-
-### 3. Usar o token em rota autenticada
-
-```powershell
-$token = '<cole-o-token-aqui>'
-
-Invoke-RestMethod `
-  -Uri 'http://localhost:3001/servicos' `
-  -Headers @{ Authorization = "Bearer $token" }
-```
-
-### 4. Testar rota publica do marketplace
-
-```powershell
-Invoke-RestMethod http://localhost:3001/profissionais
-```
 
 ## Modulos e rotas
 
@@ -261,6 +223,14 @@ Invoke-RestMethod http://localhost:3001/profissionais
 - `DELETE /agendamentos/:id`
 - `POST /agendamentos/publicos`
 
+### Bloqueios
+
+- `GET /bloqueios`
+- `GET /bloqueios/:id`
+- `POST /bloqueios`
+- `PUT /bloqueios/:id`
+- `DELETE /bloqueios/:id`
+
 ### Marketplace publico
 
 - `GET /profissionais`
@@ -302,60 +272,6 @@ Leitura rapida:
 - `src/middleware/auth.ts`: validacao do Bearer token
 - `src/modules/*`: controllers, schemas e services por dominio
 
-## Modelo de dados
-
-Entidades principais:
-
-- `Usuario`
-- `PerfilProfissional`
-- `Loja`
-- `Servico`
-- `Cliente`
-- `Agendamento`
-- `DisponibilidadeSemanal`
-- `BloqueioAgenda`
-
-Enums principais:
-
-- `UserRole`
-- `ModalidadeProfissional`
-- `TipoVendedor`
-- `StatusAgendamento`
-- `OrigemAgendamento`
-
-Relacao central:
-
-- um `Usuario` profissional possui uma `Loja`
-- a `Loja` possui `Servicos`, `Clientes`, `Agendamentos`, `DisponibilidadeSemanal` e `BloqueioAgenda`
-- o perfil publico do marketplace sai de `Loja + PerfilProfissional + Servicos`
-
-## Contrato da API
-
-Padroes adotados:
-
-- JSON em `camelCase`
-- `id` em UUID
-- datas em ISO string
-- preco exposto como numero decimal no JSON
-- erros de validacao retornam `400`
-- conflitos de horario ou duplicidade retornam `409`
-
-Exemplo de erro:
-
-```json
-{
-  "message": "Erro de validacao.",
-  "issues": {
-    "formErrors": [],
-    "fieldErrors": {
-      "telefone": [
-        "String must contain at least 8 character(s)"
-      ]
-    }
-  }
-}
-```
-
 ## Disponibilidade e agendamento
 
 Regra atual:
@@ -385,6 +301,42 @@ Se quiser abrir o banco visualmente:
 npm run prisma:studio
 ```
 
+## Usando Supabase como banco
+
+O Supabase usa PostgreSQL, entao o schema Prisma atual continua valido. Como os dados locais sao descartaveis, a troca pode ser feita aplicando as migrations existentes em um projeto Supabase vazio.
+
+1. Crie um projeto no Supabase.
+2. No painel do Supabase, abra `Connect` e copie as connection strings do banco.
+3. Atualize o `.env`:
+
+```env
+DATABASE_URL="postgresql://postgres.[PROJECT-REF]:[PASSWORD]@[REGION].pooler.supabase.com:6543/postgres?pgbouncer=true"
+DIRECT_URL="postgresql://postgres.[PROJECT-REF]:[PASSWORD]@[REGION].pooler.supabase.com:5432/postgres"
+```
+
+Se sua rede tiver IPv6 ou o projeto tiver IPv4 Add-on, `DIRECT_URL` tambem pode ser a conexao direta:
+
+```env
+DIRECT_URL="postgresql://postgres:[PASSWORD]@db.[PROJECT-REF].supabase.co:5432/postgres"
+```
+
+Depois aplique o banco remoto:
+
+```bash
+npm run prisma:generate
+npm run prisma:deploy
+npm run seed
+npm run dev
+```
+
+Para confirmar:
+
+```bash
+npm run prisma:studio
+```
+
+Em desenvolvimento local com Docker, mantenha `DATABASE_URL` e `DIRECT_URL` apontando para `127.0.0.1:5434`.
+
 ## Build e execucao compilada
 
 Compilar:
@@ -398,11 +350,6 @@ Rodar compilado:
 ```bash
 npm run start
 ```
-
-Observacao:
-
-- voce edita `src/` e `prisma/`
-- nao edite `dist/`, porque ele e gerado automaticamente
 
 ## Troubleshooting
 
@@ -443,7 +390,7 @@ Pontos que continuam como proxima camada de trabalho:
 - testes automatizados
 - upload real de imagem
 - recuperacao de senha
-- bloqueios de agenda por painel
+- tela de bloqueios integrada no frontend
 - avaliacao real de profissionais
 - paginacao e filtros mais avancados
 - observabilidade e logs estruturados

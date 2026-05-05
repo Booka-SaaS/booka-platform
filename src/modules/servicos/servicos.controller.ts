@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { requireAuth, AuthenticatedRequest } from '../../middleware/auth';
 import { requireRole } from '../../middleware/role';
-import { createServicoSchema, updateServicoSchema } from './servicos.schema';
+import { createServicoSchema, servicoIdParamSchema, updateServicoSchema } from './servicos.schema';
 import { createServico, deleteServico, listServicos, updateServico } from './servicos.service';
 
 export function buildServicosRouter() {
@@ -33,8 +33,9 @@ export function buildServicosRouter() {
   router.put('/:id', async (request, response, next) => {
     try {
       const authenticatedRequest = request as AuthenticatedRequest;
+      const { id } = servicoIdParamSchema.parse(request.params);
       const payload = updateServicoSchema.parse(request.body);
-      const result = await updateServico(authenticatedRequest.auth!.userId, request.params.id, payload);
+      const result = await updateServico(authenticatedRequest.auth!.userId, id, payload);
       response.json(result);
     } catch (error) {
       next(error);
@@ -44,7 +45,8 @@ export function buildServicosRouter() {
   router.delete('/:id', async (request, response, next) => {
     try {
       const authenticatedRequest = request as AuthenticatedRequest;
-      const result = await deleteServico(authenticatedRequest.auth!.userId, request.params.id);
+      const { id } = servicoIdParamSchema.parse(request.params);
+      const result = await deleteServico(authenticatedRequest.auth!.userId, id);
       response.json(result);
     } catch (error) {
       next(error);

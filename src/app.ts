@@ -13,6 +13,7 @@ import { buildClientesRouter } from './modules/clientes/clientes.controller';
 import { buildAgendamentosRouter } from './modules/agendamentos/agendamentos.controller';
 import { buildProfissionaisRouter } from './modules/profissionais/profissionais.controller';
 import { buildDashboardRouter } from './modules/dashboard/dashboard.controller';
+import { buildBloqueiosRouter } from './modules/bloqueios/bloqueios.controller';
 
 export function buildApp() {
   const app = express();
@@ -41,6 +42,7 @@ export function buildApp() {
   app.use('/agendamentos', buildAgendamentosRouter());
   app.use('/profissionais', buildProfissionaisRouter());
   app.use('/dashboard', buildDashboardRouter());
+  app.use('/bloqueios', buildBloqueiosRouter());
 
   app.use((error: Error, _request: Request, response: Response, next: NextFunction) => {
     if (response.headersSent) {

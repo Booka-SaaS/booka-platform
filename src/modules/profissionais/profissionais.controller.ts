@@ -19,6 +19,10 @@ const disponibilidadeQuerySchema = z.object({
   data: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
 });
 
+const profissionalIdParamSchema = z.object({
+  id: z.string().uuid(),
+});
+
 export function buildProfissionaisRouter() {
   const router = Router();
 
@@ -34,8 +38,9 @@ export function buildProfissionaisRouter() {
 
   router.get('/:id/disponibilidade', async (request, response, next) => {
     try {
+      const { id } = profissionalIdParamSchema.parse(request.params);
       const query = disponibilidadeQuerySchema.parse(request.query);
-      const result = await getProfissionalDisponibilidade(request.params.id, query.data);
+      const result = await getProfissionalDisponibilidade(id, query.data);
       response.json(result);
     } catch (error) {
       next(error);
@@ -44,7 +49,8 @@ export function buildProfissionaisRouter() {
 
   router.get('/:id', async (request, response, next) => {
     try {
-      const result = await getProfissionalDetalhe(request.params.id);
+      const { id } = profissionalIdParamSchema.parse(request.params);
+      const result = await getProfissionalDetalhe(id);
       response.json(result);
     } catch (error) {
       next(error);
