@@ -33,15 +33,7 @@ export class LoginComponent {
       return;
     }
 
-    // Interceptar login de teste
-    if (this.email === 'cliente@booka.com' && this.password === 'teste123') {
-      this.loginTeste('CLIENTE');
-      return;
-    }
-    if (this.email === 'profissional@booka.com' && this.password === 'teste123') {
-      this.loginTeste('PROFISSIONAL');
-      return;
-    }
+
 
     this.isLoading = true;
     this.authService.login(this.email, this.password).subscribe({
@@ -62,16 +54,4 @@ export class LoginComponent {
     });
   }
 
-  loginTeste(tipo: 'CLIENTE' | 'PROFISSIONAL') {
-    this.isLoading = true;
-    this.authService.loginTeste(tipo);
-    setTimeout(() => {
-      this.isLoading = false;
-      if (tipo === 'PROFISSIONAL') {
-        this.router.navigate(['/dashboard']);
-      } else {
-        this.router.navigate(['/explorar']);
-      }
-    }, 500);
-  }
 }

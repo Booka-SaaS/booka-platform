@@ -96,8 +96,4 @@ export class AuthService {
     return this.getRole() === 'CLIENTE';
   }
 
-  loginTeste(tipo: 'CLIENTE' | 'PROFISSIONAL'): void {
-    localStorage.setItem(this.TOKEN_KEY, 'fake-jwt-token-para-teste');
-    localStorage.setItem(this.ROLE_KEY, tipo);
-  }
 }
