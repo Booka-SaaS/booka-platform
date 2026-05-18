@@ -1,73 +1,124 @@
-// src/app/services/agendamento.service.ts
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of, delay } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { Agendamento } from '../models/Agendamento';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+
+export type StatusAgendamento = 'PENDENTE' | 'CONFIRMADO' | 'CANCELADO' | 'CONCLUIDO';
+
+export interface Agendamento {
+  id: string;
+  dataAgendamento: string;
+  horaInicio: string;
+  horaFim: string;
+  status: StatusAgendamento;
+  origem: 'PUBLICO' | 'PAINEL';
+  nomeCliente: string;
+  emailCliente: string;
+  telefoneCliente?: string;
+  notasCliente?: string;
+  servicoId: string;
+  clienteId?: string;
+  lojaId: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateAgendamentoRequest {
+  nomeCliente: string;
+  emailCliente: string;
+  telefoneCliente?: string;
+  notasCliente?: string;
+  servicoId: string;
+  dataAgendamento: string;
+  horaInicio: string;
+  horaFim?: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AgendamentoService {
   private http = inject(HttpClient);
-  private apiUrl = environment.apiUrl;
+  private apiUrl = `${environment.apiUrl}/agendamentos`;
 
-  // Mock para desenvolvimento sem backend
-  private mockAgendamentos: Agendamento[] = [
-    {
-      id: 1,
-      clienteId: 'user-123',
-      lojaId: 'barber-01',
-      nomeLoja: 'Corte & Estilo Premium',
-      servicoId: 101,
-      nomeServico: 'Corte de Cabelo + Barba',
-      data: '2026-04-20T14:30:00',
-      dataHora: '2026-04-20T14:30:00',
-      valor: 85.00,
-      status: 'CONFIRMADO'
-    },
-    {
-      id: 2,
-      clienteId: 'user-123',
-      lojaId: 'beauty-02',
-      nomeLoja: 'Studio Letícia Nails',
-      servicoId: 202,
-      nomeServico: 'Manicure e Pedicure',
-      data: '2026-04-10T09:00:00',
-      dataHora: '2026-04-10T09:00:00',
-      valor: 120.00,
-      status: 'CONCLUIDO'
-    },
-    {
-      id: 3,
-      clienteId: 'user-123',
-      lojaId: 'spa-03',
-      nomeLoja: 'Zen Spa & Wellness',
-      servicoId: 303,
-      nomeServico: 'Massagem Relaxante',
-      data: '2026-04-25T16:00:00',
-      dataHora: '2026-04-25T16:00:00',
-      valor: 150.00,
-      status: 'PENDENTE'
-    }
-  ];
-
-  getMeusAgendamentos(): Observable<Agendamento[]> {
-    // Futuro: return this.http.get<Agendamento[]>(`${this.apiUrl}/agendamentos/meus`);
-    return of(this.mockAgendamentos).pipe(delay(1200)); // Delay um pouco maior para ver o loading bonito
+  // Cliente criar agendamento (público, sem autenticação)
+  criarPublico(dados: CreateAgendamentoRequest): Observable<{ agendamento: Agendamento }> {
+    return this.http.post<{ agendamento: Agendamento }>(`${this.apiUrl}/publicos`, dados)
+      .pipe(
+        catchError(err => {
+          console.error('Erro ao criar agendamento público:', err);
+          return throwError(() => err);
+        })
+      );
   }
 
-  listar() {
-    return of(this.mockAgendamentos).pipe(delay(800));
+  // Profissional: listar seus agendamentos (requer autenticação)
+  listar(params?: { page?: number; limit?: number; status?: StatusAgendamento; data?: string }): Observable<{ data: Agendamento[] }> {
+    let httpParams = new HttpParams();
+    if (params) {
+      if (params.page) httpParams = httpParams.set('page', params.page);
+      if (params.limit) httpParams = httpParams.set('limit', params.limit);
+      if (params.status) httpParams = httpParams.set('status', params.status);
+      if (params.data) httpParams = httpParams.set('data', params.data);
+    }
+    return this.http.get<{ data: Agendamento[] }>(this.apiUrl, { params: httpParams })
+      .pipe(
+        catchError(err => {
+          console.error('Erro ao listar agendamentos:', err);
+          return throwError(() => err);
+        })
+      );
+  }
+
+  // Profissional: criar agendamento (requer autenticação)
+  criar(dados: CreateAgendamentoRequest): Observable<{ agendamento: Agendamento }> {
+    return this.http.post<{ agendamento: Agendamento }>(this.apiUrl, dados)
+      .pipe(
+        catchError(err => {
+          console.error('Erro ao criar agendamento:', err);
+          return throwError(() => err);
+        })
+      );
+  }
+
+  // Profissional: atualizar agendamento (requer autenticação)
+  atualizar(id: string, dados: Partial<Agendamento>): Observable<{ agendamento: Agendamento }> {
+    return this.http.put<{ agendamento: Agendamento }>(`${this.apiUrl}/${id}`, dados)
+      .pipe(
+        catchError(err => {
+          console.error('Erro ao atualizar agendamento:', err);
+          return throwError(() => err);
+        })
+      );
+  }
+
+  // Profissional: deletar agendamento (requer autenticação)
+  deletar(id: string): Observable<{ success: boolean }> {
+    return this.http.delete<{ success: boolean }>(`${this.apiUrl}/${id}`)
+      .pipe(
+        catchError(err => {
+          console.error('Erro ao deletar agendamento:', err);
+          return throwError(() => err);
+        })
+      );
+  }
+
+  // Atualizar status
+  atualizarStatus(id: string, novoStatus: StatusAgendamento): Observable<{ agendamento: Agendamento }> {
+    return this.atualizar(id, { status: novoStatus });
+  }
+
+  // Métodos compatíveis com código legado
+  getMeusAgendamentos(): Observable<Agendamento[]> {
+    return this.http.get<Agendamento[]>(`${this.apiUrl}`);
+  }
+
+  listarPorLoja(lojaId: string | number): Observable<Agendamento[]> {
+    return this.http.get<Agendamento[]>(`${this.apiUrl}?lojaId=${lojaId}`);
   }
 
   cancelar(id: string | number): Observable<any> {
-    console.log(`Cancelando agendamento ${id}`);
-    return of({ success: true }).pipe(delay(1000));
-  }
-
-  // Métodos já existentes
-  listarPorLoja(lojaId: string | number) {
-    return this.http.get<Agendamento[]>(`${this.apiUrl}/agendamentos/loja/${lojaId}`);
+    return this.atualizarStatus(id.toString(), 'CANCELADO');
   }
 }

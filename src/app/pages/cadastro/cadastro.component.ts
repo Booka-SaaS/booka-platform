@@ -3,6 +3,7 @@ import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common'; 
 import { FormsModule } from '@angular/forms'; 
 import { AuthService } from '../../services/auth.service';
+import { CustomValidators } from '../../utils/validators';
 
 @Component({
   selector: 'app-cadastro',
@@ -17,8 +18,9 @@ export class CadastroComponent {
   password = '';
   confirmPassword = '';
   showPassword = false;
+  isLoading = false;
+  errorMessage = '';
   
-  // Nova variável para controlar o dropdown mágico
   showRequirements = false;
   role: string = 'CLIENTE';
 
@@ -48,6 +50,14 @@ export class CadastroComponent {
   get hasNumber() {
     return /[0-9]/.test(this.password);
   }
+  
+  get hasUpperCase() {
+    return /[A-Z]/.test(this.password);
+  }
+  
+  get hasLowerCase() {
+    return /[a-z]/.test(this.password);
+  }
 
   get hasSpecialChar() {
     return /[!@#$%^&*(),.?":{}|<>]/.test(this.password);
@@ -58,17 +68,31 @@ export class CadastroComponent {
   }
 
   onSubmit() {
+    this.errorMessage = '';
+    
     if (!this.fullName || !this.email || !this.password) {
-      alert('Preencha os campos obrigatórios!');
+      this.errorMessage = 'Preencha os campos obrigatórios!';
       return;
     }
+    
+    if (!this.isValidEmail(this.email)) {
+      this.errorMessage = 'E-mail inválido. Use um formato válido (ex: user@domain.com)';
+      return;
+    }
+    
     if (!this.passwordsMatch || !this.hasMinLength) {
-      alert('Verifique os requisitos da senha!');
+      this.errorMessage = 'Verifique os requisitos da senha!';
+      return;
+    }
+    if (!this.hasNumber || !this.hasUpperCase || !this.hasLowerCase) {
+      this.errorMessage = 'A senha não atende os requisitos de segurança';
       return;
     }
 
+    this.isLoading = true;
     this.authService.register(this.fullName, this.email, this.password, this.role).subscribe({
       next: () => {
+        this.isLoading = false;
         if (this.role === 'PROFISSIONAL') {
           this.router.navigate(['/onboarding']);
         } else {
@@ -76,9 +100,14 @@ export class CadastroComponent {
         }
       },
       error: (err) => {
-        alert('Erro ao realizar cadastro.');
-        console.error(err);
+        this.isLoading = false;
+        console.error('Erro ao realizar cadastro:', err);
+        this.errorMessage = 'Erro ao realizar cadastro. Verifique os dados e tente novamente.';
       }
     });
   }
-}
+  
+  isValidEmail(email: string): boolean {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  }
