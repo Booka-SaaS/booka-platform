@@ -1,6 +1,6 @@
 # Importação dos repositórios
 
-Este documento registra como os repositórios principais do BOOKA foram importados para o novo monorepo `BookaSaaS/booka-platform`.
+Este documento registra como os repositórios principais do BOOKA foram importados para o novo monorepo `Booka-SaaS/booka-platform`.
 
 ## Regras
 

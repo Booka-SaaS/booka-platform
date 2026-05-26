@@ -1,6 +1,6 @@
 # BOOKA Platform
 
-BOOKA Platform é o monorepo oficial do projeto BOOKA dentro da organização BookaSaaS.
+BOOKA Platform é o monorepo oficial do projeto BOOKA dentro da organização Booka-SaaS.
 
 ## Estrutura
 
@@ -69,10 +69,10 @@ Mais detalhes estão em `docs/integracao-frontend-backend.md`.
 O remoto local `origin` está configurado para:
 
 ```text
-https://github.com/BookaSaaS/booka-platform.git
+https://github.com/Booka-SaaS/booka-platform.git
 ```
 
-Se o repositório ainda não existir na organização, crie `BookaSaaS/booka-platform` no GitHub antes do primeiro push. Depois publique somente o novo monorepo:
+Se o repositório ainda não existir na organização, crie `Booka-SaaS/booka-platform` no GitHub antes do primeiro push. Depois publique somente o novo monorepo:
 
 ```bash
 git push -u origin main
