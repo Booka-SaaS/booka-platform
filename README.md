@@ -64,6 +64,22 @@ CLIENT_ORIGINS=http://localhost:4200,http://localhost:5173,http://localhost:3000
 
 Mais detalhes estão em `docs/integracao-frontend-backend.md`.
 
+## Publicação no GitHub
+
+O remoto local `origin` está configurado para:
+
+```text
+https://github.com/BookaSaaS/booka-platform.git
+```
+
+Se o repositório ainda não existir na organização, crie `BookaSaaS/booka-platform` no GitHub antes do primeiro push. Depois publique somente o novo monorepo:
+
+```bash
+git push -u origin main
+```
+
+Os remotos de origem `frontend-origin` e `backend-origin` devem permanecer apenas para leitura.
+
 ## Observações
 
 - Os repositórios originais não foram alterados.
