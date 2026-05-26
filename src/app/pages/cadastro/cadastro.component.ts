@@ -22,7 +22,7 @@ export class CadastroComponent {
   errorMessage = '';
   
   showRequirements = false;
-  role: string = 'CLIENTE';
+  role: 'CLIENTE' | 'PROFISSIONAL' = 'CLIENTE';
 
   private authService = inject(AuthService);
   private router = inject(Router);
@@ -111,3 +111,4 @@ export class CadastroComponent {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);
   }
+}

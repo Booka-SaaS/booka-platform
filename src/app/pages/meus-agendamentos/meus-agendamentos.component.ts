@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AgendamentoService } from '../../services/agendamento.service';
 import { AuthService } from '../../services/auth.service';
-import { Agendamento } from '../../models/Agendamento';
+import { Agendamento } from '../../models';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 
 @Component({
@@ -20,7 +20,7 @@ export class MeusAgendamentosComponent implements OnInit {
     agendamentos: Agendamento[] = [];
     loading = true;
     error = false;
-    cancelandoId: string | number | null = null;
+    cancelandoId: string | null = null;
 
 
 
@@ -47,12 +47,10 @@ export class MeusAgendamentosComponent implements OnInit {
     isFuturo(data: string | Date): boolean {
         const dataAgendamento = new Date(data);
         const agora = new Date();
-        // Zera as horas para comparar apenas os dias se necessário, 
-        // ou mantém para precisão de minuto. Aqui manteremos precisão.
         return dataAgendamento > agora;
     }
 
-    cancelar(id: string | number | undefined) {
+    cancelar(id: string | undefined) {
         if (!id) return;
 
         if (confirm('Deseja realmente cancelar este agendamento?')) {

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { TopbarComponent } from '../../components/topbar/topbar.component';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
-import { ServicoService } from '../../services/servico.service';
+import { ServicoService, CreateServicoRequest } from '../../services/servico.service';
 import { Servico } from '../../models';
 
 @Component({
@@ -20,7 +20,7 @@ export class ServicosComponent implements OnInit {
   isSaving = false;
   showModal = false;
 
-  novoServico: Partial<Servico> = {
+  novoServico: CreateServicoRequest = {
     nome: '',
     preco: 0,
     duracaoMinutos: 0
@@ -59,7 +59,7 @@ export class ServicosComponent implements OnInit {
     if (!this.novoServico.nome || !this.novoServico.preco) return;
 
     this.isSaving = true;
-    this.servicoService.criar(this.novoServico as Servico).subscribe({
+    this.servicoService.criar(this.novoServico).subscribe({
       next: () => {
         this.isSaving = false;
         this.fecharModal();

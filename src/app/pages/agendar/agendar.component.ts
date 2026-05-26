@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ProfissionalService } from '../../services/profissional.service';
-import { AgendamentoService } from '../../services/agendamento.service';
+import { AgendamentoService, CreateAgendamentoPublicoRequest } from '../../services/agendamento.service';
 import { AuthService } from '../../services/auth.service';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { ModalService } from '../../services/modal.service';
-import { Profissional } from '../../models';
+import { ProfissionalDetalhe, ProfissionalServico } from '../../models';
 
 @Component({
   selector: 'app-agendar',
@@ -17,14 +17,14 @@ import { Profissional } from '../../models';
   styleUrl: './agendar.component.css'
 })
 export class AgendarComponent implements OnInit {
-  slug: string | null = null;
-  profissional: Profissional | null = null;
+  lojaId: string | null = null;
+  profissional: ProfissionalDetalhe | null = null;
   step = 1;
   isLoading = false;
   isSaving = false;
   errorMessage = '';
 
-  servicoSelecionado: any = null;
+  servicoSelecionado: ProfissionalServico | null = null;
   dataSelecionada: Date | null = null;
   horarioSelecionado: string | null = null;
 
@@ -52,10 +52,10 @@ export class AgendarComponent implements OnInit {
 
   carregarProfissional() {
     this.route.paramMap.subscribe(params => {
-      this.slug = params.get('slug');
-      if (this.slug) {
+      this.lojaId = params.get('idLoja');
+      if (this.lojaId) {
         this.isLoading = true;
-        this.profissionalService.obterPorSlug(this.slug).subscribe({
+        this.profissionalService.obterPorId(this.lojaId).subscribe({
           next: (response) => {
             this.profissional = response;
             if (this.profissional?.servicos?.length > 0) {
@@ -113,7 +113,7 @@ export class AgendarComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
-  selecionarServico(servico: any) {
+  selecionarServico(servico: ProfissionalServico) {
     this.servicoSelecionado = servico;
   }
 
@@ -123,9 +123,9 @@ export class AgendarComponent implements OnInit {
     this.horarioSelecionado = null;
     
     // Buscar horários disponíveis da API
-    if (this.slug && this.dataSelecionada) {
+    if (this.lojaId && this.dataSelecionada) {
       const dataFormatada = this.dataSelecionada.toISOString().split('T')[0];
-      this.profissionalService.obterDisponibilidade(this.slug, dataFormatada).subscribe({
+      this.profissionalService.obterDisponibilidade(this.lojaId, dataFormatada).subscribe({
         next: (response) => {
           this.horariosDisponiveis = response.slots || [];
         },
@@ -147,22 +147,24 @@ export class AgendarComponent implements OnInit {
       return;
     }
 
-    if (!this.clienteNome || !this.clienteEmail || !this.clienteWhatsapp) {
-      this.modalService.alert("Atenção", "Preencha seus dados (nome, email e WhatsApp) para continuar.");
+    if (!this.clienteNome || !this.clienteWhatsapp) {
+      this.modalService.alert("Atenção", "Preencha seu nome e WhatsApp para continuar.");
       return;
     }
 
     this.isSaving = true;
     const dataFormatada = this.dataSelecionada.toISOString().split('T')[0];
+    const inicioIso = `${dataFormatada}T${this.horarioSelecionado}:00.000Z`;
     
-    const dados = {
-      servico_id: this.servicoSelecionado.id,
-      profissional_id: this.profissional?.id,
-      cliente_nome: this.clienteNome,
-      cliente_email: this.clienteEmail,
-      cliente_telefone: this.clienteWhatsapp,
-      data_hora: `${dataFormatada}T${this.horarioSelecionado}:00`,
-      modalidade: this.profissional?.modalidades?.[0] || 'PRESENCIAL'
+    const dados: CreateAgendamentoPublicoRequest = {
+      lojaId: this.lojaId!,
+      servicoId: this.servicoSelecionado.id,
+      inicio: inicioIso,
+      cliente: {
+        nome: this.clienteNome,
+        email: this.clienteEmail || null,
+        telefone: this.clienteWhatsapp,
+      }
     };
 
     this.agendamentoService.criarPublico(dados).subscribe({

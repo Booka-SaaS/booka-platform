@@ -51,27 +51,23 @@ export class ExplorarComponent implements OnInit {
       // 1. Busca textual
       const normalizar = (str: string) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
       const termo = normalizar(this.termoBusca);
-      const bateTermo = !termo || normalizar(p.nome || '').includes(termo) || normalizar(p.especialidade || '').includes(termo);
+      const bateTermo = !termo || normalizar(p.nome || '').includes(termo) || normalizar(p.profissao || '').includes(termo);
       
       // 2. Preço Máximo
-      const precoMedio = p.preco_medio || 0;
-      const batePreco = precoMedio <= this.precomax;
+      const batePreco = p.precoInicial <= this.precomax;
 
       // 3. Avaliação
-      const rating = p.rating || 0;
-      const bateAvaliacao = rating >= this.avaliacaoMinima;
+      const bateAvaliacao = p.rating >= this.avaliacaoMinima;
 
       // 4. Modalidade
-      const modalidades = p.modalidades || [];
-      const bateModalidade = this.modalidade === 'todas' || modalidades.includes(this.modalidade);
+      const bateModalidade = this.modalidade === 'todas' || p.modalidade === this.modalidade.toUpperCase();
 
       // 5. Categorias (se nenhuma selecionada, ignora filtro de categoria)
       const catsAtivas = Object.keys(this.categorias).filter(k => this.categorias[k]);
       const bateCategoria = catsAtivas.length === 0 || catsAtivas.includes(p.categoria || '');
 
       // 6. Vendedor
-      const tipoVendedor = p.tipo_vendedor || 'AUTONOMO';
-      const vendedorDisplay = tipoVendedor === 'AUTONOMO' ? 'Autônomo' : 'Empresa';
+      const vendedorDisplay = p.vendedor === 'AUTONOMO' ? 'Autônomo' : 'Empresa';
       const bateVendedor = this.tiposVendedor[vendedorDisplay];
 
       return bateTermo && batePreco && bateAvaliacao && bateModalidade && bateCategoria && bateVendedor;
@@ -126,13 +122,13 @@ export class ExplorarComponent implements OnInit {
   carregarProfissionais() {
     this.isLoading = true;
     this.errorMessage = '';
-    const params = {
-      cidade: this.cidadeBusca || undefined,
-      limite: 50
-    };
+    const params: any = {};
+    if (this.cidadeBusca) params.cidade = this.cidadeBusca;
+    if (this.termoBusca) params.q = this.termoBusca;
+    
     this.profissionalService.listar(params).subscribe({
       next: (response) => {
-        this.profissionais = response.data || [];
+        this.profissionais = response;
         this.isLoading = false;
       },
       error: (err) => {

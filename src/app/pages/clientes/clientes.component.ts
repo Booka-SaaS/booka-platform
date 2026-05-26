@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { TopbarComponent } from '../../components/topbar/topbar.component';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
-import { ClienteService } from '../../services/cliente.service';
+import { ClienteService, CreateClienteRequest } from '../../services/cliente.service';
 import { Cliente } from '../../models';
 
 @Component({
@@ -20,7 +20,7 @@ export class ClientesComponent implements OnInit {
   isSaving = false;
   showModal = false;
 
-  novoCliente: Partial<Cliente> = {
+  novoCliente: CreateClienteRequest = {
     nome: '',
     email: '',
     telefone: ''
@@ -56,10 +56,10 @@ export class ClientesComponent implements OnInit {
   }
 
   salvarCliente() {
-    if (!this.novoCliente.nome) return;
+    if (!this.novoCliente.nome || !this.novoCliente.telefone) return;
 
     this.isSaving = true;
-    this.clienteService.criar(this.novoCliente as Cliente).subscribe({
+    this.clienteService.criar(this.novoCliente).subscribe({
       next: () => {
         this.isSaving = false;
         this.fecharModal();
