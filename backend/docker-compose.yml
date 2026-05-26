@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: booka-v2-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: booka_v2
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5434:5432"
+    volumes:
+      - booka_v2_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  booka_v2_postgres_data:
