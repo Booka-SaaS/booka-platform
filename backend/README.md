@@ -56,17 +56,17 @@ Valores padrao:
 
 ```env
 PORT=3001
-CLIENT_ORIGIN=http://localhost:4200
+CLIENT_ORIGINS=http://localhost:4200,http://localhost:5173,http://localhost:3000
 DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5434/booka_v2?schema=public
 DIRECT_URL=postgresql://postgres:postgres@127.0.0.1:5434/booka_v2?schema=public
-JWT_SECRET=booka-v2-local-secret-change-me
+JWT_SECRET=change-me-use-a-long-random-secret
 JWT_TTL_SECONDS=604800
 ```
 
 Observacoes:
 
 - `JWT_SECRET` precisa ter pelo menos 16 caracteres.
-- `CLIENT_ORIGIN` precisa bater com a origem do frontend local.
+- `CLIENT_ORIGINS` precisa listar as origens locais permitidas, separadas por virgula.
 - `DATABASE_URL` e usada pela API em runtime.
 - `DIRECT_URL` e usada pelo Prisma para migrations e comandos administrativos.
 - `JWT_TTL_SECONDS=604800` equivale a 7 dias.

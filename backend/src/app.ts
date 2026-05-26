@@ -20,7 +20,7 @@ export function buildApp() {
 
   app.use(
     cors({
-      origin: env.CLIENT_ORIGIN,
+      origin: env.CLIENT_ORIGINS,
     }),
   );
   app.use(express.json());
