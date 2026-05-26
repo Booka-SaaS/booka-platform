@@ -127,12 +127,12 @@ export class ExplorarComponent implements OnInit {
     this.isLoading = true;
     this.errorMessage = '';
     const params = {
-      cidade: this.cidadeBusca || undefined,
-      limite: 50
+      q: this.termoBusca || undefined,
+      cidade: this.cidadeBusca || undefined
     };
     this.profissionalService.listar(params).subscribe({
       next: (response) => {
-        this.profissionais = response.data || [];
+        this.profissionais = response || [];
         this.isLoading = false;
       },
       error: (err) => {

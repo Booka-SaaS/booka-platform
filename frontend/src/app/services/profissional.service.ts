@@ -1,22 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { Observable, catchError } from 'rxjs';
-import { throwError } from 'rxjs';
-
-export interface Profissional {
-  id: string;
-  nomeExibicao: string;
-  profissao: string;
-  bio?: string;
-  imagemUrl?: string;
-  categoriaPrincipal: string;
-  modalidadePrincipal: 'ONLINE' | 'PRESENCIAL' | 'HIBRIDO';
-  cidade?: string;
-  publicado: boolean;
-  rating: number;
-  avaliacoesCount: number;
-}
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { Profissional } from '../models';
 
 export interface ProfissionalDetalhe extends Profissional {
   loja?: {
@@ -28,7 +15,6 @@ export interface ProfissionalDetalhe extends Profissional {
     endereco?: string;
     descricao?: string;
   };
-  servicos?: any[];
 }
 
 @Injectable({
@@ -38,17 +24,36 @@ export class ProfissionalService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}/profissionais`;
 
-  // Listing público com paginação
-  listar(params?: { page?: number; limit?: number; categoria?: string; cidade?: string }): Observable<{ data: Profissional[] }> {
+  private mapProfissional(item: Profissional): Profissional {
+    return {
+      ...item,
+      especialidade: item.especialidade ?? item.profissao,
+      preco_medio: item.preco_medio ?? item.precoInicial,
+      preco: item.preco ?? item.precoInicial,
+      modalidades: item.modalidades ?? (item.modalidade ? [item.modalidade] : []),
+      tipo_vendedor: item.tipo_vendedor ?? item.vendedor,
+      servicos: item.servicos?.map((servico) => ({
+        ...servico,
+        duracao: servico.duracao ?? servico.duracaoMinutos,
+      })),
+    };
+  }
+
+  listar(params?: { page?: number; limit?: number; q?: string; categoria?: string; cidade?: string; modalidade?: string; precoMax?: number; avaliacaoMinima?: number }): Observable<Profissional[]> {
     let httpParams = new HttpParams();
     if (params) {
       if (params.page) httpParams = httpParams.set('page', params.page);
       if (params.limit) httpParams = httpParams.set('limit', params.limit);
+      if (params.q) httpParams = httpParams.set('q', params.q);
       if (params.categoria) httpParams = httpParams.set('categoria', params.categoria);
       if (params.cidade) httpParams = httpParams.set('cidade', params.cidade);
+      if (params.modalidade) httpParams = httpParams.set('modalidade', params.modalidade);
+      if (params.precoMax) httpParams = httpParams.set('precoMax', params.precoMax);
+      if (params.avaliacaoMinima) httpParams = httpParams.set('avaliacaoMinima', params.avaliacaoMinima);
     }
-    return this.http.get<{ data: Profissional[] }>(this.apiUrl, { params: httpParams })
+    return this.http.get<Profissional[]>(this.apiUrl, { params: httpParams })
       .pipe(
+        map((response) => response.map((item) => this.mapProfissional(item))),
         catchError(err => {
           console.error('Erro ao listar profissionais:', err);
           return throwError(() => err);
@@ -56,10 +61,10 @@ export class ProfissionalService {
       );
   }
 
-  // Detalhe público por slug
   obterPorSlug(slug: string): Observable<ProfissionalDetalhe> {
     return this.http.get<ProfissionalDetalhe>(`${this.apiUrl}/${slug}`)
       .pipe(
+        map((response) => this.mapProfissional(response) as ProfissionalDetalhe),
         catchError(err => {
           console.error('Erro ao obter profissional:', err);
           return throwError(() => err);
@@ -67,10 +72,9 @@ export class ProfissionalService {
       );
   }
 
-  // Disponibilidade por data
-  obterDisponibilidade(slug: string, data: string): Observable<{ slots: any[] }> {
+  obterDisponibilidade(slug: string, data: string): Observable<{ data: string; horarios: string[] }> {
     let httpParams = new HttpParams().set('data', data);
-    return this.http.get<{ slots: any[] }>(`${this.apiUrl}/${slug}/disponibilidade`, { params: httpParams })
+    return this.http.get<{ data: string; horarios: string[] }>(`${this.apiUrl}/${slug}/disponibilidade`, { params: httpParams })
       .pipe(
         catchError(err => {
           console.error('Erro ao obter disponibilidade:', err);

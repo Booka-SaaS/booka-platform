@@ -40,7 +40,7 @@ export class ServicosComponent implements OnInit {
         this.isLoading = false;
       },
       error: (err) => {
-        console.error('Erro ao buscar serviços', err);
+        console.error('Erro ao buscar servicos', err);
         this.isLoading = false;
       }
     });
@@ -59,7 +59,11 @@ export class ServicosComponent implements OnInit {
     if (!this.novoServico.nome || !this.novoServico.preco) return;
 
     this.isSaving = true;
-    this.servicoService.criar(this.novoServico as Servico).subscribe({
+    this.servicoService.criar({
+      nome: this.novoServico.nome,
+      preco: this.novoServico.preco,
+      duracaoMinutos: this.novoServico.duracaoMinutos ?? 0
+    }).subscribe({
       next: () => {
         this.isSaving = false;
         this.fecharModal();
@@ -68,7 +72,7 @@ export class ServicosComponent implements OnInit {
       error: (err) => {
         this.isSaving = false;
         console.error(err);
-        alert('Erro ao salvar serviço. Tente novamente.');
+        alert('Erro ao salvar servico. Tente novamente.');
       }
     });
   }

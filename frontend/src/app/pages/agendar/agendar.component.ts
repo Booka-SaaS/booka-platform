@@ -58,8 +58,9 @@ export class AgendarComponent implements OnInit {
         this.profissionalService.obterPorSlug(this.slug).subscribe({
           next: (response) => {
             this.profissional = response;
-            if (this.profissional?.servicos?.length > 0) {
-              this.servicoSelecionado = this.profissional.servicos[0];
+            const servicos = this.profissional.servicos ?? [];
+            if (servicos.length > 0) {
+              this.servicoSelecionado = servicos[0];
             }
             this.isLoading = false;
           },
@@ -127,7 +128,7 @@ export class AgendarComponent implements OnInit {
       const dataFormatada = this.dataSelecionada.toISOString().split('T')[0];
       this.profissionalService.obterDisponibilidade(this.slug, dataFormatada).subscribe({
         next: (response) => {
-          this.horariosDisponiveis = response.slots || [];
+          this.horariosDisponiveis = response.horarios || [];
         },
         error: (err) => {
           console.error('Erro ao carregar horários:', err);
@@ -156,13 +157,14 @@ export class AgendarComponent implements OnInit {
     const dataFormatada = this.dataSelecionada.toISOString().split('T')[0];
     
     const dados = {
-      servico_id: this.servicoSelecionado.id,
-      profissional_id: this.profissional?.id,
-      cliente_nome: this.clienteNome,
-      cliente_email: this.clienteEmail,
-      cliente_telefone: this.clienteWhatsapp,
-      data_hora: `${dataFormatada}T${this.horarioSelecionado}:00`,
-      modalidade: this.profissional?.modalidades?.[0] || 'PRESENCIAL'
+      lojaId: this.profissional!.id,
+      servicoId: this.servicoSelecionado.id,
+      inicio: `${dataFormatada}T${this.horarioSelecionado}:00.000Z`,
+      cliente: {
+        nome: this.clienteNome,
+        email: this.clienteEmail,
+        telefone: this.clienteWhatsapp
+      }
     };
 
     this.agendamentoService.criarPublico(dados).subscribe({

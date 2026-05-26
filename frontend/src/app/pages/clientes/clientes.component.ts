@@ -59,7 +59,11 @@ export class ClientesComponent implements OnInit {
     if (!this.novoCliente.nome) return;
 
     this.isSaving = true;
-    this.clienteService.criar(this.novoCliente as Cliente).subscribe({
+    this.clienteService.criar({
+      nome: this.novoCliente.nome,
+      email: this.novoCliente.email ?? null,
+      telefone: this.novoCliente.telefone ?? ''
+    }).subscribe({
       next: () => {
         this.isSaving = false;
         this.fecharModal();

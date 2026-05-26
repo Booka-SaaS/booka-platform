@@ -1,26 +1,27 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter, Router } from '@angular/router';
 import { LoginComponent } from './login.component';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { AuthService } from '../../services/auth.service';
 import { of, throwError } from 'rxjs';
-import { Router } from '@angular/router';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
   let authServiceSpy: jasmine.SpyObj<AuthService>;
-  let routerSpy: jasmine.SpyObj<Router>;
+  let router: Router;
 
   beforeEach(async () => {
     const authSpy = jasmine.createSpyObj('AuthService', ['login', 'getRole']);
-    const navSpy = jasmine.createSpyObj('Router', ['navigate']);
 
     await TestBed.configureTestingModule({
-      imports: [LoginComponent, HttpClientTestingModule, RouterTestingModule],
+      imports: [LoginComponent],
       providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
         { provide: AuthService, useValue: authSpy },
-        { provide: Router, useValue: navSpy }
       ]
     })
     .compileComponents();
@@ -28,7 +29,8 @@ describe('LoginComponent', () => {
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
     authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
-    routerSpy = TestBed.inject(Router) as jasmine.SpyObj<Router>;
+    router = TestBed.inject(Router);
+    spyOn(router, 'navigate');
     fixture.detectChanges();
   });
 
@@ -47,22 +49,23 @@ describe('LoginComponent', () => {
   it('should call authService.login on submit with valid credentials', () => {
     authServiceSpy.login.and.returnValue(of({ token: 'mock-token' }));
     authServiceSpy.getRole.and.returnValue('CLIENTE');
-    
+
     component.email = 'test@test.com';
     component.password = 'password123';
     component.onSubmit();
-    
+
     expect(authServiceSpy.login).toHaveBeenCalledWith('test@test.com', 'password123');
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/explorar']);
+    expect(router.navigate).toHaveBeenCalledWith(['/explorar']);
   });
 
   it('should show error message on login failure', () => {
+    spyOn(console, 'error');
     authServiceSpy.login.and.returnValue(throwError(() => new Error('Login failed')));
-    
+
     component.email = 'wrong@test.com';
     component.password = 'wrong123';
     component.onSubmit();
-    
+
     expect(authServiceSpy.login).toHaveBeenCalled();
     expect(component.errorMessage).toBe('Email ou senha incorretos. Tente novamente.');
     expect(component.isLoading).toBeFalse();

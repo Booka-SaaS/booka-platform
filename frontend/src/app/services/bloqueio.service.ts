@@ -6,18 +6,17 @@ import { catchError } from 'rxjs/operators';
 
 export interface BloqueioAgenda {
   id: string;
-  dataInicio: string;
-  dataFim: string;
-  motivo?: string;
-  lojaId: string;
+  inicio: string;
+  fim: string;
+  motivo?: string | null;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface CreateBloqueioRequest {
-  dataInicio: string;
-  dataFim: string;
-  motivo?: string;
+  inicio: string;
+  fim: string;
+  motivo?: string | null;
 }
 
 @Injectable({
@@ -27,14 +26,13 @@ export class BloqueioService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}/bloqueios`;
 
-  // Listar bloqueios da loja do profissional logado
-  listar(params?: { page?: number; limit?: number }): Observable<{ data: BloqueioAgenda[] }> {
+  listar(params?: { page?: number; limit?: number }): Observable<BloqueioAgenda[]> {
     let httpParams = new HttpParams();
     if (params) {
       if (params.page) httpParams = httpParams.set('page', params.page);
       if (params.limit) httpParams = httpParams.set('limit', params.limit);
     }
-    return this.http.get<{ data: BloqueioAgenda[] }>(this.apiUrl, { params: httpParams })
+    return this.http.get<BloqueioAgenda[]>(this.apiUrl, { params: httpParams })
       .pipe(
         catchError(err => {
           console.error('Erro ao listar bloqueios:', err);
@@ -43,9 +41,8 @@ export class BloqueioService {
       );
   }
 
-  // Criar novo bloqueio
-  criar(dados: CreateBloqueioRequest): Observable<{ bloqueio: BloqueioAgenda }> {
-    return this.http.post<{ bloqueio: BloqueioAgenda }>(this.apiUrl, dados)
+  criar(dados: CreateBloqueioRequest): Observable<BloqueioAgenda> {
+    return this.http.post<BloqueioAgenda>(this.apiUrl, dados)
       .pipe(
         catchError(err => {
           console.error('Erro ao criar bloqueio:', err);
@@ -54,7 +51,6 @@ export class BloqueioService {
       );
   }
 
-  // Deletar bloqueio
   deletar(id: string): Observable<{ success: boolean }> {
     return this.http.delete<{ success: boolean }>(`${this.apiUrl}/${id}`)
       .pipe(

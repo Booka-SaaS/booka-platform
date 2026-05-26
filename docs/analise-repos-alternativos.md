@@ -190,6 +190,9 @@ Checklist minimo para migrar o app futuramente:
 
 Nao foi acrescentado codigo dos repositorios alternativos ao monorepo nesta etapa.
 
-Foram acrescentadas apenas esta analise e a atualizacao da comparacao de versoes.
+Foram acrescentadas apenas esta analise, a atualizacao da comparacao de versoes e dois roadmaps tecnicos:
+
+- `docs/roadmap-login-google.md`
+- `docs/roadmap-mobile.md`
 
 Isso preserva a estabilidade do monorepo e evita trazer implementacoes incompletas, conflitos de porta, endpoints inexistentes ou arquivos de ambiente sensiveis.

@@ -5,14 +5,7 @@ import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { TopbarComponent } from '../../components/topbar/topbar.component';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
-import { BloqueioService } from '../../services/bloqueio.service';
-
-interface Bloqueio {
-  id: number;
-  data_inicio: string;
-  data_fim: string;
-  motivo: string;
-}
+import { BloqueioAgenda, BloqueioService, CreateBloqueioRequest } from '../../services/bloqueio.service';
 
 @Component({
   selector: 'app-bloqueios',
@@ -22,15 +15,15 @@ interface Bloqueio {
   styleUrl: './bloqueios.component.css'
 })
 export class BloqueiosComponent implements OnInit {
-  bloqueios: Bloqueio[] = [];
+  bloqueios: BloqueioAgenda[] = [];
   isLoading = true;
   isSaving = false;
   showModal = false;
 
-  novoBloqueio: Partial<Bloqueio> = {
-    data_inicio: '',
-    data_fim: '',
-    motivo: 'Férias'
+  novoBloqueio: CreateBloqueioRequest = {
+    inicio: '',
+    fim: '',
+    motivo: 'Ferias'
   };
 
   private bloqueioService = inject(BloqueioService);
@@ -59,14 +52,14 @@ export class BloqueiosComponent implements OnInit {
 
   fecharModal() {
     this.showModal = false;
-    this.novoBloqueio = { data_inicio: '', data_fim: '', motivo: 'Férias' };
+    this.novoBloqueio = { inicio: '', fim: '', motivo: 'Ferias' };
   }
 
   salvarBloqueio() {
-    if (!this.novoBloqueio.data_inicio || !this.novoBloqueio.data_fim) return;
+    if (!this.novoBloqueio.inicio || !this.novoBloqueio.fim) return;
 
     this.isSaving = true;
-    this.bloqueioService.criar(this.novoBloqueio as Bloqueio).subscribe({
+    this.bloqueioService.criar(this.novoBloqueio).subscribe({
       next: () => {
         this.isSaving = false;
         this.fecharModal();
@@ -80,7 +73,7 @@ export class BloqueiosComponent implements OnInit {
     });
   }
 
-  deletarBloqueio(id: number) {
+  deletarBloqueio(id: string) {
     if (confirm('Tem certeza que deseja remover este bloqueio?')) {
       this.bloqueioService.deletar(id).subscribe({
         next: () => {

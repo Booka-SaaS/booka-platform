@@ -1,15 +1,21 @@
-// src/app/models/Agendamento.ts
 export interface Agendamento {
   id?: number | string;
-  clienteId: number | string;
-  lojaId: number | string;
-  nomeLoja?: string;      // Adicionado para o front-end
-  servicoId: number | string;
-  nomeServico?: string;   // Adicionado para o front-end
+  clienteId?: number | string;
+  clienteNome?: string;
+  lojaId?: number | string;
+  nomeLoja?: string;
+  servicoId?: number | string;
+  servicoNome?: string;
+  nomeServico?: string;
   data: Date | string;
-  dataHora?: Date | string; // Compatibilidade com AgendaComponent
-  valor?: number;         // Adicionado para o front-end
+  dataHora?: Date | string;
+  inicio?: Date | string;
+  fim?: Date | string;
+  valor?: number;
   status: 'PENDENTE' | 'CONFIRMADO' | 'CONCLUIDO' | 'CANCELADO';
+  observacoes?: string | null;
   criadoEm?: Date | string;
   atualizadoEm?: Date | string;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
 }

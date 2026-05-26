@@ -17,6 +17,8 @@ Essas versoes alternativas nao foram copiadas diretamente para evitar conflitos,
 A analise detalhada esta registrada em:
 
 - `docs/analise-repos-alternativos.md`
+- `docs/roadmap-login-google.md`
+- `docs/roadmap-mobile.md`
 
 Resumo:
 
@@ -33,6 +35,6 @@ Nao migrar codigo automaticamente agora.
 
 Itens que podem virar trabalho futuro:
 
-- Login com Google, depois de implementar suporte no backend.
-- App mobile Ionic/Capacitor em uma pasta separada `mobile/`, depois de decidir se ele consumira o backend atual ou Supabase diretamente.
+- Login com Google, depois de implementar suporte no backend, conforme `docs/roadmap-login-google.md`.
+- App mobile Ionic/Capacitor em uma pasta separada `mobile/`, conforme `docs/roadmap-mobile.md`.
 - Comparacao manual de telas mobile e fluxo de cadastro em duas etapas.
