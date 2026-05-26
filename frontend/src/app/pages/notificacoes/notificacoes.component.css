@@ -1,0 +1,12 @@
+/* iOS-style toggle animation transition */
+.toggle-checkbox:checked {
+  right: 0;
+  border-color: #4f46e5; /* Usando nosso Indigo-600 premium */
+}
+.toggle-checkbox:checked + .toggle-label {
+  background-color: #4f46e5; /* Usando nosso Indigo-600 premium */
+}
+.toggle-checkbox {
+  transition: all 0.3s ease-in-out;
+  right: 1.25rem;
+}

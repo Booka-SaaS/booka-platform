@@ -1,0 +1,59 @@
+<div class="flex min-h-screen bg-slate-50 font-sans antialiased text-slate-900">
+  
+  <div class="flex w-full flex-col justify-center px-6 py-12 lg:w-1/2 lg:px-24 xl:px-32 bg-white relative z-10 shadow-2xl shadow-slate-900/5 overflow-y-auto">
+    <div class="mx-auto w-full max-w-md">
+      
+      <div class="flex items-center gap-2 mb-8 lg:hidden">
+        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600">
+          <svg class="w-6 h-6" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><rect fill="#4f46e5" height="64" rx="18" width="64"></rect><g transform="translate(8, 8)"><path clip-rule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="#FFFFFF" fill-rule="evenodd"></path></g></svg>
+        </div>
+        <span class="text-xl font-bold tracking-tight text-slate-900">Booka</span>
+      </div>
+      
+      <div class="mb-10">
+        <h1 class="text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">Recuperar senha</h1>
+        <p class="mt-3 text-base text-slate-500">Insira seu e-mail para receber as instruções de redefinição.</p>
+      </div>
+      
+      <form class="space-y-6">
+        <div>
+          <label class="block text-sm font-semibold text-slate-900 mb-1.5" for="email">E-mail</label>
+          <input autocomplete="email" class="block w-full rounded-xl border-slate-200 bg-slate-50 py-3 px-4 text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 sm:text-sm transition-all outline-none" id="email" name="email" placeholder="seu@email.com" required="" type="email">
+        </div>
+        
+        <button class="flex w-full justify-center rounded-xl bg-slate-900 px-4 py-3.5 text-sm font-bold text-white shadow-md hover:bg-slate-800 hover:-translate-y-0.5 transition-all active:scale-95" type="button">
+          Enviar Link de Recuperação
+        </button>
+      </form>
+      
+      <div class="mt-10 text-center">
+        <a routerLink="/login" class="group inline-flex items-center justify-center gap-2 text-sm font-bold text-slate-500 transition-colors hover:text-indigo-600 cursor-pointer">
+          <span class="material-symbols-outlined text-lg group-hover:-translate-x-1 transition-transform">arrow_back</span>
+          Voltar para o login
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="hidden lg:flex lg:w-1/2 bg-slate-900 items-center justify-center p-12 overflow-hidden relative">
+    <div class="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none">
+      <div class="absolute top-[-10%] right-[-10%] w-[400px] h-[400px] rounded-full bg-indigo-500 blur-3xl"></div>
+      <div class="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] rounded-full bg-blue-400/20 blur-3xl"></div>
+    </div>
+    
+    <div class="relative z-10 flex flex-col items-center">
+      <div class="group relative flex h-32 w-32 items-center justify-center rounded-[2.5rem] shadow-2xl transition-transform hover:scale-105 bg-white">
+        <svg class="w-20 h-20" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <rect fill="#4f46e5" height="64" rx="18" width="64"></rect>
+          <g transform="translate(8, 8)">
+            <path clip-rule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="#FFFFFF" fill-rule="evenodd"></path>
+          </g>
+        </svg>
+      </div>
+      <div class="mt-12 text-center">
+        <h2 class="text-4xl font-black text-white tracking-tight">Booka</h2>
+        <p class="mt-4 text-slate-300 text-lg max-w-sm font-medium">A solução definitiva para escalar seu negócio com simplicidade e inteligência.</p>
+      </div>
+    </div>
+  </div>
+</div>

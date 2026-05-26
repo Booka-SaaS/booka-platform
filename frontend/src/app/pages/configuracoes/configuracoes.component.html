@@ -1,0 +1,89 @@
+<div class="bg-slate-50 font-sans text-slate-900 antialiased h-screen flex flex-col overflow-hidden">
+  
+  <app-navbar></app-navbar>
+
+  <div class="flex-1 flex overflow-hidden pt-20">
+    <app-sidebar></app-sidebar>
+
+    <div class="flex-1 flex flex-col min-w-0">
+      <app-topbar></app-topbar>
+
+    <main class="flex-1 overflow-y-auto p-8 space-y-8">
+      <div>
+        
+        <div class="mb-8">
+          <h1 class="text-2xl font-bold text-slate-900">Configurações Gerais</h1>
+          <p class="text-slate-500 mt-1">Gerencie as preferências da sua conta e do seu negócio.</p>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="flex flex-col divide-y divide-slate-100">
+            
+            <a routerLink="/perfil" class="group flex items-center justify-between p-6 cursor-pointer hover:bg-slate-50 transition-colors">
+              <div class="flex items-center gap-4">
+                <div class="flex size-12 items-center justify-center rounded-xl bg-slate-100 group-hover:bg-indigo-50 transition-colors">
+                  <span class="material-symbols-outlined text-slate-500 group-hover:text-indigo-600 transition-colors text-2xl">person</span>
+                </div>
+                <div>
+                  <h3 class="font-bold text-slate-800 text-base">Meu Perfil</h3>
+                  <p class="text-sm text-slate-500">Altere sua foto, nome, e-mail e senha de acesso</p>
+                </div>
+              </div>
+              <span class="material-symbols-outlined text-slate-400 group-hover:text-indigo-600 transition-all group-hover:translate-x-1">chevron_right</span>
+            </a>
+
+            <a routerLink="/dados-loja" class="group flex items-center justify-between p-6 cursor-pointer hover:bg-slate-50 transition-colors">
+              <div class="flex items-center gap-4">
+                <div class="flex size-12 items-center justify-center rounded-xl bg-slate-100 group-hover:bg-indigo-50 transition-colors">
+                  <span class="material-symbols-outlined text-slate-500 group-hover:text-indigo-600 transition-colors text-2xl">storefront</span>
+                </div>
+                <div>
+                  <h3 class="font-bold text-slate-800 text-base">Dados do Estabelecimento</h3>
+                  <p class="text-sm text-slate-500">Nome da loja, endereço e horários de funcionamento.</p>
+                </div>
+              </div>
+              <span class="material-symbols-outlined text-slate-400 group-hover:text-indigo-600 transition-all group-hover:translate-x-1">chevron_right</span>
+            </a>
+
+            <a routerLink="/notificacoes" class="group flex items-center justify-between p-6 cursor-pointer hover:bg-slate-50 transition-colors">
+              <div class="flex items-center gap-4">
+                <div class="flex size-12 items-center justify-center rounded-xl bg-slate-100 group-hover:bg-emerald-50 transition-colors">
+                  <span class="material-symbols-outlined text-slate-500 group-hover:text-emerald-600 transition-colors text-2xl">notifications_active</span>
+                </div>
+                <div>
+                  <h3 class="font-bold text-slate-800 text-base">Notificações</h3>
+                  <p class="text-sm text-slate-500">Avisos por SMS e E-mail enviados aos clientes.</p>
+                </div>
+              </div>
+              <span class="material-symbols-outlined text-slate-400 group-hover:text-emerald-600 transition-all group-hover:translate-x-1">chevron_right</span>
+            </a>
+
+            <a routerLink="/bloqueios" class="group flex items-center justify-between p-6 cursor-pointer hover:bg-slate-50 transition-colors">
+              <div class="flex items-center gap-4">
+                <div class="flex size-12 items-center justify-center rounded-xl bg-slate-100 group-hover:bg-amber-50 transition-colors">
+                  <span class="material-symbols-outlined text-slate-500 group-hover:text-amber-600 transition-colors text-2xl">event_busy</span>
+                </div>
+                <div>
+                  <h3 class="font-bold text-slate-800 text-base">Bloqueios e Férias</h3>
+                  <p class="text-sm text-slate-500">Gerencie horários de almoço, feriados e férias.</p>
+                </div>
+              </div>
+              <span class="material-symbols-outlined text-slate-400 group-hover:text-amber-600 transition-all group-hover:translate-x-1">chevron_right</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="mt-8 flex items-center justify-between p-6 bg-slate-900 rounded-2xl text-white shadow-lg shadow-slate-900/10">
+          <div>
+            <h4 class="font-bold">Precisa de ajuda com as configurações?</h4>
+            <p class="text-slate-400 text-sm mt-1">Nossa equipe de suporte está disponível para ajudar você.</p>
+          </div>
+          <button class="bg-indigo-600 text-white px-6 py-2.5 rounded-xl font-bold hover:bg-indigo-500 transition-colors">
+            Falar com Suporte
+          </button>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>

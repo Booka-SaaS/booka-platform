@@ -1,0 +1,125 @@
+<div class="bg-slate-50 font-sans text-slate-900 antialiased h-screen flex flex-col overflow-hidden">
+  
+  <app-navbar></app-navbar>
+
+  <div class="flex-1 flex overflow-hidden pt-20">
+    <app-sidebar></app-sidebar>
+
+    <div class="flex-1 flex flex-col min-w-0">
+      
+      <app-topbar></app-topbar>
+
+    <main class="flex-1 overflow-y-auto p-8 space-y-8">
+      
+      <div class="w-full">
+        
+        <a routerLink="/configuracoes" class="inline-flex items-center gap-2 text-slate-500 hover:text-indigo-600 text-sm font-semibold mb-6 transition-colors cursor-pointer group">
+          <span class="material-symbols-outlined text-[18px] group-hover:-translate-x-1 transition-transform">arrow_back</span>
+          Voltar para Configurações
+        </a>
+
+        <div class="mb-8">
+          <h2 class="text-2xl font-bold text-slate-900">Bloqueios e Férias</h2>
+          <p class="text-slate-500 mt-1">Gerencie os períodos de indisponibilidade da sua agenda.</p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+          <div class="p-6 border-b border-slate-100">
+            <h3 class="text-lg font-bold text-slate-800">Bloquear Agenda</h3>
+            <p class="text-sm text-slate-500">Preencha as informações abaixo para criar um novo bloqueio.</p>
+          </div>
+
+          <form class="p-8 space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="space-y-2">
+                <label class="text-sm font-semibold text-slate-700">Data Inicial</label>
+                <div class="relative">
+                  <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">calendar_today</span>
+                  <input class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" type="date"/>
+                </div>
+              </div>
+              <div class="space-y-2">
+                <label class="text-sm font-semibold text-slate-700">Data Final</label>
+                <div class="relative">
+                  <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">calendar_today</span>
+                  <input class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" type="date"/>
+                </div>
+              </div>
+
+              <div class="space-y-2">
+                <label class="text-sm font-semibold text-slate-700">Hora Início</label>
+                <div class="relative">
+                  <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">schedule</span>
+                  <input class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" type="time"/>
+                </div>
+              </div>
+              <div class="space-y-2">
+                <label class="text-sm font-semibold text-slate-700">Hora Fim</label>
+                <div class="relative">
+                  <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">schedule</span>
+                  <input class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" type="time"/>
+                </div>
+              </div>
+
+              <div class="md:col-span-2 space-y-2">
+                <label class="text-sm font-semibold text-slate-700">Motivo</label>
+                <div class="relative">
+                  <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">info</span>
+                  <select class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all appearance-none">
+                    <option disabled="" selected="" value="">Selecione um motivo</option>
+                    <option value="lunch">Horário de Almoço</option>
+                    <option value="vacation">Férias</option>
+                    <option value="renovation">Reforma</option>
+                    <option value="personal">Assuntos Pessoais</option>
+                    <option value="holiday">Feriado Local</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-6 flex justify-end items-center border-t border-slate-100 mt-6">
+              <button class="px-6 py-2.5 text-sm font-medium text-slate-600 hover:text-slate-900 mr-4 transition-colors" type="button">Cancelar</button>
+              <button class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-8 py-2.5 rounded-xl transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2" type="submit">
+                <span class="material-symbols-outlined text-xl">lock</span>
+                Bloquear Agenda
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-5 bg-white border border-slate-200 rounded-xl flex items-center gap-4 shadow-sm hover:shadow-md transition-shadow">
+            <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+              <span class="material-symbols-outlined text-2xl">restaurant</span>
+            </div>
+            <div>
+              <p class="text-xs text-slate-500 uppercase font-bold tracking-wider mb-0.5">Próximo Bloqueio</p>
+              <p class="text-sm font-bold text-slate-800">Almoço - Hoje</p>
+            </div>
+          </div>
+          
+          <div class="p-5 bg-white border border-slate-200 rounded-xl flex items-center gap-4 shadow-sm hover:shadow-md transition-shadow">
+            <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600">
+              <span class="material-symbols-outlined text-2xl">flight</span>
+            </div>
+            <div>
+              <p class="text-xs text-slate-500 uppercase font-bold tracking-wider mb-0.5">Férias Agendadas</p>
+              <p class="text-sm font-bold text-slate-800">15 - 20 Ago</p>
+            </div>
+          </div>
+          
+          <div class="p-5 bg-white border border-slate-200 rounded-xl flex items-center gap-4 shadow-sm hover:shadow-md transition-shadow">
+            <div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600">
+              <span class="material-symbols-outlined text-2xl">construction</span>
+            </div>
+            <div>
+              <p class="text-xs text-slate-500 uppercase font-bold tracking-wider mb-0.5">Manutenção</p>
+              <p class="text-sm font-bold text-slate-800">02 Outubro</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>

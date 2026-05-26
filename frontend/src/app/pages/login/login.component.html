@@ -1,0 +1,142 @@
+<div class="flex min-h-screen bg-slate-50 font-sans antialiased text-slate-900">
+
+  <div
+    class="flex w-full flex-col justify-center px-6 py-12 lg:w-1/2 lg:px-24 xl:px-32 bg-white relative z-10 shadow-2xl shadow-slate-900/5 overflow-y-auto">
+    
+    <a routerLink="/" class="absolute top-8 left-8 flex items-center justify-center w-10 h-10 rounded-full bg-slate-100 text-slate-500 hover:text-[#004ac6] hover:bg-white hover:shadow-md transition-all cursor-pointer">
+      <span class="material-symbols-outlined text-xl">arrow_back</span>
+    </a>
+
+    <div class="mx-auto w-full max-w-md mt-8">
+
+      <div class="flex items-center gap-2 mb-8 lg:hidden">
+        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#004ac6]">
+          <svg class="w-6 h-6" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <rect fill="#004ac6" height="64" rx="18" width="64"></rect>
+            <g transform="translate(8, 8)">
+              <path clip-rule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="#FFFFFF"
+                fill-rule="evenodd"></path>
+            </g>
+          </svg>
+        </div>
+        <span class="text-xl font-bold tracking-tight text-slate-900">Booka</span>
+      </div>
+
+      <div class="mb-10">
+        <h1 class="text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">Entrar na conta</h1>
+        <p class="mt-3 text-base text-slate-500">Bem-vindo de volta! Por favor, insira seus dados para acessar o painel.
+        </p>
+      </div>
+
+      <form class="space-y-5">
+        <div>
+          <label class="block text-sm font-semibold text-slate-900 mb-1.5" for="email">E-mail</label>
+          <input [(ngModel)]="email" autocomplete="email"
+            class="block w-full rounded-xl border-slate-200 bg-slate-50 py-3 px-4 text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 sm:text-sm transition-all outline-none"
+            id="email" name="email" placeholder="seu@email.com" required="" type="email">
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="block text-sm font-semibold text-slate-900" for="password">Senha</label>
+            <a routerLink="/recuperar-senha"
+              class="text-sm font-semibold text-indigo-600 hover:text-indigo-500 transition-colors cursor-pointer">Esqueceu
+              a senha?</a>
+          </div>
+          <input [(ngModel)]="password" autocomplete="current-password"
+            class="block w-full rounded-xl border-slate-200 bg-slate-50 py-3 px-4 text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 sm:text-sm transition-all outline-none"
+            id="password" name="password" placeholder="••••••••" required="" type="password">
+        </div>
+
+        <div class="flex items-center pt-2">
+          <input
+            class="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-600 accent-indigo-600 cursor-pointer"
+            id="remember-me" name="remember-me" type="checkbox">
+          <label class="ml-3 block text-sm font-medium text-slate-600 cursor-pointer" for="remember-me">Lembrar de
+            mim</label>
+        </div>
+
+        <button (click)="onSubmit()"
+          class="flex w-full justify-center rounded-xl bg-slate-900 px-4 py-3.5 text-sm font-bold text-white shadow-md hover:bg-slate-800 hover:-translate-y-0.5 transition-all active:scale-95 mt-2"
+          type="button">
+          Entrar no Painel
+        </button>
+      </form>
+
+      <div class="mt-8">
+        <div class="relative">
+          <div aria-hidden="true" class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-slate-200"></div>
+          </div>
+          <div class="relative flex justify-center text-sm font-medium leading-6">
+            <span class="bg-white px-4 text-slate-500">Ou continue com</span>
+          </div>
+        </div>
+
+        <div class="mt-6 grid grid-cols-2 gap-4">
+          <button
+            class="flex w-full items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-bold text-slate-900 hover:bg-slate-50 transition-colors"
+            type="button">
+            <svg class="h-5 w-5" viewBox="0 0 24 24">
+              <path
+                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                fill="#4285F4"></path>
+              <path
+                d="M12 23c2.97 0 5.46-.98 7.28-2.65l-3.57-2.77c-.99.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                fill="#34A853"></path>
+              <path
+                d="M5.84 14.11c-.22-.66-.35-1.36-.35-2.11s.13-1.45.35-2.11V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.83z"
+                fill="#FBBC05"></path>
+              <path
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.83c.87-2.6 3.3-4.53 6.16-4.53z"
+                fill="#EA4335"></path>
+            </svg>
+            <span>Google</span>
+          </button>
+          <button
+            class="flex w-full items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-bold text-slate-900 hover:bg-slate-50 transition-colors"
+            type="button">
+            <svg class="h-5 w-5 fill-slate-900" viewBox="0 0 24 24">
+              <path
+                d="M12.152 6.896c-.548 0-1.711-.616-2.895-.616-1.57 0-3.01.901-3.817 2.315-1.637 2.874-.419 7.104 1.171 9.423.774 1.139 1.691 2.419 2.915 2.419 1.177 0 1.621-.728 3.046-.728 1.42 0 1.83.728 3.069.728 1.258 0 2.046-1.158 2.815-2.296.892-1.302 1.257-2.565 1.277-2.632-.027-.014-2.454-.954-2.481-3.766-.021-2.35 1.905-3.481 1.996-3.536-1.09-1.611-2.771-1.802-3.359-1.838-1.543-.125-2.887 1.026-3.441 1.026zm2.345-3.303c.69-.834 1.157-1.994.996-3.15-.992.041-2.196.666-2.911 1.503-.64.739-1.2 1.921-1.042 3.052 1.106.086 2.235-.544 2.957-1.405z">
+              </path>
+            </svg>
+            <span>Apple</span>
+          </button>
+        </div>
+      </div>
+
+      <p class="mt-10 text-center text-sm text-slate-500">
+        Não tem uma conta?
+        <a routerLink="/cadastro"
+          class="font-bold text-indigo-600 hover:text-indigo-500 transition-colors cursor-pointer ml-1">Criar nova
+          conta</a>
+      </p>
+    </div>
+  </div>
+
+  <div class="hidden lg:flex lg:w-1/2 bg-slate-900 items-center justify-center p-12 overflow-hidden relative">
+    <div class="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none">
+      <div class="absolute top-[-10%] right-[-10%] w-[400px] h-[400px] rounded-full bg-indigo-500 blur-3xl"></div>
+      <div class="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] rounded-full bg-blue-400/20 blur-3xl"></div>
+    </div>
+
+    <div class="relative z-10 flex flex-col items-center">
+      <div
+        class="group relative flex h-32 w-32 items-center justify-center rounded-[2.5rem] shadow-2xl transition-transform hover:scale-105 bg-white">
+        <svg class="w-20 h-20" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <rect fill="#004ac6" height="64" rx="18" width="64"></rect>
+          <g transform="translate(8, 8)">
+            <path clip-rule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="#FFFFFF"
+              fill-rule="evenodd"></path>
+          </g>
+        </svg>
+      </div>
+      <div class="mt-12 text-center">
+        <h2 class="text-4xl font-black text-white tracking-tight">Booka</h2>
+        <p class="mt-4 text-slate-300 text-lg max-w-sm font-medium">A solução definitiva para escalar seu negócio com
+          simplicidade e inteligência.</p>
+      </div>
+    </div>
+  </div>
+</div>

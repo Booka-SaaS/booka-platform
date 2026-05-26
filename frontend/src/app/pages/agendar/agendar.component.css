@@ -1,0 +1,214 @@
+.agendar-container {
+  max-width: 600px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  padding: 20px;
+}
+
+.agendar-header {
+  text-align: center;
+  padding: 30px 0;
+  margin-bottom: 20px;
+}
+
+.agendar-header h1 {
+  font-size: 1.8rem;
+  color: #212529;
+  margin: 0;
+  font-weight: 700;
+}
+
+.agendar-header p {
+  color: #6c757d;
+  margin-top: 5px;
+}
+
+.step-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+h2 {
+  font-size: 1.4rem;
+  color: #343a40;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.servicos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.servico-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.servico-item:hover, .servico-item:active {
+  border-color: #0d6efd;
+  background-color: #f8faff;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(13, 110, 253, 0.15);
+}
+
+.servico-info h3 {
+  margin: 0 0 4px 0;
+  font-size: 1.1rem;
+  color: #212529;
+}
+
+.servico-info p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.servico-preco {
+  font-weight: 600;
+  color: #0d6efd;
+  font-size: 1.1rem;
+}
+
+.btn-voltar {
+  background: none;
+  border: none;
+  color: #6c757d;
+  font-size: 0.9rem;
+  padding: 0;
+  margin-bottom: 16px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.btn-voltar:hover {
+  color: #0d6efd;
+  text-decoration: underline;
+}
+
+.servico-escolhido {
+  font-size: 0.95rem;
+  color: #495057;
+  background-color: #e9ecef;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.dias-list h3 {
+  font-size: 1rem;
+  color: #495057;
+  margin-bottom: 12px;
+}
+
+.horarios-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 10px;
+}
+
+.horario-pill {
+  background: white;
+  border: 1px solid #ced4da;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #495057;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.horario-pill:hover, .horario-pill:active {
+  background-color: #0d6efd;
+  color: white;
+  border-color: #0d6efd;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #495057;
+  font-size: 0.95rem;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+}
+
+.btn-confirmar {
+  width: 100%;
+  padding: 14px;
+  background-color: #0d6efd;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-confirmar:hover {
+  background-color: #0b5ed7;
+}
+
+.btn-confirmar:disabled {
+  background-color: #a5c8fd;
+  cursor: not-allowed;
+}
+
+.success {
+  text-align: center;
+}
+
+.success-icon {
+  font-size: 3rem;
+  color: #198754;
+  margin-bottom: 16px;
+  background-color: #d1e7dd;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px auto;
+}

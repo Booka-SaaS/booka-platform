@@ -1,0 +1,111 @@
+<div class="bg-surface font-body text-on-surface antialiased bg-[#f7f9fb] min-h-screen">
+    <app-navbar></app-navbar>
+
+    <!-- Container principal centralizado (pt-24 para compensar a header fixa) -->
+    <main class="max-w-5xl mx-auto px-4 pt-32 pb-16">
+        
+        <header class="mb-12 text-center">
+            <h1 class="text-4xl font-black tracking-tight text-slate-800 mb-3">Minhas Reservas</h1>
+            <p class="text-slate-500 font-medium text-lg">Gerencie seus horários e histórico de bem-estar</p>
+        </header>
+
+        <!-- Estado de Carregamento -->
+        <div *ngIf="loading" class="flex flex-col items-center justify-center py-24">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#004ac6]"></div>
+            <p class="mt-4 text-slate-500 font-medium">Buscando suas reservas...</p>
+        </div>
+
+        <!-- Estado de Erro -->
+        <div *ngIf="!loading && error" class="bg-red-50 border border-red-100 rounded-3xl p-10 text-center mb-8">
+            <span class="material-symbols-outlined text-5xl text-red-500 mb-4">error_outline</span>
+            <h3 class="text-2xl font-bold text-slate-800 mb-2">Ops! Algo deu errado</h3>
+            <p class="text-slate-600 mb-8 max-w-md mx-auto">Não conseguimos carregar seus agendamentos. Verifique sua conexão e tente novamente.</p>
+            <button (click)="carregarAgendamentos()" class="px-8 py-3 bg-slate-800 text-white font-bold rounded-2xl hover:bg-slate-700 transition-all shadow-lg">
+                Tentar Novamente
+            </button>
+        </div>
+
+        <!-- Lista de Agendamentos -->
+        <section *ngIf="!loading && !error && agendamentos.length > 0" class="space-y-8">
+            
+            <article *ngFor="let agendamento of agendamentos" 
+                     class="bg-white rounded-3xl p-8 transition-all duration-300 hover:shadow-xl hover:translate-y-[-4px] border border-slate-100 shadow-sm"
+                     [ngClass]="{'opacity-90 grayscale-[0.2]': agendamento.status === 'CONCLUIDO' || agendamento.status === 'CANCELADO'}">
+                
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+                    <!-- Info do Agendamento -->
+                    <div class="flex-1">
+                        <div class="flex items-center gap-3 mb-5">
+                            <span class="text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-full shadow-sm"
+                                  [ngClass]="{
+                                    'bg-green-100 text-green-700': agendamento.status === 'CONFIRMADO',
+                                    'bg-blue-100 text-blue-700': agendamento.status === 'CONCLUIDO',
+                                    'bg-red-100 text-red-700': agendamento.status === 'CANCELADO',
+                                    'bg-amber-100 text-amber-700': agendamento.status === 'PENDENTE'
+                                  }">
+                                {{ agendamento.status }}
+                            </span>
+                        </div>
+                        
+                        <h3 class="text-2xl font-black text-slate-800 mb-2">{{ agendamento.nomeLoja }}</h3>
+                        <p class="text-slate-500 font-semibold text-lg mb-6">{{ agendamento.nomeServico }}</p>
+                        
+                        <div class="flex flex-wrap gap-6 text-slate-600">
+                            <div class="flex items-center gap-2.5 bg-slate-50 px-4 py-2 rounded-2xl border border-slate-100">
+                                <span class="material-symbols-outlined text-[#004ac6] text-xl">calendar_today</span>
+                                <span class="font-bold">{{ agendamento.data | date:'dd de MMMM, yyyy' }}</span>
+                            </div>
+                            <div class="flex items-center gap-2.5 bg-slate-50 px-4 py-2 rounded-2xl border border-slate-100">
+                                <span class="material-symbols-outlined text-[#004ac6] text-xl">schedule</span>
+                                <span class="font-bold">{{ agendamento.data | date:'HH:mm' }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Preço e Ações -->
+                    <div class="flex flex-col items-end gap-6 w-full md:w-auto">
+                        <div class="text-right">
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Total</p>
+                            <span class="text-3xl font-black text-slate-800">
+                                {{ agendamento.valor | currency:'BRL' }}
+                            </span>
+                        </div>
+                        <div class="flex gap-3 w-full md:w-auto">
+                            <button *ngIf="isFuturo(agendamento.data) && agendamento.status !== 'CANCELADO' && agendamento.status !== 'CONCLUIDO'" 
+                                    (click)="cancelar(agendamento.id)"
+                                    [disabled]="cancelandoId === agendamento.id"
+                                    class="flex-1 md:flex-none px-8 py-3.5 bg-red-50 text-red-600 font-bold text-sm rounded-2xl hover:bg-red-100 transition-all border border-red-100 disabled:opacity-50">
+                                {{ cancelandoId === agendamento.id ? 'Cancelando...' : 'Cancelar' }}
+                            </button>
+                            
+                            <button class="flex-1 md:flex-none px-8 py-3.5 bg-slate-800 text-white font-bold text-sm rounded-2xl hover:bg-slate-700 transition-all shadow-md">
+                                Detalhes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Histórico Visual -->
+            <div class="flex items-center justify-center py-16 px-8 border-2 border-dashed border-slate-200 rounded-3xl bg-white/50">
+                <div class="text-center">
+                    <span class="material-symbols-outlined text-5xl text-slate-300 mb-4">history</span>
+                    <p class="text-slate-400 font-bold">Nenhuma outra reserva no seu histórico recente.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Estado Vazio -->
+        <div *ngIf="!loading && !error && agendamentos.length === 0" class="flex flex-col items-center justify-center py-24 text-center">
+            <div class="w-32 h-32 bg-slate-100 rounded-full flex items-center justify-center mb-8">
+                <span class="material-symbols-outlined text-6xl text-slate-300">event_busy</span>
+            </div>
+            <h2 class="text-3xl font-black text-slate-800 mb-4">Sem agendamentos</h2>
+            <p class="text-slate-500 mb-10 max-w-sm font-medium text-lg mx-auto">Você ainda não possui reservas registradas. Que tal descobrir um profissional agora?</p>
+            <button [routerLink]="['/explorar']" class="px-10 py-4 bg-[#004ac6] text-white font-black rounded-2xl hover:scale-105 transition-all shadow-xl text-lg">
+                Explorar Serviços
+            </button>
+        </div>
+
+    </main>
+</div>

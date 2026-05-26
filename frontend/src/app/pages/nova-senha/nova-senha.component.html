@@ -1,0 +1,104 @@
+<div class="flex min-h-screen bg-slate-50 font-sans antialiased text-slate-900">
+  
+  <div class="flex w-full flex-col justify-center px-6 py-12 lg:w-1/2 lg:px-24 xl:px-32 bg-white relative z-10 shadow-2xl shadow-slate-900/5 overflow-y-auto">
+    <div class="mx-auto w-full max-w-md">
+      
+      <div class="flex items-center gap-2 mb-8 lg:hidden">
+        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600">
+          <svg class="w-6 h-6" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><rect fill="#4f46e5" height="64" rx="18" width="64"></rect><g transform="translate(8, 8)"><path clip-rule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="#FFFFFF" fill-rule="evenodd"></path></g></svg>
+        </div>
+        <span class="text-xl font-bold text-slate-900">Booka</span>
+      </div>
+      
+      <div class="mb-10">
+        <h1 class="text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">Definir nova senha</h1>
+        <p class="mt-3 text-base text-slate-500">Crie uma senha forte e segura para proteger sua conta.</p>
+      </div>
+      
+      <form class="space-y-5">
+        
+        <div class="relative">
+          <div class="space-y-5">
+            <div>
+              <label class="block text-sm font-semibold text-slate-900 mb-1.5" for="password">Nova Senha</label>
+              <div class="relative">
+                <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password" (focus)="onPasswordFocus()" (blur)="onPasswordBlur()" name="password" class="block w-full rounded-xl border-slate-200 bg-slate-50 py-3 px-4 text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 sm:text-sm transition-all outline-none" id="password" placeholder="••••••••"/>
+                
+                <button (click)="togglePasswordVisibility()" type="button" class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-indigo-600 transition-colors">
+                  <span class="material-symbols-outlined text-[20px]">{{ showPassword ? 'visibility_off' : 'visibility' }}</span>
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-slate-900 mb-1.5" for="confirm-password">Confirmar Nova Senha</label>
+              <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="confirmPassword" (focus)="onPasswordFocus()" (blur)="onPasswordBlur()" name="confirmPassword" class="block w-full rounded-xl border-slate-200 bg-slate-50 py-3 px-4 text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 sm:text-sm transition-all outline-none" id="confirm-password" placeholder="••••••••"/>
+            </div>
+          </div>
+
+          <div *ngIf="showRequirements" class="absolute z-20 left-0 right-0 mt-3 bg-white p-4 rounded-xl border border-slate-200 shadow-xl shadow-indigo-900/10 space-y-2 transition-all">
+            <p class="text-xs flex items-center gap-2 font-medium transition-colors" [ngClass]="hasMinLength ? 'text-emerald-600' : 'text-slate-400'">
+              <span class="material-symbols-outlined text-[16px]">{{ hasMinLength ? 'check_circle' : 'radio_button_unchecked' }}</span> 
+              Mínimo de 8 caracteres
+            </p>
+            <p class="text-xs flex items-center gap-2 font-medium transition-colors" [ngClass]="hasNumber ? 'text-emerald-600' : 'text-slate-400'">
+              <span class="material-symbols-outlined text-[16px]">{{ hasNumber ? 'check_circle' : 'radio_button_unchecked' }}</span> 
+              Pelo menos 1 número
+            </p>
+            <p class="text-xs flex items-center gap-2 font-medium transition-colors" [ngClass]="hasSpecialChar ? 'text-emerald-600' : 'text-slate-400'">
+              <span class="material-symbols-outlined text-[16px]">{{ hasSpecialChar ? 'check_circle' : 'radio_button_unchecked' }}</span> 
+              Pelo menos 1 caractere especial (!&#64;#$%)
+            </p>
+            <p class="text-xs flex items-center gap-2 font-medium transition-colors" [ngClass]="passwordsMatch ? 'text-emerald-600' : 'text-slate-400'">
+              <span class="material-symbols-outlined text-[16px]">{{ passwordsMatch ? 'check_circle' : 'radio_button_unchecked' }}</span> 
+              As senhas coincidem
+            </p>
+          </div>
+        </div>
+        
+        <button routerLink="/login" class="flex w-full justify-center rounded-xl bg-slate-900 px-4 py-3.5 text-sm font-bold text-white shadow-md hover:bg-slate-800 hover:-translate-y-0.5 transition-all active:scale-95 mt-6" type="button">
+          Redefinir Senha
+        </button>
+      </form>
+      
+      <div class="mt-10 text-center">
+        <a routerLink="/login" class="group inline-flex items-center justify-center gap-2 text-sm font-bold text-slate-500 transition-colors hover:text-indigo-600 cursor-pointer">
+          <span class="material-symbols-outlined text-lg group-hover:-translate-x-1 transition-transform">arrow_back</span>
+          Voltar para o login
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="hidden lg:flex lg:w-1/2 bg-slate-900 items-center justify-center p-12 overflow-hidden relative">
+    <div class="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none">
+      <div class="absolute top-[-10%] right-[-10%] w-[400px] h-[400px] rounded-full bg-indigo-500 blur-3xl"></div>
+      <div class="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] rounded-full bg-blue-400/20 blur-3xl"></div>
+    </div>
+    
+    <div class="relative z-10 flex flex-col items-center">
+      <div class="group relative flex h-32 w-32 items-center justify-center rounded-[2.5rem] shadow-2xl transition-transform hover:scale-105 bg-white">
+        <svg class="w-20 h-20" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <rect fill="#4f46e5" height="64" rx="18" width="64"></rect>
+          <g transform="translate(8, 8)">
+            <path clip-rule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="#FFFFFF" fill-rule="evenodd"></path>
+          </g>
+        </svg>
+      </div>
+      <div class="mt-12 text-center">
+        <h2 class="text-4xl font-black text-white tracking-tight">Booka</h2>
+        <p class="mt-4 text-slate-300 text-lg max-w-sm font-medium">A solução definitiva para escalar seu negócio com simplicidade e inteligência.</p>
+      </div>
+      
+      <div class="mt-16 w-full max-w-sm p-5 border border-slate-700/50 rounded-2xl bg-slate-800/40 backdrop-blur-md flex items-start text-left">
+        <div class="p-2.5 bg-emerald-500/10 rounded-xl mr-4 flex-shrink-0">
+          <span class="material-symbols-outlined text-emerald-400">lock</span>
+        </div>
+        <div>
+          <h4 class="text-sm font-bold text-white mb-0.5">Segurança Nível Bancário</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">Suas credenciais são protegidas com criptografia de ponta a ponta (AES-256).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
