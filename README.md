@@ -64,6 +64,13 @@ CLIENT_ORIGINS=http://localhost:4200,http://localhost:5173,http://localhost:3000
 
 Mais detalhes estão em `docs/integracao-frontend-backend.md`.
 
+## Versões alternativas
+
+A análise dos repositórios alternativos está em:
+
+- `docs/comparacao-versoes.md`
+- `docs/analise-repos-alternativos.md`
+
 ## Publicação no GitHub
 
 O remoto local `origin` está configurado para:
