@@ -3,22 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ProfissionalService } from '../../services/profissional.service';
-import { AgendamentoService } from '../../services/agendamento.service';
+import { AgendamentoService, CreateAgendamentoPublicoRequest } from '../../services/agendamento.service';
 import { AuthService } from '../../services/auth.service';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { ModalService } from '../../services/modal.service';
 import { Profissional } from '../../models';
-
-type CreateAgendamentoPublicoRequest = {
-  lojaId: string | number;
-  servicoId: string | number;
-  inicio: string;
-  cliente: {
-    nome: string;
-    email: string | null;
-    telefone: string;
-  };
-};
 
 @Component({
   selector: 'app-agendar',
@@ -29,7 +18,7 @@ type CreateAgendamentoPublicoRequest = {
 })
 export class AgendarComponent implements OnInit {
   slug: string | null = null;
-  lojaId: string | number | null = null;
+  lojaId: string | null = null;
   profissional: Profissional | null = null;
   step = 1;
   isLoading = false;
@@ -71,12 +60,16 @@ export class AgendarComponent implements OnInit {
           next: (response) => {
             this.profissional = response;
 
-            this.lojaId =
+            const lojaIdEncontrado =
               (this.profissional as any).lojaId ??
               (this.profissional as any).empresaId ??
               (this.profissional as any).estabelecimentoId ??
               (this.profissional as any).id ??
               null;
+
+            this.lojaId = lojaIdEncontrado !== null && lojaIdEncontrado !== undefined
+              ? String(lojaIdEncontrado)
+              : null;
 
             const servicos = this.profissional.servicos ?? [];
             if (servicos.length > 0) {
@@ -183,7 +176,7 @@ export class AgendarComponent implements OnInit {
 
     const dados: CreateAgendamentoPublicoRequest = {
       lojaId: this.lojaId,
-      servicoId: this.servicoSelecionado.id,
+      servicoId: String(this.servicoSelecionado.id),
       inicio: inicioIso,
       cliente: {
         nome: this.clienteNome,
