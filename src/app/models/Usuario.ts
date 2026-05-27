@@ -3,6 +3,7 @@ export interface Usuario {
   nome: string;
   email: string;
   role: 'CLIENTE' | 'PROFISSIONAL';
+  imagemUrl?: string | null;
 }
 
 export interface LojaContext {

@@ -101,7 +101,7 @@ export class AgendamentoService {
 
   // Métodos compatíveis com código legado
   getMeusAgendamentos(): Observable<Agendamento[]> {
-    return this.http.get<Agendamento[]>(this.apiUrl);
+    return this.http.get<Agendamento[]>(`${this.apiUrl}/meus`);
   }
 
   cancelar(id: string): Observable<Agendamento> {
