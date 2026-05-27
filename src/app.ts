@@ -1,5 +1,6 @@
 import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
+import path from 'path';
 import swaggerUi from 'swagger-ui-express';
 import { ZodError } from 'zod';
 import { env } from './config/env';
@@ -14,6 +15,8 @@ import { buildAgendamentosRouter } from './modules/agendamentos/agendamentos.con
 import { buildProfissionaisRouter } from './modules/profissionais/profissionais.controller';
 import { buildDashboardRouter } from './modules/dashboard/dashboard.controller';
 import { buildBloqueiosRouter } from './modules/bloqueios/bloqueios.controller';
+import { buildDisponibilidadeRouter } from './modules/disponibilidade/disponibilidade.controller';
+import { buildUploadRouter } from './modules/upload/upload.controller';
 
 export function buildApp() {
   const app = express();
@@ -24,6 +27,7 @@ export function buildApp() {
     }),
   );
   app.use(express.json());
+  app.use('/uploads', express.static(path.resolve(process.cwd(), 'uploads')));
 
   app.get('/health', (_request, response) => {
     response.json({
@@ -43,6 +47,8 @@ export function buildApp() {
   app.use('/profissionais', buildProfissionaisRouter());
   app.use('/dashboard', buildDashboardRouter());
   app.use('/bloqueios', buildBloqueiosRouter());
+  app.use('/disponibilidade', buildDisponibilidadeRouter());
+  app.use('/upload', buildUploadRouter());
 
   app.use((error: Error, _request: Request, response: Response, next: NextFunction) => {
     if (response.headersSent) {

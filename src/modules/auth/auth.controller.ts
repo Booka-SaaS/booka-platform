@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { requireAuth, AuthenticatedRequest } from '../../middleware/auth';
-import { getMe, login, register, requestPasswordReset, resetPassword } from './auth.service';
-import { loginSchema, registerSchema } from './auth.schema';
+import { getMe, login, register, requestPasswordReset, resetPassword, updateMe, updateSenha } from './auth.service';
+import { loginSchema, registerSchema, updateMeSchema, updateSenhaSchema } from './auth.schema';
 import { requestPasswordResetSchema, resetPasswordSchema } from './password-reset.schema';
 
 export function buildAuthRouter() {
@@ -51,6 +51,28 @@ export function buildAuthRouter() {
     try {
       const authenticatedRequest = request as AuthenticatedRequest;
       const result = await getMe(authenticatedRequest.auth!.userId);
+      response.json(result);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  router.put('/me', requireAuth, async (request, response, next) => {
+    try {
+      const req = request as AuthenticatedRequest;
+      const payload = updateMeSchema.parse(request.body);
+      const result = await updateMe(req.auth!.userId, payload);
+      response.json(result);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  router.put('/senha', requireAuth, async (request, response, next) => {
+    try {
+      const req = request as AuthenticatedRequest;
+      const { senhaAtual, novaSenha } = updateSenhaSchema.parse(request.body);
+      const result = await updateSenha(req.auth!.userId, senhaAtual, novaSenha);
       response.json(result);
     } catch (error) {
       next(error);
