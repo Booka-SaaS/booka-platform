@@ -3,9 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { Agendamento } from '../models';
-
-export type StatusAgendamento = 'PENDENTE' | 'CONFIRMADO' | 'CANCELADO' | 'CONCLUIDO';
+import { Agendamento, StatusAgendamento } from '../models';
 
 interface BackendAgendamento {
   id: string;
@@ -78,13 +76,22 @@ export class AgendamentoService {
       );
   }
 
-  listar(params?: { page?: number; limit?: number; status?: StatusAgendamento; data?: string }): Observable<Agendamento[]> {
+  listar(params?: {
+    page?: number;
+    limit?: number;
+    status?: StatusAgendamento;
+    data?: string;
+    clienteId?: string;
+    servicoId?: string;
+  }): Observable<Agendamento[]> {
     let httpParams = new HttpParams();
     if (params) {
       if (params.page) httpParams = httpParams.set('page', params.page);
       if (params.limit) httpParams = httpParams.set('limit', params.limit);
       if (params.status) httpParams = httpParams.set('status', params.status);
       if (params.data) httpParams = httpParams.set('data', params.data);
+      if (params.clienteId) httpParams = httpParams.set('clienteId', params.clienteId);
+      if (params.servicoId) httpParams = httpParams.set('servicoId', params.servicoId);
     }
     return this.http.get<BackendAgendamento[]>(this.apiUrl, { params: httpParams })
       .pipe(
@@ -137,7 +144,8 @@ export class AgendamentoService {
   }
 
   listarPorLoja(lojaId: string | number): Observable<Agendamento[]> {
-    return this.http.get<BackendAgendamento[]>(`${this.apiUrl}?lojaId=${lojaId}`).pipe(
+    const params = new HttpParams().set('lojaId', lojaId);
+    return this.http.get<BackendAgendamento[]>(this.apiUrl, { params }).pipe(
       map((response) => response.map((item) => this.mapAgendamento(item))),
     );
   }

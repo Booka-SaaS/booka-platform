@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import { requireAuth, AuthenticatedRequest } from '../../middleware/auth';
-import { getMe, login, register } from './auth.service';
+import { getMe, login, register, requestPasswordReset, resetPassword } from './auth.service';
 import { loginSchema, registerSchema } from './auth.schema';
+import { requestPasswordResetSchema, resetPasswordSchema } from './password-reset.schema';
 
 export function buildAuthRouter() {
   const router = Router();
@@ -20,6 +21,26 @@ export function buildAuthRouter() {
     try {
       const input = loginSchema.parse(request.body);
       const result = await login(input.email, input.password);
+      response.json(result);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  router.post('/recuperar-senha', async (request, response, next) => {
+    try {
+      const { email } = requestPasswordResetSchema.parse(request.body);
+      const result = await requestPasswordReset(email);
+      response.json(result);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  router.post('/nova-senha', async (request, response, next) => {
+    try {
+      const { token, novaSenha } = resetPasswordSchema.parse(request.body);
+      const result = await resetPassword(token, novaSenha);
       response.json(result);
     } catch (error) {
       next(error);

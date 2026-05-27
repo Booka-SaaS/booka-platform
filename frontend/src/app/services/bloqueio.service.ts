@@ -41,6 +41,16 @@ export class BloqueioService {
       );
   }
 
+  obter(id: string | number): Observable<BloqueioAgenda> {
+    return this.http.get<BloqueioAgenda>(`${this.apiUrl}/${id}`)
+      .pipe(
+        catchError(err => {
+          console.error('Erro ao obter bloqueio:', err);
+          return throwError(() => err);
+        })
+      );
+  }
+
   criar(dados: CreateBloqueioRequest): Observable<BloqueioAgenda> {
     return this.http.post<BloqueioAgenda>(this.apiUrl, dados)
       .pipe(
@@ -51,7 +61,17 @@ export class BloqueioService {
       );
   }
 
-  deletar(id: string): Observable<{ success: boolean }> {
+  atualizar(id: string | number, dados: Partial<CreateBloqueioRequest>): Observable<BloqueioAgenda> {
+    return this.http.put<BloqueioAgenda>(`${this.apiUrl}/${id}`, dados)
+      .pipe(
+        catchError(err => {
+          console.error('Erro ao atualizar bloqueio:', err);
+          return throwError(() => err);
+        })
+      );
+  }
+
+  deletar(id: string | number): Observable<{ success: boolean }> {
     return this.http.delete<{ success: boolean }>(`${this.apiUrl}/${id}`)
       .pipe(
         catchError(err => {

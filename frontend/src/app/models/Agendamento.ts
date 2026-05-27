@@ -1,3 +1,6 @@
+export type StatusAgendamento = 'PENDENTE' | 'CONFIRMADO' | 'CANCELADO' | 'CONCLUIDO';
+export type OrigemAgendamento = 'PUBLICO' | 'PAINEL';
+
 export interface Agendamento {
   id?: number | string;
   clienteId?: number | string;
@@ -7,12 +10,13 @@ export interface Agendamento {
   servicoId?: number | string;
   servicoNome?: string;
   nomeServico?: string;
-  data: Date | string;
+  data?: Date | string;
   dataHora?: Date | string;
   inicio?: Date | string;
   fim?: Date | string;
   valor?: number;
-  status: 'PENDENTE' | 'CONFIRMADO' | 'CONCLUIDO' | 'CANCELADO';
+  status: StatusAgendamento;
+  origem?: OrigemAgendamento;
   observacoes?: string | null;
   criadoEm?: Date | string;
   atualizadoEm?: Date | string;

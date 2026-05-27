@@ -1,62 +1,51 @@
-# BOOKA Platform
+# Booka
 
-BOOKA Platform e o monorepo oficial do projeto BOOKA dentro da organizacao Booka-SaaS.
+Booka e uma plataforma SaaS para conectar negocios de alimentacao, com foco inicial em restaurantes de sushi, a profissionais/freelancers e servicos com agenda. O estado atual do monorepo entrega cadastro/login, marketplace publico de profissionais, perfil de loja/profissional, servicos, clientes, agendamentos, bloqueios de agenda, dashboard, onboarding e recuperacao de senha por token.
 
-BOOKA e uma plataforma SaaS de agendamentos para conectar clientes a profissionais e pequenos negocios de servicos. O produto centraliza descoberta de profissionais, agenda, servicos, clientes, bloqueios de horario e fluxo de reserva publica.
+## Contexto do monorepo
 
-## O que o BOOKA resolve
+O repositorio oficial e `Booka-SaaS/booka-platform`. Ele foi criado a partir da uniao de projetos separados de frontend e backend, preservando `frontend/` e `backend/` como areas independentes.
 
-- Clientes encontram profissionais e servicos disponiveis.
-- Clientes criam agendamentos publicos sem precisar acessar o painel profissional.
-- Profissionais gerenciam agenda, servicos, clientes, loja/perfil e periodos indisponiveis.
-- A plataforma mantem uma API unica para autenticar usuarios e persistir dados em PostgreSQL.
+Repositorios historicos detectados nos remotes do monorepo:
 
-## Perfis de usuario
+- Frontend principal: `https://github.com/TrueTrailBlazer/booka-frontend`
+- Backend principal: `https://github.com/RubensGJ/BookaBackendV2`
+- Frontend alternativo: `https://github.com/Giullianoads/booka-frontend`
+- App alternativo: `https://github.com/Giullianoads/booka-app`
 
-- `CLIENTE`: pessoa que busca profissionais, visualiza servicos e cria reservas.
-- `PROFISSIONAL`: prestador ou negocio que publica perfil, configura loja, cadastra servicos e administra agendamentos.
+Os repositorios `https://github.com/Booka-SaaS/booka-frontend` e `https://github.com/Booka-SaaS/booka-backend` devem ser verificados quando estiverem acessiveis; nesta base, as origens efetivas estao registradas como remotes auxiliares.
 
-## Modulos principais
+## Arquitetura
 
-- Marketplace publico de profissionais.
-- Pagina publica de agendamento.
-- Login e cadastro.
-- Onboarding do profissional.
-- Dashboard profissional.
-- Agenda.
-- Servicos.
-- Clientes.
-- Dados da loja.
-- Bloqueios de agenda.
-- Perfil e configuracoes.
-- API com Swagger.
+```text
+Frontend Angular na Vercel
+  -> Backend Express no Render
+    -> PostgreSQL no Supabase
+```
 
-## Estrutura do monorepo
+## Estrutura
 
 ```text
 booka-platform/
-|-- frontend/
-|-- backend/
-|-- docs/
-|-- README.md
-|-- .env.example
-`-- .gitignore
+|-- frontend/        Angular 19, Angular SSR/static build, Tailwind, RxJS
+|-- backend/         Node.js, Express, TypeScript, Prisma, PostgreSQL
+|-- database/        SQL para Supabase e consultas de validacao
+|-- docs/            analises e documentacao historica
+|-- render.yaml      blueprint do backend no Render
+|-- DEPLOY.md        passo a passo de deploy
+|-- .env.example     referencia de variaveis
+`-- README.md
 ```
 
-- `frontend/`: aplicacao web principal em Angular.
-- `backend/`: API principal em Node.js, Express, TypeScript, Prisma e PostgreSQL.
-- `docs/`: documentacao tecnica, integracao, importacao e analises.
-
-## Stack
+## Tecnologias
 
 Frontend:
 
 - Angular 19
-- Angular SSR
+- Angular SSR/build application
 - Tailwind CSS
 - RxJS
-- Karma/Jasmine
-- Cypress configurado para E2E
+- Cypress e Karma/Jasmine configurados
 
 Backend:
 
@@ -64,106 +53,32 @@ Backend:
 - TypeScript
 - Express
 - Prisma
-- PostgreSQL
+- PostgreSQL/Supabase
 - Zod
 - JWT
+- bcryptjs
 - Swagger UI
 
-Banco local:
+## Funcionalidades atuais
 
-- PostgreSQL via Docker Compose.
+- Cadastro, login e `GET /auth/me`
+- Recuperacao de senha por token interno
+- Onboarding profissional
+- Perfil/loja do profissional
+- Marketplace publico de profissionais
+- Detalhe publico e disponibilidade por data
+- Servicos
+- Clientes
+- Agendamentos publicos e privados
+- Bloqueios de agenda
+- Dashboard/resumo
+- Notificacoes no schema
 
-## Repositorios de origem
+Ainda nao ha tabelas/rotas reais para vagas, candidaturas, convites, administradores dedicados, CPF ou avaliacoes como entidade separada. Avaliacao existe hoje como campos agregados no perfil profissional.
 
-- Frontend principal: https://github.com/TrueTrailBlazer/booka-frontend
-- Backend principal: https://github.com/RubensGJ/BookaBackendV2
-
-Esses repositorios foram importados para este monorepo sem alterar, apagar, reescrever historico ou fazer push nos repositorios originais.
-
-## Repositorios secundarios analisados
-
-- Frontend alternativo: https://github.com/Giullianoads/booka-frontend
-- App alternativo/legado: https://github.com/Giullianoads/booka-app
-
-O que foi aproveitado:
-
-- A ideia de Login com Google virou roadmap tecnico em `docs/roadmap-login-google.md`.
-- A base Ionic/Capacitor virou roadmap mobile em `docs/roadmap-mobile.md`.
-- A comparacao e as razoes para nao copiar codigo diretamente estao em `docs/analise-repos-alternativos.md`.
-
-O que nao foi copiado:
-
-- Codigo de Login com Google que depende de `POST /auth/google`, ainda inexistente no backend.
-- Proxy `/api` apontando para `localhost:3000`, incompativel com a API atual em `localhost:3001`.
-- App Ionic completo, porque ele usa Supabase diretamente e criaria uma segunda arquitetura de auth/dados.
-- Arquivo `.env` do app alternativo.
-
-## Integracao local
-
-Frontend:
-
-```text
-http://localhost:4200
-```
+## Rodando localmente
 
 Backend:
-
-```text
-http://localhost:3001
-```
-
-Swagger:
-
-```text
-http://localhost:3001/docs
-```
-
-Healthcheck:
-
-```text
-http://localhost:3001/health
-```
-
-O frontend usa:
-
-```ts
-apiUrl: 'http://localhost:3001'
-```
-
-Arquivos:
-
-- `frontend/src/environments/environment.ts`
-- `frontend/src/environments/environment.development.ts`
-
-O backend controla CORS com:
-
-```env
-CLIENT_ORIGINS=http://localhost:4200,http://localhost:5173,http://localhost:3000
-```
-
-## Variaveis de ambiente
-
-Na raiz existe `.env.example` apenas como guia geral.
-
-No backend, copie:
-
-```bash
-cd backend
-copy .env.example .env
-```
-
-Principais variaveis do backend:
-
-- `PORT`
-- `CLIENT_ORIGINS`
-- `DATABASE_URL`
-- `DIRECT_URL`
-- `JWT_SECRET`
-- `JWT_TTL_SECONDS`
-
-Arquivos `.env` reais nao devem ser versionados.
-
-## Como rodar o backend
 
 ```bash
 cd backend
@@ -176,14 +91,7 @@ npm run seed
 npm run dev
 ```
 
-Comandos uteis:
-
-```bash
-npm run build
-npm run prisma:studio
-```
-
-## Como rodar o frontend
+Frontend:
 
 ```bash
 cd frontend
@@ -191,89 +99,129 @@ npm install
 npm start
 ```
 
-Build:
+URLs locais:
 
-```bash
-npm run build
+- Frontend: `http://localhost:4200`
+- Backend: `http://localhost:3001`
+- Swagger: `http://localhost:3001/docs`
+- Health: `http://localhost:3001/health`
+- Banco: `GET http://localhost:3001/test/db-status`
+
+## Variaveis
+
+Backend:
+
+```env
+NODE_ENV=production
+PORT=10000
+DATABASE_URL=
+JWT_SECRET=
+JWT_TTL_SECONDS=604800
+FRONTEND_URL=
+CLIENT_ORIGINS=
+SUPABASE_URL=
+SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
 ```
 
-Testes unitarios:
+Frontend:
 
-```bash
-npm test -- --watch=false --browsers=ChromeHeadless
+```env
+BOOKA_API_URL=
 ```
 
-E2E:
+`BOOKA_API_URL` deve apontar para a URL publica do backend no Render. O build tambem aceita `VITE_API_URL`, `NG_APP_API_URL` ou `NEXT_PUBLIC_API_URL` como alias, mas `BOOKA_API_URL` e o padrao documentado para este Angular.
 
-```bash
-npm run cypress:run
-```
+Nunca exponha no frontend:
 
-O E2E usa Cypress e depende do binario local do Cypress/Chrome estar disponivel na maquina.
+- `DATABASE_URL`
+- `JWT_SECRET`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- tokens privados
+- segredos relacionados a CPF, caso essa funcionalidade exista no futuro
 
-## Fluxo de comunicacao
+## Scripts
 
-```text
-Cliente/Profissional -> Frontend Angular -> API HTTP -> Backend Express -> Prisma -> PostgreSQL
-```
+Backend:
 
-Rotas principais do backend:
+- `npm run dev`
+- `npm run build`
+- `npm start`
+- `npm run prisma:generate`
+- `npm run prisma:migrate`
+- `npm run prisma:deploy`
+- `npm run prisma:studio`
+- `npm run seed`
 
+Frontend:
+
+- `npm start`
+- `npm run build`
+- `npm test`
+- `npm run cypress:open`
+- `npm run cypress:run`
+
+## Rotas principais
+
+Publicas:
+
+- `GET /health`
+- `GET /test/db-status`
+- `GET /docs`
 - `POST /auth/register`
 - `POST /auth/login`
-- `GET /auth/me`
+- `POST /auth/recuperar-senha`
+- `POST /auth/nova-senha`
 - `GET /profissionais`
 - `GET /profissionais/:id`
-- `GET /profissionais/:id/disponibilidade`
+- `GET /profissionais/:id/disponibilidade?data=YYYY-MM-DD`
 - `POST /agendamentos/publicos`
-- `GET /agendamentos`
-- `POST /agendamentos`
-- `PUT /agendamentos/:id`
-- `DELETE /agendamentos/:id`
+
+Protegidas:
+
+- `GET /auth/me`
+- `GET /loja`
+- `PUT /loja`
+- `POST /onboarding/finalizar`
 - `GET /servicos`
 - `POST /servicos`
 - `PUT /servicos/:id`
 - `DELETE /servicos/:id`
 - `GET /clientes`
+- `GET /clientes/:id`
 - `POST /clientes`
 - `PUT /clientes/:id`
 - `DELETE /clientes/:id`
-- `GET /loja`
-- `PUT /loja`
+- `GET /agendamentos`
+- `POST /agendamentos`
+- `PUT /agendamentos/:id`
+- `DELETE /agendamentos/:id`
 - `GET /bloqueios`
+- `GET /bloqueios/:id`
 - `POST /bloqueios`
 - `PUT /bloqueios/:id`
 - `DELETE /bloqueios/:id`
+- `GET /dashboard/resumo`
 
-## Documentacao
+## Deploy
 
-- `docs/importacao-repos.md`: como os repositorios principais foram importados.
-- `docs/integracao-frontend-backend.md`: portas, variaveis, CORS e teste local.
-- `docs/comparacao-versoes.md`: comparacao resumida das versoes.
-- `docs/analise-repos-alternativos.md`: analise dos repositorios secundarios.
-- `docs/roadmap-login-google.md`: aproveitamento futuro do frontend alternativo.
-- `docs/roadmap-mobile.md`: aproveitamento futuro do app Ionic/Capacitor.
+Leia [DEPLOY.md](./DEPLOY.md).
 
-## Publicacao
+Ordem correta:
 
-Repositorio oficial:
+1. Supabase: criar projeto, rodar `database/schema.sql`, copiar connection string.
+2. Render: publicar `backend/`, configurar variaveis e testar `/health` e `/test/db-status`.
+3. Vercel: publicar `frontend/`, configurar `BOOKA_API_URL` e validar chamadas para a API.
 
-```text
-https://github.com/Booka-SaaS/booka-platform
-```
+## Seguranca
 
-Publicar alteracoes:
+- `.env` reais nao devem ser versionados.
+- Senhas sao armazenadas como hash bcrypt.
+- `DATABASE_URL` e `JWT_SECRET` ficam apenas no backend.
+- Reset de senha nao retorna token em `NODE_ENV=production`.
+- CORS usa `FRONTEND_URL`/`CLIENT_ORIGINS`; nao use `*` em producao.
+- Erros de banco sao retornados de forma controlada.
 
-```bash
-git push origin main
-```
+## Status e proximos passos
 
-Os remotos dos repositorios de origem e referencia devem permanecer apenas para leitura.
-
-## Cuidados
-
-- Nao versionar `.env` reais.
-- Nao fazer push para os repositorios originais.
-- Nao misturar frontend e backend na mesma pasta.
-- Nao copiar codigo de repositorios secundarios sem revisar contratos e arquitetura.
-- Manter uma API oficial para evitar regras de negocio duplicadas.
+O projeto esta preparado para Supabase/Render/Vercel no nivel de configuracao e documentacao. Pendencias funcionais futuras incluem envio real de email para reset de senha, avaliacoes como entidade propria, vagas/candidaturas/convites, painel administrativo dedicado, observabilidade e testes automatizados de fluxo completo.

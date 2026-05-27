@@ -19,7 +19,10 @@ export class DadosLojaComponent implements OnInit {
   loja: Partial<Loja> = {
     nome: '',
     telefone: '',
-    endereco: ''
+    endereco: '',
+    email: '',
+    cidade: '',
+    descricao: ''
   };
   isLoading = true;
   isSaving = false;
@@ -31,7 +34,7 @@ export class DadosLojaComponent implements OnInit {
 
   carregarDados() {
     this.isLoading = true;
-    this.lojaService.buscarDados().subscribe({
+    this.lojaService.obter().subscribe({
       next: (dados) => {
         if (dados) {
           this.loja = dados;
@@ -47,7 +50,7 @@ export class DadosLojaComponent implements OnInit {
 
   salvarDados() {
     this.isSaving = true;
-    this.lojaService.atualizarDados(this.loja).subscribe({
+    this.lojaService.atualizar(this.loja).subscribe({
       next: (dados) => {
         this.loja = dados;
         this.isSaving = false;

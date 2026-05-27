@@ -58,7 +58,6 @@ Valores padrao:
 PORT=3001
 CLIENT_ORIGINS=http://localhost:4200,http://localhost:5173,http://localhost:3000
 DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5434/booka_v2?schema=public
-DIRECT_URL=postgresql://postgres:postgres@127.0.0.1:5434/booka_v2?schema=public
 JWT_SECRET=change-me-use-a-long-random-secret
 JWT_TTL_SECONDS=604800
 ```
@@ -68,7 +67,6 @@ Observacoes:
 - `JWT_SECRET` precisa ter pelo menos 16 caracteres.
 - `CLIENT_ORIGINS` precisa listar as origens locais permitidas, separadas por virgula.
 - `DATABASE_URL` e usada pela API em runtime.
-- `DIRECT_URL` e usada pelo Prisma para migrations e comandos administrativos.
 - `JWT_TTL_SECONDS=604800` equivale a 7 dias.
 
 ## Como rodar pela primeira vez
@@ -95,7 +93,8 @@ npm run dev
 
 Quando tudo subir corretamente:
 
-- `GET /health` deve responder `ok`
+- `GET /health` deve responder `{ "status": "ok", "service": "booka-api" }`
+- `GET /test/db-status` deve responder `{ "database": "connected", "status": "ok" }`
 - `GET /docs` deve abrir o Swagger
 
 ## Fluxo do dia a dia
@@ -146,7 +145,7 @@ npm run seed
 Usuario profissional inicial:
 
 - email: `profissional@booka.local`
-- senha: `12345678`
+- senha: defina `SEED_PASSWORD` antes de rodar `npm run seed`, ou use `SEED_PASSWORD_HASH` com um hash bcrypt.
 
 Dados gerados pelo seed:
 
@@ -186,6 +185,7 @@ Rotas privadas principais:
 ### App
 
 - `GET /health`
+- `GET /test/db-status`
 - `GET /docs`
 
 ### Auth
@@ -311,13 +311,6 @@ O Supabase usa PostgreSQL, entao o schema Prisma atual continua valido. Como os 
 
 ```env
 DATABASE_URL="postgresql://postgres.[PROJECT-REF]:[PASSWORD]@[REGION].pooler.supabase.com:6543/postgres?pgbouncer=true"
-DIRECT_URL="postgresql://postgres.[PROJECT-REF]:[PASSWORD]@[REGION].pooler.supabase.com:5432/postgres"
-```
-
-Se sua rede tiver IPv6 ou o projeto tiver IPv4 Add-on, `DIRECT_URL` tambem pode ser a conexao direta:
-
-```env
-DIRECT_URL="postgresql://postgres:[PASSWORD]@db.[PROJECT-REF].supabase.co:5432/postgres"
 ```
 
 Depois aplique o banco remoto:
@@ -335,7 +328,7 @@ Para confirmar:
 npm run prisma:studio
 ```
 
-Em desenvolvimento local com Docker, mantenha `DATABASE_URL` e `DIRECT_URL` apontando para `127.0.0.1:5434`.
+Em desenvolvimento local com Docker, mantenha `DATABASE_URL` apontando para `127.0.0.1:5434`.
 
 ## Build e execucao compilada
 

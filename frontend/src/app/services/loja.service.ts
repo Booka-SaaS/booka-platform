@@ -5,15 +5,18 @@ import { Loja } from '../models';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-export interface CreateLojaRequest {
-  nome: string;
-  slug?: string;
-  email?: string;
-  telefone?: string;
-  endereco?: string;
-  cidade?: string;
-  descricao?: string;
-  imagemUrl?: string;
+export interface UpdateLojaRequest {
+  nome?: string;
+  email?: string | null;
+  telefone?: string | null;
+  endereco?: string | null;
+  cidade?: string | null;
+  descricao?: string | null;
+  imagemUrl?: string | null;
+  profissao?: string | null;
+  categoriaPrincipal?: string | null;
+  modalidadePrincipal?: 'ONLINE' | 'PRESENCIAL' | 'HIBRIDO' | null;
+  tipoVendedor?: 'AUTONOMO' | 'EMPRESA' | null;
 }
 
 @Injectable({
@@ -24,8 +27,8 @@ export class LojaService {
   private apiUrl = `${environment.apiUrl}/loja`;
 
   // Obter dados da loja do profissional logado
-  obter(): Observable<{ loja: Loja }> {
-    return this.http.get<{ loja: Loja }>(this.apiUrl)
+  obter(): Observable<Loja> {
+    return this.http.get<Loja>(this.apiUrl)
       .pipe(
         catchError(err => {
           console.error('Erro ao obter loja:', err);
@@ -34,20 +37,9 @@ export class LojaService {
       );
   }
 
-  // Criar loja
-  criar(dados: CreateLojaRequest): Observable<{ loja: Loja }> {
-    return this.http.post<{ loja: Loja }>(this.apiUrl, dados)
-      .pipe(
-        catchError(err => {
-          console.error('Erro ao criar loja:', err);
-          return throwError(() => err);
-        })
-      );
-  }
-
   // Atualizar loja
-  atualizar(dados: Partial<CreateLojaRequest>): Observable<{ loja: Loja }> {
-    return this.http.put<{ loja: Loja }>(this.apiUrl, dados)
+  atualizar(dados: UpdateLojaRequest): Observable<Loja> {
+    return this.http.put<Loja>(this.apiUrl, dados)
       .pipe(
         catchError(err => {
           console.error('Erro ao atualizar loja:', err);
@@ -58,10 +50,10 @@ export class LojaService {
 
   // Métodos legados para compatibilidade
   buscarDados(): Observable<Loja> {
-    return this.http.get<Loja>(this.apiUrl);
+    return this.obter();
   }
 
   atualizarDados(loja: Partial<Loja>): Observable<Loja> {
-    return this.http.put<Loja>(this.apiUrl, loja);
+    return this.atualizar(loja);
   }
 }

@@ -13,7 +13,11 @@ function slugify(value: string) {
 }
 
 async function main() {
-  const passwordHash = await bcrypt.hash('12345678', 10);
+  const passwordHash =
+    process.env.SEED_PASSWORD_HASH ??
+    (process.env.SEED_PASSWORD
+      ? await bcrypt.hash(process.env.SEED_PASSWORD, 10)
+      : '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy');
 
   const profissional = await prisma.usuario.upsert({
     where: { email: 'profissional@booka.local' },

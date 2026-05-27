@@ -3,9 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 enum UserRole {
@@ -47,6 +46,8 @@ model Usuario {
   updatedAt          DateTime            @updatedAt
   perfilProfissional PerfilProfissional?
   loja               Loja?
+  passwordResetTokens PasswordResetToken[]
+  notificacoes       Notificacao[]
 }
 
 model PerfilProfissional {
@@ -176,4 +177,37 @@ model BloqueioAgenda {
   loja      Loja     @relation(fields: [lojaId], references: [id], onDelete: Cascade)
 
   @@index([lojaId, inicio, fim])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid()) @db.Uuid
+  usuarioId String   @db.Uuid
+  tokenHash String
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([tokenHash])
+  @@index([usuarioId])
+}
+
+enum TipoNotificacao {
+  AGENDAMENTO
+  SISTEMA
+  LEMBRETE
+}
+
+model Notificacao {
+  id        String           @id @default(uuid()) @db.Uuid
+  usuarioId String           @db.Uuid
+  titulo    String
+  mensagem  String
+  tipo      TipoNotificacao  @default(SISTEMA)
+  lida      Boolean          @default(false)
+  createdAt DateTime         @default(now())
+  usuario   Usuario          @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId, lida])
+  @@index([usuarioId, createdAt])
 }

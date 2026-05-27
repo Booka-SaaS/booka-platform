@@ -1,8 +1,21 @@
+export type ModalidadeProfissional = 'ONLINE' | 'PRESENCIAL' | 'HIBRIDO';
+export type TipoVendedor = 'AUTONOMO' | 'EMPRESA';
+
+export interface ProfissionalServico {
+  id: string;
+  nome: string;
+  descricao?: string | null;
+  preco: number;
+  duracaoMinutos?: number;
+  duracao?: number;
+  ativo?: boolean;
+}
+
 export interface Profissional {
   id: string;
-  nome?: string;
+  nome: string;
   nomeExibicao?: string;
-  profissao?: string;
+  profissao: string;
   especialidade?: string;
   descricao?: string | null;
   bio?: string | null;
@@ -10,25 +23,31 @@ export interface Profissional {
   cidade?: string | null;
   img?: string | null;
   imagemUrl?: string | null;
-  categoria?: string;
+  categoria: string;
   categoriaPrincipal?: string;
-  modalidade?: 'ONLINE' | 'PRESENCIAL' | 'HIBRIDO' | string;
-  modalidadePrincipal?: 'ONLINE' | 'PRESENCIAL' | 'HIBRIDO';
+  modalidade: ModalidadeProfissional | string;
+  modalidadePrincipal?: ModalidadeProfissional;
   modalidades?: string[];
-  vendedor?: 'AUTONOMO' | 'EMPRESA' | string;
-  tipo_vendedor?: 'AUTONOMO' | 'EMPRESA' | string;
-  precoInicial?: number;
+  vendedor: TipoVendedor | string;
+  tipo_vendedor?: TipoVendedor | string;
+  precoInicial: number;
   preco_medio?: number;
   preco?: number;
-  rating?: number;
+  rating: number;
   avaliacoesCount?: number;
   publicado?: boolean;
-  servicos?: Array<{
+  servicos?: ProfissionalServico[];
+}
+
+export interface ProfissionalDetalhe extends Profissional {
+  loja?: {
     id: string;
     nome: string;
-    descricao?: string | null;
-    preco: number;
-    duracaoMinutos?: number;
-    duracao?: number;
-  }>;
+    slug?: string;
+    email?: string;
+    telefone?: string;
+    endereco?: string;
+    descricao?: string;
+  };
+  servicos: ProfissionalServico[];
 }

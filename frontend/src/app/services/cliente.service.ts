@@ -34,6 +34,16 @@ export class ClienteService {
       );
   }
 
+  obter(id: string | number): Observable<Cliente> {
+    return this.http.get<Cliente>(`${this.apiUrl}/${id}`)
+      .pipe(
+        catchError(err => {
+          console.error('Erro ao obter cliente:', err);
+          return throwError(() => err);
+        })
+      );
+  }
+
   criar(dados: CreateClienteRequest): Observable<Cliente> {
     return this.http.post<Cliente>(this.apiUrl, dados)
       .pipe(

@@ -1,8 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { tap, switchMap, catchError } from 'rxjs/operators';
+import { tap, catchError } from 'rxjs/operators';
 import { throwError, Observable } from 'rxjs';
+import { MeResponse } from '../models';
 
 export interface AuthResponse {
   token: string;
@@ -63,8 +64,8 @@ export class AuthService {
       );
   }
 
-  getMe(): Observable<{ user: any }> {
-    return this.http.get<{ user: any }>(`${this.apiUrl}/auth/me`);
+  getMe(): Observable<MeResponse> {
+    return this.http.get<MeResponse>(`${this.apiUrl}/auth/me`);
   }
 
   logout(): void {

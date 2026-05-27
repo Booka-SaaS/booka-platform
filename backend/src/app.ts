@@ -4,6 +4,7 @@ import swaggerUi from 'swagger-ui-express';
 import { ZodError } from 'zod';
 import { env } from './config/env';
 import { openApiDocument } from './docs/openapi';
+import { prisma } from './lib/db';
 import { AppError } from './lib/errors';
 import { buildAuthRouter } from './modules/auth/auth.controller';
 import { buildOnboardingRouter } from './modules/onboarding/onboarding.controller';
@@ -27,10 +28,29 @@ export function buildApp() {
 
   app.get('/health', (_request, response) => {
     response.json({
-      name: 'Booka Backend V2',
       status: 'ok',
-      docs: '/docs',
+      service: 'booka-api',
     });
+  });
+
+  app.get('/test/db-status', async (_request, response) => {
+    try {
+      await prisma.$queryRaw`SELECT 1`;
+      response.json({
+        database: 'connected',
+        status: 'ok',
+      });
+    } catch (error) {
+      if (env.NODE_ENV !== 'production') {
+        console.error('Falha ao testar conexao com o banco:', error);
+      }
+
+      response.status(503).json({
+        database: 'disconnected',
+        status: 'error',
+        message: 'Nao foi possivel conectar ao banco de dados.',
+      });
+    }
   });
 
   app.use('/docs', swaggerUi.serve, swaggerUi.setup(openApiDocument));
@@ -43,6 +63,12 @@ export function buildApp() {
   app.use('/profissionais', buildProfissionaisRouter());
   app.use('/dashboard', buildDashboardRouter());
   app.use('/bloqueios', buildBloqueiosRouter());
+
+  app.use((_request, response) => {
+    response.status(404).json({
+      message: 'Rota nao encontrada.',
+    });
+  });
 
   app.use((error: Error, _request: Request, response: Response, next: NextFunction) => {
     if (response.headersSent) {

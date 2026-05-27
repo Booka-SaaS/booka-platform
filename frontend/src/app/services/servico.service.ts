@@ -35,6 +35,16 @@ export class ServicoService {
       );
   }
 
+  obter(id: string | number): Observable<Servico> {
+    return this.http.get<Servico>(`${this.apiUrl}/${id}`)
+      .pipe(
+        catchError(err => {
+          console.error('Erro ao obter servico:', err);
+          return throwError(() => err);
+        })
+      );
+  }
+
   criar(dados: CreateServicoRequest): Observable<Servico> {
     return this.http.post<Servico>(this.apiUrl, dados)
       .pipe(

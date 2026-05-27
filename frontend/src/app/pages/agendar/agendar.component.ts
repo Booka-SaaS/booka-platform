@@ -156,13 +156,13 @@ export class AgendarComponent implements OnInit {
     this.isSaving = true;
     const dataFormatada = this.dataSelecionada.toISOString().split('T')[0];
     
-    const dados = {
-      lojaId: this.profissional!.id,
+    const dados: CreateAgendamentoPublicoRequest = {
+      lojaId: this.lojaId!,
       servicoId: this.servicoSelecionado.id,
-      inicio: `${dataFormatada}T${this.horarioSelecionado}:00.000Z`,
+      inicio: inicioIso,
       cliente: {
         nome: this.clienteNome,
-        email: this.clienteEmail,
+        email: this.clienteEmail || null,
         telefone: this.clienteWhatsapp
       }
     };
