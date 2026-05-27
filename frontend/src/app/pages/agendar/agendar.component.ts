@@ -9,6 +9,17 @@ import { FooterComponent } from '../../components/footer/footer.component';
 import { ModalService } from '../../services/modal.service';
 import { Profissional } from '../../models';
 
+type CreateAgendamentoPublicoRequest = {
+  lojaId: string | number;
+  servicoId: string | number;
+  inicio: string;
+  cliente: {
+    nome: string;
+    email: string | null;
+    telefone: string;
+  };
+};
+
 @Component({
   selector: 'app-agendar',
   standalone: true,
@@ -18,6 +29,7 @@ import { Profissional } from '../../models';
 })
 export class AgendarComponent implements OnInit {
   slug: string | null = null;
+  lojaId: string | number | null = null;
   profissional: Profissional | null = null;
   step = 1;
   isLoading = false;
@@ -37,7 +49,7 @@ export class AgendarComponent implements OnInit {
   dataAtual: Date = new Date();
   diaSelecionado: number | null = null;
   horariosDisponiveis: string[] = [];
-  
+
   private profissionalService = inject(ProfissionalService);
   private agendamentoService = inject(AgendamentoService);
   private authService = inject(AuthService);
@@ -58,6 +70,14 @@ export class AgendarComponent implements OnInit {
         this.profissionalService.obterPorSlug(this.slug).subscribe({
           next: (response) => {
             this.profissional = response;
+
+            this.lojaId =
+              (this.profissional as any).lojaId ??
+              (this.profissional as any).empresaId ??
+              (this.profissional as any).estabelecimentoId ??
+              (this.profissional as any).id ??
+              null;
+
             const servicos = this.profissional.servicos ?? [];
             if (servicos.length > 0) {
               this.servicoSelecionado = servicos[0];
@@ -77,7 +97,7 @@ export class AgendarComponent implements OnInit {
   gerarCalendario(data: Date) {
     const ano = data.getFullYear();
     const mes = data.getMonth();
-    
+
     const nomesMeses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
     this.mesAtualNome = `${nomesMeses[mes]} ${ano}`;
 
@@ -91,15 +111,13 @@ export class AgendarComponent implements OnInit {
   }
 
   mudarMes(delta: number) {
-     this.dataAtual.setMonth(this.dataAtual.getMonth() + delta);
-     this.gerarCalendario(this.dataAtual);
-     this.diaSelecionado = null;
-     this.dataSelecionada = null;
-     this.horarioSelecionado = null;
-     this.horariosDisponiveis = [];
+    this.dataAtual.setMonth(this.dataAtual.getMonth() + delta);
+    this.gerarCalendario(this.dataAtual);
+    this.diaSelecionado = null;
+    this.dataSelecionada = null;
+    this.horarioSelecionado = null;
+    this.horariosDisponiveis = [];
   }
-
-
 
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
@@ -122,7 +140,7 @@ export class AgendarComponent implements OnInit {
     this.diaSelecionado = dia;
     this.dataSelecionada = new Date(this.dataAtual.getFullYear(), this.dataAtual.getMonth(), dia);
     this.horarioSelecionado = null;
-    
+
     // Buscar horários disponíveis da API
     if (this.slug && this.dataSelecionada) {
       const dataFormatada = this.dataSelecionada.toISOString().split('T')[0];
@@ -153,11 +171,18 @@ export class AgendarComponent implements OnInit {
       return;
     }
 
+    if (!this.lojaId) {
+      this.modalService.alert('Erro', 'Loja não identificada para o agendamento.');
+      return;
+    }
+
     this.isSaving = true;
+
     const dataFormatada = this.dataSelecionada.toISOString().split('T')[0];
-    
+    const inicioIso = new Date(`${dataFormatada}T${this.horarioSelecionado}:00`).toISOString();
+
     const dados: CreateAgendamentoPublicoRequest = {
-      lojaId: this.lojaId!,
+      lojaId: this.lojaId,
       servicoId: this.servicoSelecionado.id,
       inicio: inicioIso,
       cliente: {

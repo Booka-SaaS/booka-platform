@@ -20,9 +20,7 @@ export class MeusAgendamentosComponent implements OnInit {
     agendamentos: Agendamento[] = [];
     loading = true;
     error = false;
-    cancelandoId: string | null = null;
-
-
+    cancelandoId: string | number | null = null;
 
     ngOnInit() {
         this.carregarAgendamentos();
@@ -44,20 +42,26 @@ export class MeusAgendamentosComponent implements OnInit {
         });
     }
 
-    isFuturo(data: string | Date): boolean {
+    isFuturo(data: string | Date | undefined): boolean {
+        if (!data) {
+            return false;
+        }
+
         const dataAgendamento = new Date(data);
         const agora = new Date();
         return dataAgendamento > agora;
     }
 
-    cancelar(id: string | undefined) {
-        if (!id) return;
+    cancelar(id: string | number | undefined) {
+        if (id === undefined || id === null) return;
+
+        const agendamentoId = String(id);
 
         if (confirm('Deseja realmente cancelar este agendamento?')) {
             this.cancelandoId = id;
-            this.agendamentoService.cancelar(id).subscribe({
+            this.agendamentoService.cancelar(agendamentoId).subscribe({
                 next: () => {
-                    const item = this.agendamentos.find(a => a.id === id);
+                    const item = this.agendamentos.find(a => String(a.id) === agendamentoId);
                     if (item) item.status = 'CANCELADO';
                     this.cancelandoId = null;
                 },
