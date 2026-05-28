@@ -43,6 +43,7 @@ model Usuario {
   passwordHash       String
   role               UserRole
   ativo              Boolean             @default(true)
+  imagemUrl          String?
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @updatedAt
   perfilProfissional PerfilProfissional?

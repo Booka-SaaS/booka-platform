@@ -32,11 +32,12 @@ type CreateAgendamentoPublicoInput = {
 };
 
 function startOfDay(date: string) {
-  return new Date(`${date}T00:00:00.000Z`);
+  // Interpreta a data como local do servidor (não UTC fixo)
+  return new Date(`${date}T00:00:00`);
 }
 
 function endOfDay(date: string) {
-  return new Date(`${date}T23:59:59.999Z`);
+  return new Date(`${date}T23:59:59.999`);
 }
 
 function calculateEnd(inicioIso: string | Date, duracaoMinutos: number) {
