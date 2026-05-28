@@ -1,28 +1,122 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar class="bg-surface/90 backdrop-blur-md">
     <ion-title><span class="font-bold text-slate-900">Bloqueios</span></ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="abrirModal()">
+        <ion-icon name="add-outline" color="primary"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div class="px-4 pt-4 pb-6">
-    <p class="text-sm text-slate-500 mb-4">Bloqueie períodos em que você não está disponível para atendimento.</p>
+  <div class="px-4 pt-4 pb-2">
+    <p class="text-sm text-slate-500">Bloqueie períodos em que você não está disponível.</p>
+  </div>
 
-    <!-- Placeholder - empty state -->
-    <div class="flex flex-col items-center justify-center h-48 gap-3 text-center">
+  <!-- Loading -->
+  @if (isLoading) {
+    <div class="flex flex-col items-center justify-center h-48 gap-3">
+      <div class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+      <p class="text-sm text-slate-500">Carregando bloqueios...</p>
+    </div>
+  }
+
+  <!-- Empty State -->
+  @if (!isLoading && bloqueios.length === 0) {
+    <div class="flex flex-col items-center justify-center h-48 gap-3 text-center px-8">
       <div class="w-14 h-14 rounded-full bg-amber-50 flex items-center justify-center">
         <ion-icon name="lock-closed-outline" class="text-3xl text-amber-400"></ion-icon>
       </div>
       <p class="font-semibold text-slate-700">Nenhum bloqueio ativo</p>
-      <p class="text-sm text-slate-500">Adicione um bloqueio de horário para almoço, férias ou folga.</p>
+      <p class="text-sm text-slate-500">Adicione um bloqueio para almoço, férias ou folga.</p>
+      <button (click)="abrirModal()" class="text-primary text-sm font-bold mt-1">+ Novo Bloqueio</button>
     </div>
-  </div>
+  }
 
+  <!-- Lista de Bloqueios -->
+  @if (!isLoading && bloqueios.length > 0) {
+    <div class="px-4 pt-3 space-y-3 pb-6">
+      @for (bloqueio of bloqueios; track bloqueio.id) {
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex items-center justify-between">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="w-11 h-11 rounded-xl bg-amber-50 flex items-center justify-center shrink-0">
+              <ion-icon name="lock-closed-outline" class="text-xl text-amber-600"></ion-icon>
+            </div>
+            <div class="min-w-0">
+              <p class="text-sm font-bold text-slate-900 truncate">{{ bloqueio.motivo }}</p>
+              <p class="text-xs text-slate-500 mt-0.5">
+                {{ bloqueio.data_inicio | date:'dd/MM' }} → {{ bloqueio.data_fim | date:'dd/MM' }}
+              </p>
+            </div>
+          </div>
+          <button (click)="deletarBloqueio(bloqueio.id)" class="p-2 text-red-500 hover:bg-red-50 rounded-lg">
+            <ion-icon name="trash-outline" class="text-lg"></ion-icon>
+          </button>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- FAB -->
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button color="warning">
+    <ion-fab-button color="warning" (click)="abrirModal()">
       <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </ion-content>
 
+<!-- Modal Novo Bloqueio -->
+<ion-modal [isOpen]="showModal" (didDismiss)="fecharModal()">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar class="bg-surface/90 backdrop-blur-md">
+        <ion-title>Novo Bloqueio</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="fecharModal()">
+            <ion-icon name="close-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
 
+    <ion-content class="ion-padding">
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wide">Data Início</label>
+          <input type="date" [(ngModel)]="novoBloqueio.data_inicio"
+            class="block w-full rounded-xl border border-slate-200 bg-surface py-3 px-4 text-sm outline-none" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wide">Data Fim</label>
+          <input type="date" [(ngModel)]="novoBloqueio.data_fim"
+            class="block w-full rounded-xl border border-slate-200 bg-surface py-3 px-4 text-sm outline-none" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wide">Motivo</label>
+          <select [(ngModel)]="novoBloqueio.motivo"
+            class="block w-full rounded-xl border border-slate-200 bg-surface py-3 px-4 text-sm outline-none appearance-none">
+            <option value="Férias">Férias</option>
+            <option value="Almoço">Horário de Almoço</option>
+            <option value="Reforma">Reforma</option>
+            <option value="Pessoal">Assuntos Pessoais</option>
+            <option value="Feriado">Feriado Local</option>
+          </select>
+        </div>
+
+        <button (click)="salvarBloqueio()" [disabled]="isSaving"
+          class="flex w-full justify-center rounded-xl bg-amber-500 px-4 py-3.5 text-sm font-bold text-white shadow-sm disabled:opacity-70 mt-4 gap-2">
+          @if (isSaving) {
+            <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Salvando...
+          } @else {
+            Bloquear Agenda
+          }
+        </button>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>

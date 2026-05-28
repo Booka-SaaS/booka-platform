@@ -18,4 +18,8 @@ export class AgendamentoService {
   criar(agendamento: Agendamento): Observable<Agendamento> {
     return this.http.post<Agendamento>(this.apiUrl, agendamento);
   }
+
+  criarPublico(dados: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/publico`, dados);
+  }
 }

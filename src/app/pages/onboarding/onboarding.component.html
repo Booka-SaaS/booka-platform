@@ -1,12 +1,12 @@
-<div class="min-h-screen flex flex-col items-center bg-slate-50 font-sans text-slate-900 antialiased relative overflow-hidden">
+<div class="min-h-screen flex flex-col items-center bg-surface font-sans text-slate-900 antialiased relative overflow-hidden">
   
-  <div class="absolute top-0 left-0 h-1.5 bg-indigo-600 transition-all duration-500 ease-in-out" 
+  <div class="absolute top-0 left-0 h-1.5 bg-primary transition-all duration-500 ease-in-out" 
        [style.width]="step === 1 ? '50%' : '100%'"></div>
 
   <div class="w-full max-w-[960px] flex flex-col items-center px-4 py-12 md:py-16">
     
     <div class="mb-12 flex items-center gap-3">
-      <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-600/20">
+      <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
         <svg class="w-6 h-6" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><rect fill="#4f46e5" height="64" rx="18" width="64"></rect><g transform="translate(8, 8)"><path clip-rule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="#FFFFFF" fill-rule="evenodd"></path></g></svg>
       </div>
       <span class="text-2xl font-black tracking-tight text-slate-900">Booka</span>
@@ -24,9 +24,9 @@
       
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full mb-12">
         <button (click)="selectCategory('barbearia', 'Barbearia', 'sua')" 
-                [ngClass]="selectedCategory === 'barbearia' ? 'border-indigo-600 ring-4 ring-indigo-600/10 shadow-lg scale-105' : 'border-transparent hover:border-indigo-600/50 hover:shadow-md'"
+                [ngClass]="selectedCategory === 'barbearia' ? 'border-primary ring-4 ring-primary/10 shadow-lg scale-105' : 'border-transparent hover:border-primary/50 hover:shadow-md'"
                 class="group flex flex-col items-center p-8 bg-white rounded-xl shadow-sm border-2 transition-all duration-300 focus:outline-none">
-          <div [ngClass]="selectedCategory === 'barbearia' ? 'bg-indigo-600 text-white' : 'bg-indigo-50 text-indigo-600 group-hover:scale-110'"
+          <div [ngClass]="selectedCategory === 'barbearia' ? 'bg-primary text-white' : 'bg-primary/10 text-primary group-hover:scale-110'"
                class="w-20 h-20 mb-6 rounded-full flex items-center justify-center transition-all duration-300">
             <span class="material-symbols-outlined text-4xl">content_cut</span>
           </div>
@@ -34,9 +34,9 @@
         </button>
         
         <button (click)="selectCategory('lavajato', 'Lava-Jato', 'seu')" 
-                [ngClass]="selectedCategory === 'lavajato' ? 'border-indigo-600 ring-4 ring-indigo-600/10 shadow-lg scale-105' : 'border-transparent hover:border-indigo-600/50 hover:shadow-md'"
+                [ngClass]="selectedCategory === 'lavajato' ? 'border-primary ring-4 ring-primary/10 shadow-lg scale-105' : 'border-transparent hover:border-primary/50 hover:shadow-md'"
                 class="group flex flex-col items-center p-8 bg-white rounded-xl shadow-sm border-2 transition-all duration-300 focus:outline-none">
-          <div [ngClass]="selectedCategory === 'lavajato' ? 'bg-indigo-600 text-white' : 'bg-indigo-50 text-indigo-600 group-hover:scale-110'"
+          <div [ngClass]="selectedCategory === 'lavajato' ? 'bg-primary text-white' : 'bg-primary/10 text-primary group-hover:scale-110'"
                class="w-20 h-20 mb-6 rounded-full flex items-center justify-center transition-all duration-300">
             <span class="material-symbols-outlined text-4xl">local_car_wash</span>
           </div>
@@ -44,9 +44,9 @@
         </button>
         
         <button (click)="selectCategory('salao', 'Salão de Beleza', 'seu')" 
-                [ngClass]="selectedCategory === 'salao' ? 'border-indigo-600 ring-4 ring-indigo-600/10 shadow-lg scale-105' : 'border-transparent hover:border-indigo-600/50 hover:shadow-md'"
+                [ngClass]="selectedCategory === 'salao' ? 'border-primary ring-4 ring-primary/10 shadow-lg scale-105' : 'border-transparent hover:border-primary/50 hover:shadow-md'"
                 class="group flex flex-col items-center p-8 bg-white rounded-xl shadow-sm border-2 transition-all duration-300 focus:outline-none">
-          <div [ngClass]="selectedCategory === 'salao' ? 'bg-indigo-600 text-white' : 'bg-indigo-50 text-indigo-600 group-hover:scale-110'"
+          <div [ngClass]="selectedCategory === 'salao' ? 'bg-primary text-white' : 'bg-primary/10 text-primary group-hover:scale-110'"
                class="w-20 h-20 mb-6 rounded-full flex items-center justify-center transition-all duration-300">
             <span class="material-symbols-outlined text-4xl">face_retouching_natural</span>
           </div>
@@ -54,9 +54,9 @@
         </button>
         
         <button (click)="selectCategory('outros', 'Negócio', 'seu')" 
-                [ngClass]="selectedCategory === 'outros' ? 'border-indigo-600 ring-4 ring-indigo-600/10 shadow-lg scale-105' : 'border-transparent hover:border-indigo-600/50 hover:shadow-md'"
+                [ngClass]="selectedCategory === 'outros' ? 'border-primary ring-4 ring-primary/10 shadow-lg scale-105' : 'border-transparent hover:border-primary/50 hover:shadow-md'"
                 class="group flex flex-col items-center p-8 bg-white rounded-xl shadow-sm border-2 transition-all duration-300 focus:outline-none">
-          <div [ngClass]="selectedCategory === 'outros' ? 'bg-indigo-600 text-white' : 'bg-indigo-50 text-indigo-600 group-hover:scale-110'"
+          <div [ngClass]="selectedCategory === 'outros' ? 'bg-primary text-white' : 'bg-primary/10 text-primary group-hover:scale-110'"
                class="w-20 h-20 mb-6 rounded-full flex items-center justify-center transition-all duration-300">
             <span class="material-symbols-outlined text-4xl">more_horiz</span>
           </div>
@@ -78,7 +78,7 @@
       
       <div class="text-center mb-8 w-full">
         <h1 class="text-3xl md:text-4xl font-black tracking-tight mb-3 text-slate-900">
-          Como se chama {{ categoryArticle }} <span class="text-indigo-600">{{ categoryName }}</span>?
+          Como se chama {{ categoryArticle }} <span class="text-primary">{{ categoryName }}</span>?
         </h1>
         <p class="text-slate-500 text-lg mx-auto font-medium">
           Preencha os dados abaixo. Essas informações serão visíveis para os seus clientes.
@@ -91,7 +91,7 @@
           <div class="md:col-span-2">
             <label class="block text-sm font-bold text-slate-900 mb-2">Nome do Estabelecimento <span class="text-red-500">*</span></label>
             <input [(ngModel)]="storeName" name="storeName" type="text" placeholder="Ex: Booka Barber & Co." 
-                   class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none font-medium text-slate-900 placeholder:font-normal">
+                   class="w-full px-4 py-3.5 bg-surface border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary/80/20 focus:border-primary/80 transition-all outline-none font-medium text-slate-900 placeholder:font-normal">
           </div>
 
           <div class="md:col-span-2">
@@ -99,29 +99,29 @@
             <div class="relative">
               <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium">+55</span>
               <input [(ngModel)]="storePhone" name="storePhone" type="tel" placeholder="(11) 90000-0000" 
-                     class="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none font-medium text-slate-900 placeholder:font-normal">
+                     class="w-full pl-12 pr-4 py-3.5 bg-surface border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary/80/20 focus:border-primary/80 transition-all outline-none font-medium text-slate-900 placeholder:font-normal">
             </div>
           </div>
 
           <div class="md:col-span-2">
             <label class="block text-sm font-bold text-slate-900 mb-2">Endereço Completo <span class="text-red-500">*</span></label>
             <textarea [(ngModel)]="storeAddress" name="storeAddress" rows="3" placeholder="Rua, Número, Bairro, Cidade - Estado" 
-                      class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none font-medium text-slate-900 placeholder:font-normal resize-none"></textarea>
+                      class="w-full px-4 py-3.5 bg-surface border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary/80/20 focus:border-primary/80 transition-all outline-none font-medium text-slate-900 placeholder:font-normal resize-none"></textarea>
           </div>
         </div>
         
-        <div class="bg-indigo-50 p-4 rounded-xl flex items-start gap-3 mt-2 border border-indigo-100">
-          <span class="material-symbols-outlined text-indigo-500 mt-0.5">map</span>
+        <div class="bg-primary/10 p-4 rounded-xl flex items-start gap-3 mt-2 border border-primary/20">
+          <span class="material-symbols-outlined text-primary/80 mt-0.5">map</span>
           <div>
             <p class="text-xs font-bold text-indigo-900 uppercase tracking-wide">Localização Automática</p>
-            <p class="text-xs text-indigo-700 mt-0.5">As coordenadas do mapa serão detectadas automaticamente a partir deste endereço.</p>
+            <p class="text-xs text-primary mt-0.5">As coordenadas do mapa serão detectadas automaticamente a partir deste endereço.</p>
           </div>
         </div>
 
       </div>
 
       <div class="w-full flex justify-between items-center pt-8 mt-4">
-        <button (click)="prevStep()" class="flex items-center gap-2 px-4 py-2 text-slate-500 hover:text-indigo-600 font-bold transition-colors">
+        <button (click)="prevStep()" class="flex items-center gap-2 px-4 py-2 text-slate-500 hover:text-primary font-bold transition-colors">
           <span class="material-symbols-outlined text-lg">arrow_back</span>
           Voltar
         </button>

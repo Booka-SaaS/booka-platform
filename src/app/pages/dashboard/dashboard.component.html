@@ -1,8 +1,8 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar class="bg-surface/90 backdrop-blur-md">
     <ion-title>
       <div class="flex items-center gap-2">
-        <div class="flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-600">
+        <div class="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">
           <svg class="w-4 h-4" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
             <g transform="translate(8, 8)">
               <path clip-rule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="#FFFFFF" fill-rule="evenodd"></path>
@@ -54,11 +54,11 @@
       </div>
     </div>
 
-    <div class="bg-indigo-600 rounded-2xl p-4 shadow-sm">
-      <span class="text-xs font-medium text-indigo-200">Agendamentos</span>
+    <div class="bg-primary rounded-2xl p-4 shadow-sm">
+      <span class="text-xs font-medium text-primary/30">Agendamentos</span>
       <div class="mt-1">
         <span class="text-xl font-bold text-white">28</span>
-        <span class="block text-indigo-200 text-xs mt-0.5">hoje</span>
+        <span class="block text-primary/30 text-xs mt-0.5">hoje</span>
       </div>
     </div>
   </div>
@@ -67,14 +67,14 @@
   <div class="px-4 mt-6">
     <div class="flex items-center justify-between mb-3">
       <h3 class="text-sm font-bold text-slate-800">Próximos Agendamentos</h3>
-      <a routerLink="/painel/agenda" class="text-xs font-semibold text-indigo-600">Ver todos</a>
+      <a routerLink="/painel/agenda" class="text-xs font-semibold text-primary">Ver todos</a>
     </div>
 
     <div class="space-y-3">
       <!-- Item 1 -->
       <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold text-sm">MS</div>
+          <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">MS</div>
           <div>
             <p class="text-sm font-semibold text-slate-900">Mariana Silva</p>
             <p class="text-xs text-slate-500">Corte Feminino · 09:00</p>
@@ -88,7 +88,7 @@
       <!-- Item 2 -->
       <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold text-sm">JP</div>
+          <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">JP</div>
           <div>
             <p class="text-sm font-semibold text-slate-900">João Pereira</p>
             <p class="text-xs text-slate-500">Barba e Cabelo · 10:30</p>
@@ -102,7 +102,7 @@
       <!-- Item 3 -->
       <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold text-sm">AB</div>
+          <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">AB</div>
           <div>
             <p class="text-sm font-semibold text-slate-900">Ana Beatriz</p>
             <p class="text-xs text-slate-500">Manicure · 14:00</p>
@@ -120,8 +120,8 @@
     <h3 class="text-sm font-bold text-slate-800 mb-3">Ações Rápidas</h3>
     <div class="grid grid-cols-2 gap-3">
       <button routerLink="/painel/agenda" class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex flex-col items-start gap-2 text-left">
-        <div class="w-9 h-9 rounded-xl bg-indigo-50 flex items-center justify-center">
-          <ion-icon name="add-outline" class="text-indigo-600 text-xl"></ion-icon>
+        <div class="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center">
+          <ion-icon name="add-outline" class="text-primary text-xl"></ion-icon>
         </div>
         <span class="text-sm font-semibold text-slate-800">Novo Agend.</span>
       </button>

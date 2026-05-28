@@ -1,168 +1,183 @@
-<div class="bg-[#f8fafc] text-slate-800 antialiased min-h-screen flex flex-col font-['Inter']">
+<ion-header [translucent]="true">
+  <ion-toolbar class="bg-surface/90 backdrop-blur-md">
+    <ion-buttons slot="start">
+      <ion-button (click)="voltar()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title><span class="font-bold text-slate-900">Agendar</span></ion-title>
+  </ion-toolbar>
+</ion-header>
 
-    <!-- Navbar Compacta -->
-    <nav class="fixed top-0 w-full z-10 bg-white/90 backdrop-blur-md shadow-sm border-b border-slate-200/60">
-        <div class="flex items-center justify-between px-6 h-16 max-w-screen-2xl mx-auto">
-            <!-- Logo -->
-            <div class="flex items-center gap-2 shrink-0 cursor-pointer" routerLink="/">
-                <svg class="w-8 h-8" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-                    <rect fill="#004ac6" height="64" rx="18" width="64"></rect>
-                    <g transform="translate(8, 8)">
-                        <path clip-rule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z"
-                            fill="#FFFFFF" fill-rule="evenodd"></path>
-                    </g>
-                </svg>
-                <span class="text-2xl font-black tracking-tighter text-[#004ac6]">Booka</span>
+<ion-content [fullscreen]="true">
+
+  <!-- Loading -->
+  @if (isLoading) {
+    <div class="flex flex-col items-center justify-center h-64 gap-3">
+      <div class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+      <p class="text-sm text-slate-500">Carregando profissional...</p>
+    </div>
+  }
+
+  @if (!isLoading && !profissional) {
+    <div class="flex flex-col items-center justify-center h-64 gap-3 px-8 text-center">
+      <div class="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center">
+        <span class="text-3xl">😕</span>
+      </div>
+      <p class="font-semibold text-slate-700">Profissional não encontrado</p>
+      <button (click)="voltar()" class="text-primary text-sm font-bold">← Voltar ao Explorar</button>
+    </div>
+  }
+
+  @if (!isLoading && profissional) {
+    <div class="pb-8">
+      
+      <!-- Hero Card -->
+      <div class="px-4 pt-4 pb-5">
+        <div class="flex items-center gap-4">
+          <div class="w-16 h-16 rounded-2xl overflow-hidden bg-slate-100 shrink-0 shadow-sm">
+            <img [src]="profissional.img || 'https://via.placeholder.com/64'" [alt]="profissional.nome" class="w-full h-full object-cover" />
+          </div>
+          <div class="min-w-0">
+            <h2 class="text-lg font-bold text-slate-900 truncate">{{ profissional.nome }}</h2>
+            <p class="text-sm text-primary font-medium">{{ profissional.profissao || 'Profissional' }}</p>
+            <div class="flex items-center gap-2 mt-1 text-xs text-slate-500">
+              <span class="flex items-center gap-0.5">⭐ 4.9</span>
+              <span>•</span>
+              <span>120+ avaliações</span>
             </div>
-            <!-- Right Actions -->
-            <div class="flex items-center gap-3">
-                <button class="hidden lg:block text-sm font-bold text-slate-800 px-4 py-2 hover:bg-slate-100 transition-colors rounded-lg">Suporte</button>
-                <button routerLink="/login" class="text-sm font-bold text-[#004ac6] px-4 py-2 hover:bg-blue-50 transition-colors rounded-lg">Entrar</button>
-                <button routerLink="/cadastro" class="bg-[#004ac6] text-white px-5 py-2 rounded-lg font-bold text-sm hover:bg-blue-700 transition-colors shadow-sm">Cadastrar</button>
-            </div>
+          </div>
         </div>
-    </nav>
+      </div>
 
-    <main class="pt-16 flex-grow" *ngIf="profissional">
-        <!-- Modern Clean Hero Section Compact -->
-        <section class="relative pt-12 pb-8 w-full bg-gradient-to-b from-blue-50/80 via-blue-50/30 to-[#f8fafc] overflow-hidden">
-            <div class="max-w-6xl mx-auto px-6 lg:px-8 relative z-10 flex flex-col md:flex-row items-center gap-6 lg:gap-10">
-                <!-- Avatar Frame (Pequeno) -->
-                <div class="relative shrink-0">
-                    <div class="w-28 h-28 md:w-36 md:h-36 rounded-3xl border-4 border-white shadow-xl overflow-hidden bg-white rotate-[-2deg] hover:rotate-0 transition-transform duration-300">
-                        <img alt="{{ profissional?.nome }}" class="w-full h-full object-cover" 
-                             [src]="profissional?.img || 'https://lh3.googleusercontent.com/aida-public/AB6AXuCw8xHBhQsIXqMUIojdvu58Yg9jRmMsxWSqBO57lMWPTzlfSqR38l0NoepOj0RL8pbSZbCZ2aFfgIdWRNml6vvJxq5DrEVEpxDjc55IIxNR-BlafNbx8olvqE0m0vRBd4b7XiLcJ-NB910P1kZdnQ6yzXaNjjaaWPmUFhZs5obbqixnnaNiawEgJ2YJcgRkFxf3oUIdfGkZOFEJ8hXj0g7fJpKsxBt6m8QIgpM-89frgGPBRQMbm_0qwqHLPKhorIeyWDy49gCWSU4'" />
-                    </div>
+      <!-- Serviços -->
+      <div class="px-4 mb-5">
+        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Escolha o Serviço</h3>
+        <div class="space-y-2">
+          @for (servico of profissional.servicos; track servico.id) {
+            <button (click)="selecionarServico(servico)"
+              class="w-full bg-white rounded-2xl p-4 border shadow-sm flex items-center justify-between transition-all text-left"
+              [ngClass]="servicoSelecionado?.id === servico.id ? 'border-primary/80 ring-2 ring-primary/30' : 'border-slate-100'">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0"
+                  [ngClass]="servicoSelecionado?.id === servico.id ? 'border-primary bg-primary' : 'border-slate-300'">
+                  @if (servicoSelecionado?.id === servico.id) {
+                    <ion-icon name="checkmark-circle-outline" class="text-white text-xs"></ion-icon>
+                  }
                 </div>
-                
-                <!-- Info block Compact -->
-                <div class="flex-1 mt-2 md:mt-0 text-center md:text-left">
-                    <h1 class="text-3xl md:text-4xl font-black tracking-tight text-slate-900 mb-1">{{ profissional?.nome }}</h1>
-                    <p class="text-lg font-bold text-[#004ac6] mb-3">{{ profissional?.profissao || 'Consultor Especialista' }}</p>
-                    <div class="flex items-center justify-center md:justify-start gap-4 mb-2 text-sm text-slate-500 font-medium">
-                        <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-amber-500" style="font-variation-settings: 'FILL' 1;">star</span> 4.9 (120+)</span>
-                        <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-emerald-500" style="font-variation-settings: 'FILL' 1;">verified</span> Em Alta</span>
-                    </div>
+                <div class="min-w-0">
+                  <p class="text-sm font-bold text-slate-900 truncate">{{ servico.nome }}</p>
+                  <p class="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
+                    <ion-icon name="time-outline"></ion-icon> {{ servico.duracao }} min
+                  </p>
                 </div>
-            </div>
-        </section>
-
-        <!-- Main Layout -->
-        <div class="max-w-6xl mx-auto px-6 lg:px-8 py-6 pb-20">
-            <div class="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8">
-
-                <!-- Left Column: Services -->
-                <div class="space-y-6">
-                    <h2 class="text-2xl font-black tracking-tight text-slate-900 border-b border-slate-200 pb-3">Serviços</h2>
-
-                    <div class="grid gap-4">
-                        @for (servico of profissional?.servicos; track servico.id) {
-                        <div class="group relative bg-white rounded-2xl transition-all shadow-sm border cursor-pointer hover:shadow-lg hover:-translate-y-0.5 p-5"
-                            (click)="selecionarServico(servico)"
-                            [ngClass]="servicoSelecionado?.id === servico.id ? 'border-[#004ac6] ring-2 ring-[#004ac6]/10' : 'border-slate-200'">
-                            
-                            <div class="absolute top-4 right-4 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors"
-                                 [ngClass]="servicoSelecionado?.id === servico.id ? 'border-[#004ac6] bg-[#004ac6] text-white' : 'border-slate-300 text-transparent'">
-                                <span class="material-symbols-outlined text-[14px] font-bold">check</span>
-                            </div>
-
-                            <div class="pr-10 mb-3">
-                                <h3 class="text-lg font-bold text-slate-900 mb-1">{{ servico.nome }}</h3>
-                            </div>
-                            
-                            <div class="flex items-center justify-between text-sm">
-                                <span class="bg-slate-50 px-2.5 py-1 rounded text-slate-600 font-bold flex items-center gap-1 border border-slate-100">
-                                    <span class="material-symbols-outlined text-[14px]">schedule</span> {{ servico.duracao }} min
-                                </span>
-                                <p class="text-xl font-black text-slate-900">{{ servico.preco | currency:'BRL' }}</p>
-                            </div>
-                        </div>
-                        }
-                    </div>
-                </div>
-
-                <!-- Right Column: Booking Sidebar -->
-                <aside class="relative">
-                    <div class="sticky top-20 z-0">
-                        <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/50 p-6 border border-slate-100">
-                            <h2 class="text-xl font-black mb-5 text-slate-900 flex items-center gap-2">
-                                <span class="material-symbols-outlined text-[#004ac6]">calendar_month</span> Agendamento
-                            </h2>
-
-                            <!-- Area do Calendario -->
-                            <div class="mb-6">
-                                <div class="flex items-center justify-between mb-4">
-                                    <span class="font-bold text-slate-800 text-sm tracking-tight">{{ mesAtualNome }}</span>
-                                    <div class="flex items-center gap-1">
-                                        <button (click)="mudarMes(-1)" class="p-1 hover:bg-slate-100 rounded text-slate-500">
-                                            <span class="material-symbols-outlined text-[18px]">chevron_left</span>
-                                        </button>
-                                        <button (click)="mudarMes(1)" class="p-1 hover:bg-slate-100 rounded text-slate-500">
-                                            <span class="material-symbols-outlined text-[18px]">chevron_right</span>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-bold text-slate-400 mb-2">
-                                    <span>DOM</span><span>SEG</span><span>TER</span><span>QUA</span><span>QUI</span><span>SEX</span><span>SAB</span>
-                                </div>
-                                <div class="grid grid-cols-7 gap-1">
-                                    @for (dia of diasDoMes; track $index) {
-                                        @if (dia === null) {
-                                            <div class="aspect-square"></div>
-                                        } @else {
-                                            <button (click)="selecionarData(dia)" 
-                                                    [ngClass]="diaSelecionado === dia ? 'bg-[#004ac6] text-white shadow-sm' : 'hover:bg-slate-100 text-slate-700'"
-                                                    class="aspect-square rounded-xl flex items-center justify-center text-sm font-bold transition-all cursor-pointer">
-                                                {{ dia }}
-                                            </button>
-                                        }
-                                    }
-                                </div>
-                            </div>
-                            
-                            <!-- Time Slots -->
-                            <div class="mb-6" *ngIf="horariosDisponiveis.length > 0">
-                                <div class="grid grid-cols-3 gap-2">
-                                    @for (hora of horariosDisponiveis; track hora) {
-                                        <button (click)="selecionarHorario(hora)" 
-                                                [ngClass]="horarioSelecionado === hora ? 'bg-[#004ac6] text-white border-[#004ac6]' : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-[#004ac6]/50 hover:bg-blue-50'" 
-                                                class="py-2 rounded-lg border transition-all text-xs font-bold text-center">
-                                            {{ hora }}
-                                        </button>
-                                    }
-                                </div>
-                            </div>
-
-                            <!-- Summary -->
-                            <div class="bg-slate-900 p-4 rounded-xl space-y-2 mb-6 text-white shadow-lg">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-[10px] font-bold uppercase text-slate-400">Serviço</span>
-                                    <span class="text-xs font-medium text-slate-100 truncate max-w-[140px]">{{ servicoSelecionado?.nome || '--' }}</span>
-                                </div>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-[10px] font-bold uppercase text-slate-400">Quando</span>
-                                    <span class="text-xs font-medium text-slate-100">{{ dataSelecionada ? (dataSelecionada | date:'dd/MM') : '--' }} {{ horarioSelecionado ? 'às ' + horarioSelecionado : '' }}</span>
-                                </div>
-                                <div class="pt-2 border-t border-slate-700 flex justify-between items-end mt-1">
-                                    <span class="text-xs font-bold text-slate-300">Total</span>
-                                    <span class="text-xl font-black">{{ (servicoSelecionado?.preco || 0) | currency:'BRL' }}</span>
-                                </div>
-                            </div>
-
-                            <button (click)="finalizarAgendamento()"
-                                [disabled]="!servicoSelecionado || !dataSelecionada || !horarioSelecionado"
-                                [ngClass]="!servicoSelecionado || !dataSelecionada || !horarioSelecionado ? 'opacity-50 cursor-not-allowed bg-slate-300 text-slate-500' : 'bg-[#004ac6] text-white hover:bg-blue-700 active:scale-95 shadow-lg'"
-                                class="w-full py-3 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2">
-                                Confirmar e Avançar <span class="material-symbols-outlined text-[18px]">trending_flat</span>
-                            </button>
-                        </div>
-                    </div>
-                </aside>
-
-            </div>
+              </div>
+              <span class="text-base font-black text-slate-900 shrink-0">{{ servico.preco | currency:'BRL' }}</span>
+            </button>
+          }
         </div>
-    </main>
+      </div>
 
-    <!-- Footer Componentizado -->
-    <app-footer></app-footer>
-</div>
+      <!-- Calendário -->
+      <div class="px-4 mb-5">
+        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Escolha a Data</h3>
+        <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm">
+          <!-- Navegação do mês -->
+          <div class="flex items-center justify-between mb-4">
+            <button (click)="mudarMes(-1)" class="p-1.5 hover:bg-slate-100 rounded-lg">
+              <ion-icon name="chevron-back-outline" class="text-slate-500"></ion-icon>
+            </button>
+            <span class="font-bold text-sm text-slate-800">{{ mesAtualNome }}</span>
+            <button (click)="mudarMes(1)" class="p-1.5 hover:bg-slate-100 rounded-lg">
+              <ion-icon name="chevron-forward-outline" class="text-slate-500"></ion-icon>
+            </button>
+          </div>
+          <!-- Dias da semana -->
+          <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-bold text-slate-400 mb-2">
+            <span>D</span><span>S</span><span>T</span><span>Q</span><span>Q</span><span>S</span><span>S</span>
+          </div>
+          <!-- Grid de dias -->
+          <div class="grid grid-cols-7 gap-1">
+            @for (dia of diasDoMes; track $index) {
+              @if (dia === null) {
+                <div class="aspect-square"></div>
+              } @else {
+                <button (click)="selecionarData(dia)"
+                  class="aspect-square rounded-xl flex items-center justify-center text-sm font-bold transition-all"
+                  [class.bg-primary]="diaSelecionado === dia"
+                  [class.text-white]="diaSelecionado === dia"
+                  [class.text-slate-700]="diaSelecionado !== dia">
+                  {{ dia }}
+                </button>
+              }
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Horários -->
+      @if (horariosDisponiveis.length > 0) {
+        <div class="px-4 mb-5">
+          <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Horários Disponíveis</h3>
+          <div class="grid grid-cols-4 gap-2">
+            @for (hora of horariosDisponiveis; track hora) {
+              <button (click)="selecionarHorario(hora)"
+                class="py-2.5 rounded-xl border text-xs font-bold text-center transition-all"
+                [class.bg-primary]="horarioSelecionado === hora"
+                [class.text-white]="horarioSelecionado === hora"
+                [class.border-primary]="horarioSelecionado === hora"
+                [class.bg-white]="horarioSelecionado !== hora"
+                [class.text-slate-600]="horarioSelecionado !== hora"
+                [class.border-slate-200]="horarioSelecionado !== hora">
+                {{ hora }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Resumo -->
+      <div class="px-4 mb-5">
+        <div class="bg-slate-900 p-4 rounded-2xl text-white shadow-lg">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-[10px] font-bold uppercase text-slate-400">Serviço</span>
+            <span class="text-xs font-medium text-slate-100 truncate max-w-[160px]">{{ servicoSelecionado?.nome || '--' }}</span>
+          </div>
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-[10px] font-bold uppercase text-slate-400">Quando</span>
+            <span class="text-xs font-medium text-slate-100">
+              {{ dataSelecionada ? (dataSelecionada | date:'dd/MM') : '--' }}
+              {{ horarioSelecionado ? ' às ' + horarioSelecionado : '' }}
+            </span>
+          </div>
+          <div class="pt-2 border-t border-slate-700 flex justify-between items-end">
+            <span class="text-xs font-bold text-slate-300">Total</span>
+            <span class="text-xl font-black">{{ (servicoSelecionado?.preco || 0) | currency:'BRL' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botão Confirmar -->
+      <div class="px-4">
+        <button (click)="finalizarAgendamento()" [disabled]="!podeFinalizar || isSaving"
+          class="flex w-full justify-center rounded-2xl px-4 py-4 text-sm font-bold shadow-sm transition-all gap-2 items-center"
+          [class.bg-primary]="podeFinalizar && !isSaving"
+          [class.text-white]="podeFinalizar && !isSaving"
+          [class.bg-slate-200]="!podeFinalizar || isSaving"
+          [class.text-slate-400]="!podeFinalizar || isSaving">
+          @if (isSaving) {
+            <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Confirmando...
+          } @else {
+            Confirmar Agendamento
+          }
+        </button>
+      </div>
+
+    </div>
+  }
+
+</ion-content>

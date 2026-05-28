@@ -1,5 +1,5 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar class="bg-surface/90 backdrop-blur-md">
     <ion-title><span class="font-bold text-slate-900">Dados da Loja</span></ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="salvarDados()" [disabled]="isSaving" color="primary">
@@ -14,7 +14,7 @@
 
   @if (isLoading) {
     <div class="flex items-center justify-center h-48">
-      <div class="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+      <div class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
     </div>
   }
 
@@ -23,7 +23,7 @@
 
       <!-- Logo da Loja -->
       <div class="flex flex-col items-center py-6">
-        <div class="w-20 h-20 rounded-2xl bg-indigo-600 flex items-center justify-center text-white text-2xl font-black shadow-lg shadow-indigo-100">
+        <div class="w-20 h-20 rounded-2xl bg-primary flex items-center justify-center text-white text-2xl font-black shadow-lg shadow-primary/20">
           {{ loja.nome ? loja.nome.charAt(0).toUpperCase() : 'B' }}
         </div>
         <p class="text-sm text-slate-500 mt-3">Logo da loja</p>
@@ -48,7 +48,7 @@
       </div>
 
       <button (click)="salvarDados()" [disabled]="isSaving"
-        class="flex w-full justify-center rounded-xl bg-indigo-600 px-4 py-3.5 text-sm font-bold text-white shadow-sm disabled:opacity-70 mt-4">
+        class="flex w-full justify-center rounded-xl bg-primary px-4 py-3.5 text-sm font-bold text-white shadow-sm disabled:opacity-70 mt-4">
         {{ isSaving ? 'Salvando...' : 'Salvar Dados da Loja' }}
       </button>
     </div>
