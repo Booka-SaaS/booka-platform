@@ -30,6 +30,51 @@
           } @else {
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
               <form class="p-8">
+
+                <!-- Foto de Capa -->
+                <div class="mb-8 pb-8 border-b border-slate-100">
+                  <div class="flex items-center gap-2 mb-4">
+                    <span class="material-symbols-outlined text-indigo-600">image</span>
+                    <h3 class="font-bold text-lg">Foto de Capa do Estabelecimento</h3>
+                  </div>
+                  <p class="text-sm text-slate-500 mb-4">Esta imagem será exibida publicamente no marketplace para os clientes encontrarem sua loja. PNG, JPG ou WEBP — máx. 10MB.</p>
+
+                  <div class="relative w-full h-52 bg-slate-100 rounded-xl overflow-hidden border-2 border-dashed border-slate-300 group cursor-pointer" (click)="abrirSeletorCapa()">
+
+                    @if (capaSrc) {
+                      <img [src]="capaSrc" alt="Foto de capa" class="w-full h-full object-cover"/>
+                    } @else {
+                      <div class="flex flex-col items-center justify-center h-full gap-2 text-slate-400">
+                        <span class="material-symbols-outlined text-5xl">add_photo_alternate</span>
+                        <span class="text-sm font-semibold">Clique para adicionar a foto de capa</span>
+                      </div>
+                    }
+
+                    <div class="absolute inset-0 bg-black/40 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-xl">
+                      @if (isUploadingCapa) {
+                        <svg class="animate-spin h-8 w-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span class="text-white text-sm font-bold mt-2">Enviando...</span>
+                      } @else {
+                        <span class="material-symbols-outlined text-white text-4xl">photo_camera</span>
+                        <span class="text-white text-sm font-bold mt-1">{{ capaSrc ? 'Alterar foto de capa' : 'Adicionar foto de capa' }}</span>
+                      }
+                    </div>
+
+                    <input #capaInput type="file" accept="image/jpeg,image/png,image/webp" class="hidden" (change)="onCapaSelecionada($event)"/>
+                  </div>
+
+                  <div class="mt-3 flex justify-end">
+                    <button type="button" (click)="abrirSeletorCapa()" [disabled]="isUploadingCapa"
+                            class="px-4 py-2 border border-slate-300 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors disabled:opacity-50 flex items-center gap-2">
+                      <span class="material-symbols-outlined text-[18px]">upload</span>
+                      {{ isUploadingCapa ? 'Enviando...' : (capaSrc ? 'Trocar foto de capa' : 'Adicionar foto de capa') }}
+                    </button>
+                  </div>
+                </div>
+
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
 
                   <div class="space-y-6">
@@ -81,70 +126,33 @@
                     </div>
 
                     <div class="space-y-4">
-                      <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
-                        <div class="flex items-center justify-between mb-3">
-                          <p class="text-sm font-bold">Segunda a Sexta</p>
-                          <label class="flex items-center gap-2 cursor-pointer">
-                            <span class="text-xs text-slate-500">{{ horarioSemana.ativo ? 'Aberto' : 'Fechado' }}</span>
-                            <div class="relative">
-                              <input type="checkbox" name="ativo-semana" [(ngModel)]="horarioSemana.ativo" class="sr-only peer"/>
-                              <div class="w-10 h-6 bg-slate-300 rounded-full peer peer-checked:bg-indigo-500 transition-colors"></div>
-                              <div class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-4"></div>
+                      @for (grupo of horarios; track grupo.label; let i = $index) {
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                          <div class="flex items-center justify-between mb-3">
+                            <p class="text-sm font-bold">{{ grupo.label }}</p>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                              <span class="text-xs text-slate-500">{{ grupo.data.ativo ? 'Aberto' : 'Fechado' }}</span>
+                              <div class="relative">
+                                <input type="checkbox" [name]="'ativo-' + i" [(ngModel)]="grupo.data.ativo" class="sr-only peer"/>
+                                <div class="w-10 h-6 bg-slate-300 rounded-full peer peer-checked:bg-indigo-500 transition-colors"></div>
+                                <div class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-4"></div>
+                              </div>
+                            </label>
+                          </div>
+                          <div class="grid grid-cols-2 gap-4" [class.opacity-50]="!grupo.data.ativo">
+                            <div class="flex flex-col gap-1">
+                              <span class="text-[10px] uppercase font-bold text-slate-500">Abertura</span>
+                              <input [name]="'abertura-' + i" [(ngModel)]="grupo.data.abertura" [disabled]="!grupo.data.ativo"
+                                     class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 disabled:bg-slate-100" type="time"/>
                             </div>
-                          </label>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4" [class.opacity-50]="!horarioSemana.ativo">
-                          <div class="flex flex-col gap-1">
-                            <span class="text-[10px] uppercase font-bold text-slate-500">Abertura</span>
-                            <input name="semana-abertura" [(ngModel)]="horarioSemana.abertura" [disabled]="!horarioSemana.ativo" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 disabled:bg-slate-100" type="time"/>
-                          </div>
-                          <div class="flex flex-col gap-1">
-                            <span class="text-[10px] uppercase font-bold text-slate-500">Fechamento</span>
-                            <input name="semana-fechamento" [(ngModel)]="horarioSemana.fechamento" [disabled]="!horarioSemana.ativo" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 disabled:bg-slate-100" type="time"/>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
-                        <div class="flex items-center justify-between mb-3">
-                          <p class="text-sm font-bold">Sábado</p>
-                          <label class="flex items-center gap-2 cursor-pointer">
-                            <span class="text-xs text-slate-500">{{ horarioSabado.ativo ? 'Aberto' : 'Fechado' }}</span>
-                            <div class="relative">
-                              <input type="checkbox" name="ativo-sabado" [(ngModel)]="horarioSabado.ativo" class="sr-only peer"/>
-                              <div class="w-10 h-6 bg-slate-300 rounded-full peer peer-checked:bg-indigo-500 transition-colors"></div>
-                              <div class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-4"></div>
+                            <div class="flex flex-col gap-1">
+                              <span class="text-[10px] uppercase font-bold text-slate-500">Fechamento</span>
+                              <input [name]="'fechamento-' + i" [(ngModel)]="grupo.data.fechamento" [disabled]="!grupo.data.ativo"
+                                     class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 disabled:bg-slate-100" type="time"/>
                             </div>
-                          </label>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4" [class.opacity-50]="!horarioSabado.ativo">
-                          <div class="flex flex-col gap-1">
-                            <span class="text-[10px] uppercase font-bold text-slate-500">Abertura</span>
-                            <input name="sabado-abertura" [(ngModel)]="horarioSabado.abertura" [disabled]="!horarioSabado.ativo" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 disabled:bg-slate-100" type="time"/>
-                          </div>
-                          <div class="flex flex-col gap-1">
-                            <span class="text-[10px] uppercase font-bold text-slate-500">Fechamento</span>
-                            <input name="sabado-fechamento" [(ngModel)]="horarioSabado.fechamento" [disabled]="!horarioSabado.ativo" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 disabled:bg-slate-100" type="time"/>
                           </div>
                         </div>
-                      </div>
-
-                      <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
-                        <div class="flex items-center justify-between mb-3">
-                          <p class="text-sm font-bold">Domingo</p>
-                          <span class="px-2 py-0.5 bg-red-100 text-red-600 rounded text-[10px] font-bold uppercase tracking-tight">Fechado</span>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4 opacity-50">
-                          <div class="flex flex-col gap-1">
-                            <span class="text-[10px] uppercase font-bold text-slate-500">Abertura</span>
-                            <input class="w-full px-3 py-2 bg-slate-100 border border-slate-200 rounded-lg text-sm" disabled type="time"/>
-                          </div>
-                          <div class="flex flex-col gap-1">
-                            <span class="text-[10px] uppercase font-bold text-slate-500">Fechamento</span>
-                            <input class="w-full px-3 py-2 bg-slate-100 border border-slate-200 rounded-lg text-sm" disabled type="time"/>
-                          </div>
-                        </div>
-                      </div>
+                      }
                     </div>
                   </div>
 

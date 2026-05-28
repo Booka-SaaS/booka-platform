@@ -132,26 +132,36 @@ export class AgendarComponent implements OnInit {
 
   selecionarServico(servico: ProfissionalServico) {
     this.servicoSelecionado = servico;
+    // Recarrega slots com a duração do novo serviço, se já há data selecionada
+    if (this.dataSelecionada) {
+      this.horarioSelecionado = null;
+      this.buscarHorariosDisponiveis();
+    }
   }
 
   selecionarData(dia: number) {
     this.diaSelecionado = dia;
     this.dataSelecionada = new Date(this.dataAtual.getFullYear(), this.dataAtual.getMonth(), dia);
     this.horarioSelecionado = null;
-    
-    // Buscar horários disponíveis da API
-    if (this.lojaId && this.dataSelecionada) {
-      const dataFormatada = this.dataSelecionada.toISOString().split('T')[0];
-      this.profissionalService.obterDisponibilidade(this.lojaId, dataFormatada).subscribe({
-        next: (response) => {
-          this.horariosDisponiveis = response.slots || [];
-        },
-        error: (err) => {
-          console.error('Erro ao carregar horários:', err);
-          this.horariosDisponiveis = [];
-        }
-      });
-    }
+    this.buscarHorariosDisponiveis();
+  }
+
+  private buscarHorariosDisponiveis() {
+    if (!this.lojaId || !this.dataSelecionada) return;
+    const ano = this.dataSelecionada.getFullYear();
+    const mes = String(this.dataSelecionada.getMonth() + 1).padStart(2, '0');
+    const dia = String(this.dataSelecionada.getDate()).padStart(2, '0');
+    const dataFormatada = `${ano}-${mes}-${dia}`;
+    const servicoId = this.servicoSelecionado?.id;
+    this.profissionalService.obterDisponibilidade(this.lojaId, dataFormatada, servicoId).subscribe({
+      next: (response) => {
+        this.horariosDisponiveis = response.slots || [];
+      },
+      error: (err) => {
+        console.error('Erro ao carregar horários:', err);
+        this.horariosDisponiveis = [];
+      }
+    });
   }
 
   selecionarHorario(hora: string) {
@@ -170,8 +180,13 @@ export class AgendarComponent implements OnInit {
     }
 
     this.isSaving = true;
-    const dataFormatada = this.dataSelecionada.toISOString().split('T')[0];
-    const inicioIso = `${dataFormatada}T${this.horarioSelecionado}:00.000Z`;
+    // Constrói a data usando o ano/mês/dia local (não UTC) + horário selecionado
+    const ano = this.dataSelecionada.getFullYear();
+    const mes = String(this.dataSelecionada.getMonth() + 1).padStart(2, '0');
+    const dia = String(this.dataSelecionada.getDate()).padStart(2, '0');
+    // Cria o Date com hora local e converte para ISO com offset correto
+    const dataHoraLocal = new Date(`${ano}-${mes}-${dia}T${this.horarioSelecionado}:00`);
+    const inicioIso = dataHoraLocal.toISOString();
     
     const dados: CreateAgendamentoPublicoRequest = {
       lojaId: this.lojaId!,

@@ -39,4 +39,12 @@ export class DashboardService {
         })
       );
   }
+
+  get dataHojeISO(): string {
+    const hoje = new Date();
+    const y = hoje.getFullYear();
+    const m = String(hoje.getMonth() + 1).padStart(2, '0');
+    const d = String(hoje.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
 }

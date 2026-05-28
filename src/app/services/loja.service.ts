@@ -5,6 +5,7 @@ import { Loja } from '../models';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
+
 export interface UpdateLojaRequest {
   nome?: string;
   email?: string | null;
@@ -43,6 +44,19 @@ export class LojaService {
       .pipe(
         catchError(err => {
           console.error('Erro ao atualizar loja:', err);
+          return throwError(() => err);
+        })
+      );
+  }
+
+  // Upload de foto de capa da loja
+  uploadCapa(file: File): Observable<{ imagemUrl: string }> {
+    const form = new FormData();
+    form.append('capa', file);
+    return this.http.post<{ imagemUrl: string }>(`${environment.apiUrl}/upload/capa-loja`, form)
+      .pipe(
+        catchError(err => {
+          console.error('Erro ao enviar foto de capa:', err);
           return throwError(() => err);
         })
       );

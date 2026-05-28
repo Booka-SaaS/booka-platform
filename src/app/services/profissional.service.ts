@@ -43,9 +43,10 @@ export class ProfissionalService {
       );
   }
 
-  // Disponibilidade por data
-  obterDisponibilidade(id: string, data: string): Observable<{ slots: string[] }> {
+  // Disponibilidade por data, opcionalmente filtrada pela duração do serviço
+  obterDisponibilidade(id: string, data: string, servicoId?: string): Observable<{ slots: string[] }> {
     let httpParams = new HttpParams().set('data', data);
+    if (servicoId) httpParams = httpParams.set('servicoId', servicoId);
     return this.http.get<{ slots: string[] }>(`${this.apiUrl}/${id}/disponibilidade`, { params: httpParams })
       .pipe(
         catchError(err => {

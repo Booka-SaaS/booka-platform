@@ -7,6 +7,13 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { ServicoService, CreateServicoRequest } from '../../services/servico.service';
 import { Servico } from '../../models';
 
+interface ServicoForm {
+  nome: string;
+  preco: number;
+  duracao: number;
+  unidadeDuracao: 'minutos' | 'horas';
+}
+
 @Component({
   selector: 'app-servicos',
   standalone: true,
@@ -19,11 +26,13 @@ export class ServicosComponent implements OnInit {
   isLoading = true;
   isSaving = false;
   showModal = false;
+  editandoId: string | null = null;
 
-  novoServico: CreateServicoRequest = {
+  form: ServicoForm = {
     nome: '',
     preco: 0,
-    duracaoMinutos: 0
+    duracao: 0,
+    unidadeDuracao: 'minutos',
   };
 
   private servicoService = inject(ServicoService);
@@ -46,20 +55,69 @@ export class ServicosComponent implements OnInit {
     });
   }
 
+  formatarDuracao(duracaoMinutos: number): string {
+    if (duracaoMinutos >= 60 && duracaoMinutos % 60 === 0) {
+      const h = duracaoMinutos / 60;
+      return `${h}h`;
+    }
+    if (duracaoMinutos >= 60) {
+      const h = Math.floor(duracaoMinutos / 60);
+      const m = duracaoMinutos % 60;
+      return `${h}h ${m}min`;
+    }
+    return `${duracaoMinutos} min`;
+  }
+
   abrirModal() {
+    this.editandoId = null;
+    this.form = { nome: '', preco: 0, duracao: 0, unidadeDuracao: 'minutos' };
+    this.showModal = true;
+  }
+
+  abrirModalEdicao(servico: Servico) {
+    this.editandoId = servico.id;
+    const duracaoMinutos = servico.duracaoMinutos || 0;
+    // Detecta se a duração é em horas exatas
+    const emHoras = duracaoMinutos >= 60 && duracaoMinutos % 60 === 0;
+    this.form = {
+      nome: servico.nome,
+      preco: servico.preco,
+      duracao: emHoras ? duracaoMinutos / 60 : duracaoMinutos,
+      unidadeDuracao: emHoras ? 'horas' : 'minutos',
+    };
     this.showModal = true;
   }
 
   fecharModal() {
     this.showModal = false;
-    this.novoServico = { nome: '', preco: 0, duracaoMinutos: 0 };
+    this.editandoId = null;
+    this.form = { nome: '', preco: 0, duracao: 0, unidadeDuracao: 'minutos' };
+  }
+
+  get tituloModal(): string {
+    return this.editandoId ? 'Editar Serviço' : 'Novo Serviço';
   }
 
   salvarServico() {
-    if (!this.novoServico.nome || !this.novoServico.preco) return;
+    if (!this.form.nome || !this.form.preco || !this.form.duracao) return;
+
+    const duracaoMinutos = this.form.unidadeDuracao === 'horas'
+      ? Math.round(this.form.duracao * 60)
+      : Math.round(this.form.duracao);
+
+    const payload: CreateServicoRequest = {
+      nome: this.form.nome,
+      preco: this.form.preco,
+      duracaoMinutos,
+    };
 
     this.isSaving = true;
-    this.servicoService.criar(this.novoServico).subscribe({
+
+    const request$ = this.editandoId
+      ? this.servicoService.atualizar(this.editandoId, payload)
+      : this.servicoService.criar(payload);
+
+    request$.subscribe({
       next: () => {
         this.isSaving = false;
         this.fecharModal();
