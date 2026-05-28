@@ -9,11 +9,16 @@ interface BackendAgendamento {
   id: string;
   clienteId: string;
   clienteNome?: string;
+  lojaId?: string;
+  nomeLoja?: string;
   servicoId: string;
   servicoNome?: string;
+  nomeServico?: string;
+  valor?: number;
   inicio: string;
   fim: string;
   status: StatusAgendamento;
+  origem?: Agendamento['origem'];
   observacoes?: string | null;
   createdAt: string;
   updatedAt: string;
@@ -51,14 +56,18 @@ export class AgendamentoService {
       id: item.id,
       clienteId: item.clienteId,
       clienteNome: item.clienteNome,
+      lojaId: item.lojaId,
+      nomeLoja: item.nomeLoja,
       servicoId: item.servicoId,
       servicoNome: item.servicoNome,
-      nomeServico: item.servicoNome,
+      nomeServico: item.nomeServico ?? item.servicoNome,
+      valor: item.valor,
       data: item.inicio,
       dataHora: item.inicio,
       inicio: item.inicio,
       fim: item.fim,
       status: item.status,
+      origem: item.origem,
       observacoes: item.observacoes,
       createdAt: item.createdAt,
       updatedAt: item.updatedAt,
@@ -140,7 +149,13 @@ export class AgendamentoService {
   }
 
   getMeusAgendamentos(): Observable<Agendamento[]> {
-    return this.listar();
+    return this.http.get<BackendAgendamento[]>(`${this.apiUrl}/meus`).pipe(
+      map((response) => response.map((item) => this.mapAgendamento(item))),
+      catchError(err => {
+        console.error('Erro ao listar meus agendamentos:', err);
+        return throwError(() => err);
+      }),
+    );
   }
 
   listarPorLoja(lojaId: string | number): Observable<Agendamento[]> {

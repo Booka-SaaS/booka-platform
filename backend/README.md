@@ -306,12 +306,14 @@ npm run prisma:studio
 O Supabase usa PostgreSQL, entao o schema Prisma atual continua valido. Como os dados locais sao descartaveis, a troca pode ser feita aplicando as migrations existentes em um projeto Supabase vazio.
 
 1. Crie um projeto no Supabase.
-2. No painel do Supabase, abra `Connect` e copie as connection strings do banco.
+2. No painel do Supabase, abra `Connect` e copie a connection string do `Session pooler`/Supavisor.
 3. Atualize o `.env`:
 
 ```env
-DATABASE_URL="postgresql://postgres.[PROJECT-REF]:[PASSWORD]@[REGION].pooler.supabase.com:6543/postgres?pgbouncer=true"
+DATABASE_URL="postgresql://postgres.[PROJECT-REF]:[PASSWORD]@aws-0-[REGION].pooler.supabase.com:5432/postgres"
 ```
+
+Em hosts sem IPv6, como muitos ambientes de deploy, evite a URL direta `db.[PROJECT-REF].supabase.co:5432`. Para transaction pooler na porta `6543`, adicione `?pgbouncer=true` na URL do Prisma.
 
 Depois aplique o banco remoto:
 

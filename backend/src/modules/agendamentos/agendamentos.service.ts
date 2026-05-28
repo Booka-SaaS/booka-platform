@@ -51,6 +51,7 @@ function mapAgendamento(agendamento: {
   inicio: Date;
   fim: Date;
   status: StatusAgendamento;
+  origem: 'PUBLICO' | 'PAINEL';
   observacoes: string | null;
   createdAt: Date;
   updatedAt: Date;
@@ -66,6 +67,7 @@ function mapAgendamento(agendamento: {
     inicio: agendamento.inicio,
     fim: agendamento.fim,
     status: agendamento.status,
+    origem: agendamento.origem,
     observacoes: agendamento.observacoes,
     createdAt: agendamento.createdAt,
     updatedAt: agendamento.updatedAt,
@@ -361,4 +363,70 @@ export async function createPublicAgendamento(input: CreateAgendamentoPublicoInp
   });
 
   return mapAgendamento(agendamento);
+}
+
+export async function listMeusAgendamentos(userId: string, email: string) {
+  // Buscar clientes associados a esse email em qualquer loja
+  const clientes = await prisma.cliente.findMany({
+    where: { email },
+    select: { id: true },
+  });
+
+  const clienteIds = clientes.map(c => c.id);
+
+  if (clienteIds.length === 0) return [];
+
+  const agendamentos = await prisma.agendamento.findMany({
+    where: { clienteId: { in: clienteIds } },
+    include: {
+      cliente: { select: { nome: true } },
+      servico: { select: { nome: true, precoCentavos: true } },
+      loja: { select: { nome: true } },
+    },
+    orderBy: { inicio: 'desc' },
+  });
+
+  return agendamentos.map(a => ({
+    ...mapAgendamento(a),
+    nomeLoja: a.loja.nome,
+    nomeServico: a.servico.nome,
+    valor: a.servico.precoCentavos / 100,
+  }));
+}
+
+export async function cancelAgendamentoCliente(email: string, agendamentoId: string) {
+  const clientes = await prisma.cliente.findMany({
+    where: { email },
+    select: { id: true },
+  });
+
+  const clienteIds = clientes.map(c => c.id);
+
+  const agendamento = await prisma.agendamento.findFirst({
+    where: {
+      id: agendamentoId,
+      clienteId: { in: clienteIds },
+    },
+  });
+
+  if (!agendamento) {
+    throw new AppError('Agendamento nao encontrado ou nao pertence ao usuario.', 404);
+  }
+
+  const updated = await prisma.agendamento.update({
+    where: { id: agendamentoId },
+    data: {
+      status: 'CANCELADO',
+    },
+    include: {
+      cliente: {
+        select: { nome: true },
+      },
+      servico: {
+        select: { nome: true },
+      },
+    },
+  });
+
+  return mapAgendamento(updated);
 }

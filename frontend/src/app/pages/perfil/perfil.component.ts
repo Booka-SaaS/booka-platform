@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ElementRef, ViewChild } from '@angular/core';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { TopbarComponent } from '../../components/topbar/topbar.component';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
@@ -7,24 +7,30 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { MeResponse } from '../../models';
+import { forkJoin } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-perfil',
   standalone: true,
   imports: [SidebarComponent, TopbarComponent, NavbarComponent, RouterModule, CommonModule, FormsModule],
   templateUrl: './perfil.component.html',
-  styleUrl: './perfil.component.css'
+  styleUrl: './perfil.component.css',
 })
 export class PerfilComponent implements OnInit {
-  private authService = inject(AuthService);
-  isLoading = true;
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
-  usuario = {
-    nome: '',
-    email: '',
-    telefone: '',
-    iniciais: ''
-  };
+  private authService = inject(AuthService);
+
+  isLoading = true;
+  isSaving = false;
+  isUploadingAvatar = false;
+
+  usuario = { nome: '', email: '', iniciais: '', imagemUrl: null as string | null };
+  senha = { senhaAtual: '', novaSenha: '', confirmarSenha: '' };
+  avatarPreview: string | null = null;
+
+  readonly apiUrl = environment.apiUrl;
 
   ngOnInit() {
     this.carregarPerfil();
@@ -37,20 +43,116 @@ export class PerfilComponent implements OnInit {
         this.usuario = {
           nome: dados.user.nome,
           email: dados.user.email,
-          telefone: '',
-          iniciais: this.gerarIniciais(dados.user.nome)
+          iniciais: this.gerarIniciais(dados.user.nome),
+          imagemUrl: dados.user.imagemUrl ?? null,
         };
+        this.avatarPreview = null;
         this.isLoading = false;
       },
       error: (err) => {
         console.error('Erro ao carregar perfil:', err);
         this.isLoading = false;
-      }
+      },
     });
   }
 
   get isProfissional(): boolean {
     return this.authService.getRole() === 'PROFISSIONAL';
+  }
+
+  get avatarSrc(): string | null {
+    if (this.avatarPreview) return this.avatarPreview;
+    if (this.usuario.imagemUrl) return `${this.apiUrl}${this.usuario.imagemUrl}`;
+    return null;
+  }
+
+  abrirSeletorArquivo() {
+    this.fileInput.nativeElement.click();
+  }
+
+  onArquivoSelecionado(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    const allowed = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!allowed.includes(file.type)) {
+      alert('Apenas imagens JPEG, PNG ou WEBP são permitidas.');
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      alert('A imagem deve ter no máximo 10MB.');
+      return;
+    }
+
+    // preview local imediato
+    const reader = new FileReader();
+    reader.onload = (e) => (this.avatarPreview = e.target?.result as string);
+    reader.readAsDataURL(file);
+
+    // upload imediato
+    this.isUploadingAvatar = true;
+    this.authService.uploadAvatar(file).subscribe({
+      next: (res) => {
+        this.usuario.imagemUrl = res.imagemUrl;
+        this.isUploadingAvatar = false;
+      },
+      error: (err) => {
+        console.error(err);
+        this.avatarPreview = null;
+        this.isUploadingAvatar = false;
+        alert('Erro ao enviar a imagem. Tente novamente.');
+      },
+    });
+  }
+
+  salvarDados() {
+    this.isSaving = true;
+
+    const requests: any = {
+      perfil: this.authService.updateMe({ nome: this.usuario.nome, email: this.usuario.email }),
+    };
+
+    const alterandoSenha = this.senha.senhaAtual || this.senha.novaSenha || this.senha.confirmarSenha;
+
+    if (alterandoSenha) {
+      if (!this.senha.senhaAtual || !this.senha.novaSenha) {
+        alert('Preencha a senha atual e a nova senha.');
+        this.isSaving = false;
+        return;
+      }
+      if (this.senha.novaSenha !== this.senha.confirmarSenha) {
+        alert('A nova senha e a confirmação não coincidem.');
+        this.isSaving = false;
+        return;
+      }
+      if (this.senha.novaSenha.length < 8) {
+        alert('A nova senha deve ter pelo menos 8 caracteres.');
+        this.isSaving = false;
+        return;
+      }
+      requests['senha'] = this.authService.updateSenha(this.senha.senhaAtual, this.senha.novaSenha);
+    }
+
+    forkJoin(requests).subscribe({
+      next: (results: any) => {
+        this.usuario.iniciais = this.gerarIniciais(results['perfil'].nome);
+        this.senha = { senhaAtual: '', novaSenha: '', confirmarSenha: '' };
+        this.isSaving = false;
+        alert('Dados salvos com sucesso!');
+      },
+      error: (err: any) => {
+        console.error(err);
+        const msg = err?.error?.message || 'Erro ao salvar dados.';
+        alert(msg);
+        this.isSaving = false;
+      },
+    });
+  }
+
+  cancelar() {
+    this.carregarPerfil();
+    this.senha = { senhaAtual: '', novaSenha: '', confirmarSenha: '' };
   }
 
   private gerarIniciais(nome: string): string {

@@ -9,12 +9,12 @@ Este guia publica o Booka na ordem correta: Supabase, Render e Vercel.
 3. Abra `SQL Editor`.
 4. Rode `database/schema.sql`.
 5. Opcionalmente rode `database/seed.sql` apenas em ambiente de teste/homologacao.
-6. Em `Project Settings > Database`, copie a connection string PostgreSQL.
-7. Use a connection string como `DATABASE_URL` no backend.
+6. Em `Connect`, copie a connection string do `Session pooler`/Supavisor.
+7. Use essa connection string como `DATABASE_URL` no backend. Ela deve apontar para `pooler.supabase.com:5432`, nao para `db.[PROJECT-REF].supabase.co:5432`.
 
 Variaveis Supabase:
 
-- `DATABASE_URL`: connection string PostgreSQL para o backend.
+- `DATABASE_URL`: connection string do Supavisor Session pooler para o backend.
 - `SUPABASE_URL`: Project URL em `Project Settings > API`.
 - `SUPABASE_ANON_KEY`: anon public key, se necessario.
 - `SUPABASE_SERVICE_ROLE_KEY`: service role key, somente no backend e somente se houver uso real.
@@ -28,7 +28,7 @@ Crie um Web Service apontando para `Booka-SaaS/booka-platform`.
 Configuracao:
 
 - Root directory: `backend`
-- Build command: `npm install && npm run prisma:generate && npm run build`
+- Build command: `npm ci && npm run prisma:generate && npm run prisma:deploy && npm run build`
 - Start command: `npm start`
 - Health check path: `/health`
 

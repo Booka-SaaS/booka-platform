@@ -146,9 +146,7 @@ export async function login(emailInput: string, password: string) {
 export async function getMe(userId: string) {
   const user = await prisma.usuario.findUnique({
     where: { id: userId },
-    include: {
-      loja: true,
-    },
+    include: { loja: true },
   });
 
   if (!user) {
@@ -156,7 +154,7 @@ export async function getMe(userId: string) {
   }
 
   return {
-    user: mapAuthUser(user),
+    user: { ...mapAuthUser(user), imagemUrl: user.loja?.imagemUrl ?? null },
     loja: mapLojaContext(user.loja),
   };
 }
@@ -203,6 +201,40 @@ export async function requestPasswordReset(email: string) {
     message: 'Se o email estiver cadastrado, você receberá um link para redefinir sua senha.',
     ...(env.NODE_ENV === 'production' ? {} : { resetToken: rawToken }),
   };
+}
+
+export async function updateMe(userId: string, payload: { nome?: string; email?: string }) {
+  if (payload.email) {
+    const email = normalizeEmail(payload.email);
+    const existing = await prisma.usuario.findUnique({ where: { email } });
+    if (existing && existing.id !== userId) {
+      throw new AppError('Este email ja esta em uso.', 409);
+    }
+    payload.email = email;
+  }
+
+  const user = await prisma.usuario.update({
+    where: { id: userId },
+    data: {
+      nome: payload.nome ?? undefined,
+      email: payload.email ?? undefined,
+    },
+  });
+
+  return mapAuthUser(user);
+}
+
+export async function updateSenha(userId: string, senhaAtual: string, novaSenha: string) {
+  const user = await prisma.usuario.findUnique({ where: { id: userId } });
+  if (!user) throw new AppError('Usuario nao encontrado.', 404);
+
+  const matches = await bcrypt.compare(senhaAtual, user.passwordHash);
+  if (!matches) throw new AppError('Senha atual incorreta.', 400);
+
+  const passwordHash = await bcrypt.hash(novaSenha, 10);
+  await prisma.usuario.update({ where: { id: userId }, data: { passwordHash } });
+
+  return { message: 'Senha atualizada com sucesso.' };
 }
 
 export async function resetPassword(rawToken: string, novaSenha: string) {

@@ -1,6 +1,80 @@
 import { prisma } from '../../lib/db';
 import { AppError } from '../../lib/errors';
 
+type DisponibilidadeItem = {
+  diaSemana: number;
+  horaInicio: string;
+  horaFim: string;
+  intervaloMinutos?: number;
+  ativo?: boolean;
+};
+
+function mapDisponibilidade(item: {
+  diaSemana: number;
+  horaInicio: string;
+  horaFim: string;
+  intervaloMinutos: number;
+  ativo: boolean;
+}) {
+  return {
+    diaSemana: item.diaSemana,
+    horaInicio: item.horaInicio,
+    horaFim: item.horaFim,
+    intervaloMinutos: item.intervaloMinutos,
+    ativo: item.ativo,
+  };
+}
+
+async function getLojaId(userId: string) {
+  const loja = await prisma.loja.findUnique({
+    where: { usuarioId: userId },
+    select: { id: true },
+  });
+  if (!loja) throw new AppError('Loja nao encontrada.', 404);
+  return loja.id;
+}
+
+export async function getPanelDisponibilidade(userId: string) {
+  const lojaId = await getLojaId(userId);
+  const items = await prisma.disponibilidadeSemanal.findMany({
+    where: { lojaId },
+    orderBy: { diaSemana: 'asc' },
+  });
+  return items.map(mapDisponibilidade);
+}
+
+export async function setPanelDisponibilidade(userId: string, items: DisponibilidadeItem[]) {
+  const lojaId = await getLojaId(userId);
+
+  await prisma.$transaction(
+    items.map((item) =>
+      prisma.disponibilidadeSemanal.upsert({
+        where: { lojaId_diaSemana: { lojaId, diaSemana: item.diaSemana } },
+        update: {
+          horaInicio: item.horaInicio,
+          horaFim: item.horaFim,
+          intervaloMinutos: item.intervaloMinutos ?? 30,
+          ativo: item.ativo ?? true,
+        },
+        create: {
+          lojaId,
+          diaSemana: item.diaSemana,
+          horaInicio: item.horaInicio,
+          horaFim: item.horaFim,
+          intervaloMinutos: item.intervaloMinutos ?? 30,
+          ativo: item.ativo ?? true,
+        },
+      }),
+    ),
+  );
+
+  const updated = await prisma.disponibilidadeSemanal.findMany({
+    where: { lojaId },
+    orderBy: { diaSemana: 'asc' },
+  });
+  return updated.map(mapDisponibilidade);
+}
+
 function parseTimeToMinutes(value: string) {
   const [hours, minutes] = value.split(':').map(Number);
   return hours * 60 + minutes;
@@ -47,6 +121,7 @@ export async function listDisponibilidade(lojaId: string, date: string) {
     return {
       data: date,
       horarios: [],
+      slots: [],
     };
   }
 
@@ -112,5 +187,6 @@ export async function listDisponibilidade(lojaId: string, date: string) {
   return {
     data: date,
     horarios,
+    slots: horarios,
   };
 }

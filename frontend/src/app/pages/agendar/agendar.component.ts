@@ -49,6 +49,23 @@ export class AgendarComponent implements OnInit {
   ngOnInit() {
     this.gerarCalendario(this.dataAtual);
     this.carregarProfissional();
+    this.preencherDadosUsuarioLogado();
+  }
+
+  preencherDadosUsuarioLogado() {
+    if (this.authService.isLoggedIn()) {
+      this.authService.getMe().subscribe({
+        next: (response) => {
+          if (response?.user) {
+            this.clienteNome = response.user.nome || '';
+            this.clienteEmail = response.user.email || '';
+          }
+        },
+        error: (err) => {
+          console.error('Erro ao obter dados do usuário logado:', err);
+        }
+      });
+    }
   }
 
   carregarProfissional() {
