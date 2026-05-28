@@ -57,6 +57,7 @@ Valores padrao:
 ```env
 PORT=3001
 CLIENT_ORIGINS=http://localhost:4200,http://localhost:5173,http://localhost:3000
+DIRECT_URL=postgresql://postgres:postgres@127.0.0.1:5434/booka_v2?schema=public
 DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5434/booka_v2?schema=public
 JWT_SECRET=change-me-use-a-long-random-secret
 JWT_TTL_SECONDS=604800
@@ -310,7 +311,8 @@ O Supabase usa PostgreSQL, entao o schema Prisma atual continua valido. Como os 
 3. Atualize o `.env`:
 
 ```env
-DATABASE_URL="postgresql://postgres.[PROJECT-REF]:[PASSWORD]@aws-0-[REGION].pooler.supabase.com:5432/postgres"
+DATABASE_URL="postgresql://postgres.[PROJECT-REF]:[PASSWORD]@aws-0-[REGION].pooler.supabase.com:6543/postgres?pgbouncer=true"
+DIRECT_URL="postgresql://postgres.[PROJECT-REF]:[PASSWORD]@aws-0-[REGION].db.supabase.com:5432/postgres"
 ```
 
 Em hosts sem IPv6, como muitos ambientes de deploy, evite a URL direta `db.[PROJECT-REF].supabase.co:5432`. Para transaction pooler na porta `6543`, adicione `?pgbouncer=true` na URL do Prisma.

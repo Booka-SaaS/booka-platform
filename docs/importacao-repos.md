@@ -20,6 +20,8 @@ Este documento registra como os repositórios principais do BOOKA foram importad
 
 Ultima verificacao dos remotes: 2026-05-28. O `main` do frontend principal permanece em `885cc9dd8f1f5e42a11a63c55738d1df0e69ae72`; as mudancas recentes usadas nesta atualizacao vieram do branch `dev`.
 
+**Nota (2026-05-28):** Para a revisão atual, não foram integrados novos commits dos repositórios base. A análise focou na correção de problemas de deploy e configuração do monorepo existente.
+
 ## Comandos usados
 
 ```bash

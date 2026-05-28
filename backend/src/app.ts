@@ -45,14 +45,34 @@ export function buildApp() {
         status: 'ok',
       });
     } catch (error) {
+      const diagnostic: Record<string, any> = {
+        database: 'disconnected',
+        status: 'error',
+        message: 'Nao foi possivel conectar ao banco de dados.',
+      };
+
       if (env.NODE_ENV !== 'production') {
         console.error('Falha ao testar conexao com o banco:', error);
       }
 
+      // Add secure diagnostic info without exposing secrets
+      if (error instanceof Error && 'code' in error && typeof error.code === 'string') {
+        diagnostic.errorCode = error.code; // Prisma error code (e.g., P1000, P1001)
+      }
+      if (process.env.DATABASE_URL) {
+        try {
+          const url = new URL(process.env.DATABASE_URL);
+          diagnostic.dbHost = url.host.split(':')[0]; // Mask port and credentials
+        } catch (e) {
+          // Ignore URL parsing errors if DATABASE_URL is malformed
+        }
+      }
+
+      diagnostic.hasDatabaseUrl = !!process.env.DATABASE_URL;
+      diagnostic.hasDirectUrl = !!process.env.DIRECT_URL;
+
       response.status(503).json({
-        database: 'disconnected',
-        status: 'error',
-        message: 'Nao foi possivel conectar ao banco de dados.',
+        ...diagnostic,
       });
     }
   });

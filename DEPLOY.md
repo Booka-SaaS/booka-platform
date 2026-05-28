@@ -15,6 +15,7 @@ Este guia publica o Booka na ordem correta: Supabase, Render e Vercel.
 Variaveis Supabase:
 
 - `DATABASE_URL`: connection string do Supavisor Session pooler para o backend.
+- `DIRECT_URL`: connection string direta para o banco de dados (necessária para `prisma migrate deploy`).
 - `SUPABASE_URL`: Project URL em `Project Settings > API`.
 - `SUPABASE_ANON_KEY`: anon public key, se necessario.
 - `SUPABASE_SERVICE_ROLE_KEY`: service role key, somente no backend e somente se houver uso real.
@@ -37,10 +38,12 @@ Variaveis:
 ```env
 NODE_ENV=production
 PORT=10000
-DATABASE_URL=
-JWT_SECRET=
+DATABASE_URL=postgresql://postgres.PROJECT_REF:SUA_SENHA@REGION.pooler.supabase.com:6543/postgres?pgbouncer=true
+DIRECT_URL=postgresql://postgres.PROJECT_REF:SUA_SENHA@REGION.db.supabase.com:5432/postgres
+JWT_SECRET=SEGREDO_ALEATORIO_DE_PELO_MENOS_16_CARACTERES
 JWT_TTL_SECONDS=604800
 FRONTEND_URL=
+CLIENT_ORIGINS=
 SUPABASE_URL=
 SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
@@ -64,6 +67,16 @@ Respostas esperadas:
 ```
 
 Se CORS falhar, confirme que `FRONTEND_URL` aponta para a URL final da Vercel. Para multiplas origens, use `CLIENT_ORIGINS` com URLs separadas por virgula.
+
+### Observações sobre as variáveis do Render:
+
+- **`DATABASE_URL`**: Use a connection string do Supabase **Session Pooler (Supavisor)**, preferencialmente com a porta `6543` e `?pgbouncer=true` para melhor desempenho e compatibilidade com o Render. O usuário geralmente é `postgres.PROJECT_REF`.
+- **`DIRECT_URL`**: Use a connection string **direta** do Supabase, sem o pooler, para que o Prisma possa executar operações de migração. O usuário geralmente é `postgres`.
+- **`JWT_SECRET`**: Deve ser um segredo longo e aleatório (mínimo 16 caracteres).
+- **`FRONTEND_URL`**: A URL pública do seu frontend na Vercel.
+- **`CLIENT_ORIGINS`**: Lista de URLs permitidas para CORS, separadas por vírgula. Inclua a URL do seu frontend na Vercel.
+- **Codificação de Senhas**: Se sua senha do Supabase contiver caracteres especiais como `@`, `#`, `%`, `&`, `/`, `?`, ou `:`, eles devem ser **URL encoded** na connection string. Por exemplo, `@` vira `%40`.
+- **Não comite segredos reais**: As variáveis acima devem ser configuradas diretamente no painel do Render, não no `render.yaml`.
 
 ## 3. Vercel
 
