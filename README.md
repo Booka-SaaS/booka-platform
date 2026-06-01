@@ -2,7 +2,7 @@
 
 ## Descricao do projeto
 
-O Booka e um Sistema SaaS de Agendamento Multifuncional Inteligente desenvolvido como projeto academico da Faculdade INSTED, no curso de Analise e Desenvolvimento de Sistemas.
+O Booka e um Sistema SaaS de Agendamento Multifuncional Inteligente desenvolvido como projeto academico do Centro Universitario Insted, no curso de Analise e Desenvolvimento de Sistemas.
 
 A plataforma foi planejada para profissionais, prestadores de servicos e pequenas empresas que precisam organizar clientes, servicos, horarios, disponibilidade, bloqueios de agenda e agendamentos em um unico ambiente. O objetivo e reduzir conflitos de horarios, perda de informacoes, uso de planilhas, agendas fisicas e conversas soltas em aplicativos de mensagem.
 
