@@ -12,6 +12,10 @@ export const loginSchema = z.object({
   password: z.string().min(1),
 });
 
+export const googleLoginSchema = z.object({
+  credential: z.string().min(10),
+});
+
 export const updateMeSchema = z.object({
   nome: z.string().trim().min(2).optional(),
   email: z.string().trim().email().optional(),

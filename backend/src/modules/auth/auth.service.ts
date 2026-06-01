@@ -151,6 +151,55 @@ export async function login(emailInput: string, password: string) {
   };
 }
 
+type GoogleTokenInfo = {
+  aud?: string;
+  email?: string;
+  email_verified?: 'true' | 'false' | boolean;
+  name?: string;
+};
+
+export async function loginWithGoogle(credential: string) {
+  if (!env.GOOGLE_CLIENT_ID) {
+    throw new AppError('Login com Google nao configurado.', 501);
+  }
+
+  const response = await fetch(
+    `https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(credential)}`,
+  );
+
+  if (!response.ok) {
+    throw new AppError('Credencial Google invalida.', 401);
+  }
+
+  const tokenInfo = (await response.json()) as GoogleTokenInfo;
+  const emailVerified = tokenInfo.email_verified === true || tokenInfo.email_verified === 'true';
+
+  if (!tokenInfo.email || !emailVerified || tokenInfo.aud !== env.GOOGLE_CLIENT_ID) {
+    throw new AppError('Credencial Google invalida.', 401);
+  }
+
+  const email = normalizeEmail(tokenInfo.email);
+  const nome = tokenInfo.name?.trim() || email.split('@')[0];
+
+  const user = await prisma.usuario.upsert({
+    where: { email },
+    update: {
+      nome,
+    },
+    create: {
+      nome,
+      email,
+      passwordHash: await bcrypt.hash(randomUUID(), 10),
+      role: 'CLIENTE',
+    },
+  });
+
+  return {
+    token: buildToken(user),
+    user: mapAuthUser(user),
+  };
+}
+
 export async function getMe(userId: string) {
   const user = await prisma.usuario.findUnique({
     where: { id: userId },

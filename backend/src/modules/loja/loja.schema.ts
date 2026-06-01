@@ -7,7 +7,7 @@ export const updateLojaSchema = z.object({
   endereco: z.string().trim().min(5).nullable().optional(),
   cidade: z.string().trim().min(2).nullable().optional(),
   descricao: z.string().trim().min(3).nullable().optional(),
-  imagemUrl: z.string().trim().url().nullable().optional(),
+  imagemUrl: z.string().trim().nullable().optional(),
   profissao: z.string().trim().min(2).optional(),
   categoriaPrincipal: z.string().trim().min(2).optional(),
   modalidadePrincipal: z.enum(['ONLINE', 'PRESENCIAL', 'HIBRIDO']).optional(),

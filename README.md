@@ -254,6 +254,7 @@ CLIENT_ORIGINS=http://localhost:4200,http://localhost:5173,http://localhost:3000
 SUPABASE_URL=https://PROJECT_REF.supabase.co
 SUPABASE_ANON_KEY=fake-anon-key
 SUPABASE_SERVICE_ROLE_KEY=fake-service-role-key
+GOOGLE_CLIENT_ID=fake-google-client-id.apps.googleusercontent.com
 SEED_PASSWORD=senha-de-teste
 SEED_PASSWORD_HASH=
 ```
@@ -262,6 +263,7 @@ Frontend (`frontend/.env`):
 
 ```env
 BOOKA_API_URL=http://localhost:3001
+BOOKA_GOOGLE_CLIENT_ID=fake-google-client-id.apps.googleusercontent.com
 ```
 
 Nunca exponha no frontend `DATABASE_URL`, `DIRECT_URL`, `JWT_SECRET`, `SUPABASE_SERVICE_ROLE_KEY`, tokens privados, senhas ou chaves reais.

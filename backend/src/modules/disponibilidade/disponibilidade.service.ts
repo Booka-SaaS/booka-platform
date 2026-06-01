@@ -89,18 +89,18 @@ function minutesToTime(value: number) {
 }
 
 function getDayStart(date: string) {
-  return new Date(`${date}T00:00:00.000Z`);
+  return new Date(`${date}T00:00:00`);
 }
 
 function getDayEnd(date: string) {
-  return new Date(`${date}T23:59:59.999Z`);
+  return new Date(`${date}T23:59:59.999`);
 }
 
 function getSlotDate(date: string, time: string) {
-  return new Date(`${date}T${time}:00.000Z`);
+  return new Date(`${date}T${time}:00`);
 }
 
-export async function listDisponibilidade(lojaId: string, date: string) {
+export async function listDisponibilidade(lojaId: string, date: string, servicoId?: string) {
   const referenceDate = new Date(`${date}T00:00:00.000Z`);
 
   if (Number.isNaN(referenceDate.getTime())) {
@@ -125,6 +125,18 @@ export async function listDisponibilidade(lojaId: string, date: string) {
     };
   }
 
+  let duracaoSlotMinutos = disponibilidade.intervaloMinutos;
+  if (servicoId) {
+    const servico = await prisma.servico.findFirst({
+      where: { id: servicoId, lojaId, ativo: true },
+      select: { duracaoMinutos: true },
+    });
+
+    if (servico) {
+      duracaoSlotMinutos = servico.duracaoMinutos;
+    }
+  }
+
   const [agendamentos, bloqueios] = await Promise.all([
     prisma.agendamento.findMany({
       where: {
@@ -133,8 +145,10 @@ export async function listDisponibilidade(lojaId: string, date: string) {
           in: ['PENDENTE', 'CONFIRMADO'],
         },
         inicio: {
-          gte: getDayStart(date),
-          lte: getDayEnd(date),
+          lt: getDayEnd(date),
+        },
+        fim: {
+          gt: getDayStart(date),
         },
       },
       select: {
@@ -165,12 +179,12 @@ export async function listDisponibilidade(lojaId: string, date: string) {
 
   for (
     let currentMinutes = inicioMinutos;
-    currentMinutes < fimMinutos;
+    currentMinutes + duracaoSlotMinutos <= fimMinutos;
     currentMinutes += disponibilidade.intervaloMinutos
   ) {
     const horario = minutesToTime(currentMinutes);
     const slotStart = getSlotDate(date, horario);
-    const slotEnd = new Date(slotStart.getTime() + disponibilidade.intervaloMinutos * 60 * 1000);
+    const slotEnd = new Date(slotStart.getTime() + duracaoSlotMinutos * 60 * 1000);
 
     const conflictsWithAppointments = agendamentos.some(
       (agendamento) => agendamento.inicio < slotEnd && agendamento.fim > slotStart,

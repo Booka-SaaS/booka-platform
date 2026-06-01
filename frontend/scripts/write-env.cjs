@@ -8,11 +8,16 @@ const apiUrl =
   process.env.NEXT_PUBLIC_API_URL ||
   'http://localhost:3001';
 
+const googleClientId =
+  process.env.BOOKA_GOOGLE_CLIENT_ID ||
+  process.env.GOOGLE_CLIENT_ID ||
+  '';
+
 const publicDir = path.join(__dirname, '..', 'public');
 const outputPath = path.join(publicDir, 'env.js');
 
 fs.mkdirSync(publicDir, { recursive: true });
 fs.writeFileSync(
   outputPath,
-  `window.__BOOKA_CONFIG__ = {\n  apiUrl: ${JSON.stringify(apiUrl)}\n};\n`,
+  `window.__BOOKA_CONFIG__ = {\n  apiUrl: ${JSON.stringify(apiUrl)},\n  googleClientId: ${JSON.stringify(googleClientId)}\n};\n`,
 );

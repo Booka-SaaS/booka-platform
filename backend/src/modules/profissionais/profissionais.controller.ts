@@ -17,6 +17,7 @@ const profissionaisQuerySchema = z.object({
 
 const disponibilidadeQuerySchema = z.object({
   data: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  servicoId: z.string().uuid().optional(),
 });
 
 const profissionalIdParamSchema = z.object({
@@ -40,7 +41,7 @@ export function buildProfissionaisRouter() {
     try {
       const { id } = profissionalIdParamSchema.parse(request.params);
       const query = disponibilidadeQuerySchema.parse(request.query);
-      const result = await getProfissionalDisponibilidade(id, query.data);
+      const result = await getProfissionalDisponibilidade(id, query.data, query.servicoId);
       response.json(result);
     } catch (error) {
       next(error);

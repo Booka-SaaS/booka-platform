@@ -18,6 +18,7 @@ const envSchema = z.object({
   SUPABASE_URL: optionalUrl,
   SUPABASE_ANON_KEY: optionalString,
   SUPABASE_SERVICE_ROLE_KEY: optionalString,
+  GOOGLE_CLIENT_ID: optionalString,
 });
 
 const parsedEnv = envSchema.parse(process.env);

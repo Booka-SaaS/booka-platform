@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ElementRef, ViewChild } from '@angular/core';
+﻿import { Component, OnInit, inject, ElementRef, ViewChild } from '@angular/core';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { TopbarComponent } from '../../components/topbar/topbar.component';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
@@ -7,7 +7,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { MeResponse } from '../../models';
-import { forkJoin } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 @Component({
@@ -23,7 +22,8 @@ export class PerfilComponent implements OnInit {
   private authService = inject(AuthService);
 
   isLoading = true;
-  isSaving = false;
+  isSavingPerfil = false;
+  isSavingSenha = false;
   isUploadingAvatar = false;
 
   usuario = { nome: '', email: '', iniciais: '', imagemUrl: null as string | null };
@@ -85,12 +85,10 @@ export class PerfilComponent implements OnInit {
       return;
     }
 
-    // preview local imediato
     const reader = new FileReader();
     reader.onload = (e) => (this.avatarPreview = e.target?.result as string);
     reader.readAsDataURL(file);
 
-    // upload imediato
     this.isUploadingAvatar = true;
     this.authService.uploadAvatar(file).subscribe({
       next: (res) => {
@@ -106,46 +104,49 @@ export class PerfilComponent implements OnInit {
     });
   }
 
-  salvarDados() {
-    this.isSaving = true;
-
-    const requests: any = {
-      perfil: this.authService.updateMe({ nome: this.usuario.nome, email: this.usuario.email }),
-    };
-
-    const alterandoSenha = this.senha.senhaAtual || this.senha.novaSenha || this.senha.confirmarSenha;
-
-    if (alterandoSenha) {
-      if (!this.senha.senhaAtual || !this.senha.novaSenha) {
-        alert('Preencha a senha atual e a nova senha.');
-        this.isSaving = false;
-        return;
-      }
-      if (this.senha.novaSenha !== this.senha.confirmarSenha) {
-        alert('A nova senha e a confirmação não coincidem.');
-        this.isSaving = false;
-        return;
-      }
-      if (this.senha.novaSenha.length < 8) {
-        alert('A nova senha deve ter pelo menos 8 caracteres.');
-        this.isSaving = false;
-        return;
-      }
-      requests['senha'] = this.authService.updateSenha(this.senha.senhaAtual, this.senha.novaSenha);
-    }
-
-    forkJoin(requests).subscribe({
-      next: (results: any) => {
-        this.usuario.iniciais = this.gerarIniciais(results['perfil'].nome);
-        this.senha = { senhaAtual: '', novaSenha: '', confirmarSenha: '' };
-        this.isSaving = false;
-        alert('Dados salvos com sucesso!');
+  salvarPerfil() {
+    this.isSavingPerfil = true;
+    this.authService.updateMe({ nome: this.usuario.nome, email: this.usuario.email }).subscribe({
+      next: (result) => {
+        this.usuario.iniciais = this.gerarIniciais(result.nome);
+        this.isSavingPerfil = false;
+        alert('Dados pessoais salvos com sucesso!');
       },
       error: (err: any) => {
         console.error(err);
-        const msg = err?.error?.message || 'Erro ao salvar dados.';
+        const msg = err?.error?.message || 'Erro ao salvar dados pessoais.';
         alert(msg);
-        this.isSaving = false;
+        this.isSavingPerfil = false;
+      },
+    });
+  }
+
+  salvarSenha() {
+    if (!this.senha.senhaAtual || !this.senha.novaSenha) {
+      alert('Preencha a senha atual e a nova senha.');
+      return;
+    }
+    if (this.senha.novaSenha !== this.senha.confirmarSenha) {
+      alert('A nova senha e a confirmação não coincidem.');
+      return;
+    }
+    if (this.senha.novaSenha.length < 8) {
+      alert('A nova senha deve ter pelo menos 8 caracteres.');
+      return;
+    }
+
+    this.isSavingSenha = true;
+    this.authService.updateSenha(this.senha.senhaAtual, this.senha.novaSenha).subscribe({
+      next: () => {
+        this.senha = { senhaAtual: '', novaSenha: '', confirmarSenha: '' };
+        this.isSavingSenha = false;
+        alert('Senha alterada com sucesso!');
+      },
+      error: (err: any) => {
+        console.error(err);
+        const msg = err?.error?.message || 'Erro ao alterar senha.';
+        alert(msg);
+        this.isSavingSenha = false;
       },
     });
   }

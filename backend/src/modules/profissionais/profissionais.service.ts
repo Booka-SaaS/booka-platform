@@ -154,7 +154,7 @@ export async function getProfissionalDetalhe(lojaId: string) {
   };
 }
 
-export async function getProfissionalDisponibilidade(lojaId: string, date: string) {
+export async function getProfissionalDisponibilidade(lojaId: string, date: string, servicoId?: string) {
   const loja = await prisma.loja.findFirst({
     where: {
       id: lojaId,
@@ -171,5 +171,5 @@ export async function getProfissionalDisponibilidade(lojaId: string, date: strin
     throw new AppError('Profissional nao encontrado.', 404);
   }
 
-  return listDisponibilidade(loja.id, date);
+  return listDisponibilidade(loja.id, date, servicoId);
 }

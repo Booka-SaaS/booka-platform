@@ -16,18 +16,62 @@ import { Agendamento } from '../../models';
 export class AgendaComponent implements OnInit {
   agendamentos: Agendamento[] = [];
   isLoading = true;
-  readonly hoje = new Date();
-  readonly dataHojeFiltro = this.formatarDataFiltro(this.hoje);
-  readonly dataHojeLabel = this.formatarDataLabel(this.hoje);
+  dataSelecionada: Date = new Date();
   private agendamentoService = inject(AgendamentoService);
 
   ngOnInit() {
     this.carregarAgendamentos();
   }
 
+  get dataFormatada(): string {
+    return this.dataSelecionada.toLocaleDateString('pt-BR', {
+      weekday: 'long',
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+    });
+  }
+
+  get dataISO(): string {
+    const ano = this.dataSelecionada.getFullYear();
+    const mes = String(this.dataSelecionada.getMonth() + 1).padStart(2, '0');
+    const dia = String(this.dataSelecionada.getDate()).padStart(2, '0');
+
+    return `${ano}-${mes}-${dia}`;
+  }
+
+  get isHoje(): boolean {
+    const hoje = new Date();
+
+    return (
+      this.dataSelecionada.getFullYear() === hoje.getFullYear() &&
+      this.dataSelecionada.getMonth() === hoje.getMonth() &&
+      this.dataSelecionada.getDate() === hoje.getDate()
+    );
+  }
+
+  irParaHoje() {
+    this.dataSelecionada = new Date();
+    this.carregarAgendamentos();
+  }
+
+  diaAnterior() {
+    const data = new Date(this.dataSelecionada);
+    data.setDate(data.getDate() - 1);
+    this.dataSelecionada = data;
+    this.carregarAgendamentos();
+  }
+
+  proximoDia() {
+    const data = new Date(this.dataSelecionada);
+    data.setDate(data.getDate() + 1);
+    this.dataSelecionada = data;
+    this.carregarAgendamentos();
+  }
+
   carregarAgendamentos() {
     this.isLoading = true;
-    this.agendamentoService.listar({ data: this.dataHojeFiltro }).subscribe({
+    this.agendamentoService.listar({ data: this.dataISO }).subscribe({
       next: (dados: Agendamento[]) => {
         this.agendamentos = dados;
         this.isLoading = false;
@@ -39,21 +83,23 @@ export class AgendaComponent implements OnInit {
     });
   }
 
-  private formatarDataFiltro(data: Date): string {
-    const ano = data.getFullYear();
-    const mes = String(data.getMonth() + 1).padStart(2, '0');
-    const dia = String(data.getDate()).padStart(2, '0');
+  getTopPercent(inicio: string): number {
+    const data = new Date(inicio);
+    const horas = data.getHours() + data.getMinutes() / 60;
+    const inicioGrid = 8;
+    const totalHoras = 11;
 
-    return `${ano}-${mes}-${dia}`;
+    return Math.max(0, Math.min(100, ((horas - inicioGrid) / totalHoras) * 100));
   }
 
-  private formatarDataLabel(data: Date): string {
-    const dataFormatada = new Intl.DateTimeFormat('pt-BR', {
-      weekday: 'long',
-      day: '2-digit',
-      month: 'long',
-    }).format(data);
+  getStatusClass(status: string): string {
+    const classes: Record<string, string> = {
+      CONFIRMADO: 'bg-emerald-50 border-emerald-500 text-emerald-900',
+      PENDENTE: 'bg-indigo-50 border-indigo-600 text-indigo-900',
+      CANCELADO: 'bg-red-50 border-red-400 text-red-800',
+      CONCLUIDO: 'bg-slate-100 border-slate-400 text-slate-700',
+    };
 
-    return dataFormatada.charAt(0).toUpperCase() + dataFormatada.slice(1);
+    return classes[status] ?? 'bg-indigo-50 border-indigo-600 text-indigo-900';
   }
 }

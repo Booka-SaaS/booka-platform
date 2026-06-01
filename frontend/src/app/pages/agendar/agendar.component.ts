@@ -144,6 +144,10 @@ export class AgendarComponent implements OnInit {
 
   selecionarServico(servico: any) {
     this.servicoSelecionado = servico;
+    if (this.dataSelecionada) {
+      this.horarioSelecionado = null;
+      this.buscarHorariosDisponiveis();
+    }
   }
 
   selecionarData(dia: number) {
@@ -151,19 +155,27 @@ export class AgendarComponent implements OnInit {
     this.dataSelecionada = new Date(this.dataAtual.getFullYear(), this.dataAtual.getMonth(), dia);
     this.horarioSelecionado = null;
 
-    // Buscar horários disponíveis da API
-    if (this.profissionalId && this.dataSelecionada) {
-      const dataFormatada = this.dataSelecionada.toISOString().split('T')[0];
-      this.profissionalService.obterDisponibilidade(this.profissionalId, dataFormatada).subscribe({
-        next: (response) => {
-          this.horariosDisponiveis = response.horarios || [];
-        },
-        error: (err) => {
-          console.error('Erro ao carregar horários:', err);
-          this.horariosDisponiveis = [];
-        }
-      });
-    }
+    this.buscarHorariosDisponiveis();
+  }
+
+  private buscarHorariosDisponiveis() {
+    if (!this.profissionalId || !this.dataSelecionada) return;
+
+    const ano = this.dataSelecionada.getFullYear();
+    const mes = String(this.dataSelecionada.getMonth() + 1).padStart(2, '0');
+    const dia = String(this.dataSelecionada.getDate()).padStart(2, '0');
+    const dataFormatada = `${ano}-${mes}-${dia}`;
+    const servicoId = this.servicoSelecionado?.id ? String(this.servicoSelecionado.id) : undefined;
+
+    this.profissionalService.obterDisponibilidade(this.profissionalId, dataFormatada, servicoId).subscribe({
+      next: (response) => {
+        this.horariosDisponiveis = response.slots || response.horarios || [];
+      },
+      error: (err) => {
+        console.error('Erro ao carregar horarios:', err);
+        this.horariosDisponiveis = [];
+      }
+    });
   }
 
   selecionarHorario(hora: string) {
@@ -188,8 +200,10 @@ export class AgendarComponent implements OnInit {
 
     this.isSaving = true;
 
-    const dataFormatada = this.dataSelecionada.toISOString().split('T')[0];
-    const inicioIso = new Date(`${dataFormatada}T${this.horarioSelecionado}:00`).toISOString();
+    const ano = this.dataSelecionada.getFullYear();
+    const mes = String(this.dataSelecionada.getMonth() + 1).padStart(2, '0');
+    const dia = String(this.dataSelecionada.getDate()).padStart(2, '0');
+    const inicioIso = new Date(`${ano}-${mes}-${dia}T${this.horarioSelecionado}:00`).toISOString();
 
     const dados: CreateAgendamentoPublicoRequest = {
       lojaId: this.lojaId,

@@ -77,14 +77,21 @@ export class ProfissionalService {
     return this.obterPorSlug(id);
   }
 
-  obterDisponibilidade(id: string, data: string): Observable<{ data: string; horarios: string[] }> {
+  obterDisponibilidade(id: string, data: string, servicoId?: string): Observable<{ data: string; horarios: string[]; slots: string[] }> {
     let httpParams = new HttpParams().set('data', data);
+    if (servicoId) httpParams = httpParams.set('servicoId', servicoId);
+
     return this.http.get<DisponibilidadeResponse>(`${this.apiUrl}/${id}/disponibilidade`, { params: httpParams })
       .pipe(
-        map((response) => ({
-          data: response.data ?? data,
-          horarios: response.horarios ?? response.slots ?? [],
-        })),
+        map((response) => {
+          const horarios = response.horarios ?? response.slots ?? [];
+
+          return {
+            data: response.data ?? data,
+            horarios,
+            slots: horarios,
+          };
+        }),
         catchError(err => {
           console.error('Erro ao obter disponibilidade:', err);
           return throwError(() => err);
