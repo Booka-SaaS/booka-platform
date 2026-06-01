@@ -16,6 +16,9 @@ import { Agendamento } from '../../models';
 export class AgendaComponent implements OnInit {
   agendamentos: Agendamento[] = [];
   isLoading = true;
+  readonly hoje = new Date();
+  readonly dataHojeFiltro = this.formatarDataFiltro(this.hoje);
+  readonly dataHojeLabel = this.formatarDataLabel(this.hoje);
   private agendamentoService = inject(AgendamentoService);
 
   ngOnInit() {
@@ -24,7 +27,7 @@ export class AgendaComponent implements OnInit {
 
   carregarAgendamentos() {
     this.isLoading = true;
-    this.agendamentoService.listar().subscribe({
+    this.agendamentoService.listar({ data: this.dataHojeFiltro }).subscribe({
       next: (dados: Agendamento[]) => {
         this.agendamentos = dados;
         this.isLoading = false;
@@ -34,5 +37,23 @@ export class AgendaComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  private formatarDataFiltro(data: Date): string {
+    const ano = data.getFullYear();
+    const mes = String(data.getMonth() + 1).padStart(2, '0');
+    const dia = String(data.getDate()).padStart(2, '0');
+
+    return `${ano}-${mes}-${dia}`;
+  }
+
+  private formatarDataLabel(data: Date): string {
+    const dataFormatada = new Intl.DateTimeFormat('pt-BR', {
+      weekday: 'long',
+      day: '2-digit',
+      month: 'long',
+    }).format(data);
+
+    return dataFormatada.charAt(0).toUpperCase() + dataFormatada.slice(1);
   }
 }
