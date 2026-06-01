@@ -63,7 +63,7 @@ A comunicacao deve ocorrer por GitHub Issues/Projects, Pull Requests e reunioes 
 | API Express, regras de negocio e seguranca | Desenvolvedor Backend |
 | Prisma, migrations e Supabase/PostgreSQL | Responsavel pelo Banco de Dados |
 | Testes unitarios, E2E e validacao final | Responsavel por Testes |
-| README, docs e relatorios | Responsavel pela Documentacao |
+| README e relatorios | Responsavel pela Documentacao |
 | Render, Vercel, variaveis e pipeline | Responsavel por Deploy/DevOps |
 
 ## Estrategia de lockdown
@@ -78,7 +78,7 @@ No ultimo mes, o projeto deve entrar em lockdown: congelamento de novas funciona
 | 2 | Modelagem, autenticacao e base do backend | Schema Prisma, migrations, auth, rotas base e ambiente local |
 | 3 | Frontend inicial, telas principais e integracao parcial | Login, cadastro, marketplace, servicos e chamadas API |
 | 4 | Funcionalidades principais e regras de negocio | Agenda, disponibilidade, clientes, bloqueios, dashboard e upload |
-| 5 | Testes, melhorias, deploy e documentacao | Builds validados, deploy configurado, docs e testes ampliados |
+| 5 | Testes, melhorias, deploy e documentacao | Builds validados, deploy configurado, documentacao e testes ampliados |
 | 6 | Lockdown, validacao final, apresentacao e entrega | Correcoes criticas, checklist final, backup e PR de entrega |
 
 ## Definir cidade da empresa
@@ -125,9 +125,7 @@ booka-platform/
 |-- frontend/   Aplicacao Angular 19 com Tailwind, SSR/static build e testes
 |-- backend/    API Node.js/Express/TypeScript com Prisma e Swagger
 |-- database/   Scripts SQL de schema, seed e consultas de apoio
-|-- docs/       Planejamento, Kanban, Scrum, cronograma e analises
 |-- render.yaml Blueprint do backend no Render
-|-- DEPLOY.md   Guia de publicacao
 `-- README.md   Documentacao principal
 ```
 
@@ -211,11 +209,18 @@ Nunca exponha no frontend `DATABASE_URL`, `DIRECT_URL`, `JWT_SECRET`, `SUPABASE_
 
 ## Deploy
 
-O deploy esta documentado em [DEPLOY.md](./DEPLOY.md).
-
 - Frontend: Vercel, com root directory `frontend` e `BOOKA_API_URL` apontando para o backend.
 - Backend: Render, com root directory `backend`, build `npm ci && npm run prisma:generate && npm run prisma:deploy && npm run build` e start `npm start`.
 - Banco: Supabase/PostgreSQL, com migrations Prisma e variaveis `DATABASE_URL` e `DIRECT_URL`.
+
+Ordem recomendada de publicacao:
+
+1. Criar o banco no Supabase.
+2. Configurar `DATABASE_URL` e `DIRECT_URL` no Render.
+3. Rodar migrations Prisma no deploy do backend.
+4. Validar `/health` e `/test/db-status`.
+5. Configurar `BOOKA_API_URL` na Vercel apontando para o backend.
+6. Validar CORS, login, marketplace e agendamento publico.
 
 ## Testes
 
@@ -234,9 +239,40 @@ npm run build
 
 Ainda nao ha suite automatizada completa no backend. Proposta futura: testes unitarios para services, testes de integracao para rotas Express, E2E de autenticacao/agendamento e validacao automatizada de deploy.
 
+## Kanban do projeto
+
+O quadro Kanban recomendado para o Booka deve usar as colunas `Backlog`, `A Fazer`, `Em Desenvolvimento`, `Em Revisao`, `Testes`, `Concluido` e `Bloqueado`.
+
+| Coluna | Cards |
+| --- | --- |
+| Backlog | Levantamento final de requisitos; Revisao da arquitetura; Definicao de regras de negocio; Planejamento das sprints |
+| A Fazer | Revisar integracao frontend/backend; Revisar autenticacao; Revisar conexao com Supabase; Revisar deploy no Render; Revisar deploy na Vercel; Atualizar documentacao |
+| Em Desenvolvimento | Melhorias no frontend; Melhorias no backend; Ajustes no Prisma; Ajustes de variaveis de ambiente |
+| Em Revisao | Revisao de codigo; Revisao do README; Revisao do fluxo de agendamentos; Revisao das rotas da API |
+| Testes | Testes de autenticacao; Testes de agendamento; Testes de disponibilidade; Testes de integracao; Testes de deploy |
+| Concluido | Estrutura inicial do monorepo; Configuracao inicial do frontend; Configuracao inicial do backend; Configuracao inicial do banco |
+| Bloqueado | Itens dependentes de credenciais; Itens dependentes de variaveis de ambiente; Itens dependentes de acesso ao GitHub Projects, Render, Vercel ou Supabase |
+
+## Issues sugeridas
+
+| Issue | Labels sugeridas |
+| --- | --- |
+| Revisar fluxo completo de autenticacao | backend, frontend, testing |
+| Validar integracao frontend/backend em ambiente de homologacao | frontend, backend, testing |
+| Revisar conexao Supabase e migrations Prisma | database, backend |
+| Configurar e validar deploy no Render | deploy, backend |
+| Configurar e validar deploy na Vercel | deploy, frontend |
+| Ampliar testes E2E de agendamento | testing, frontend, backend |
+| Revisar fluxo de disponibilidade e bloqueios | backend, frontend, bug |
+| Documentar decisoes de arquitetura no README | documentation, enhancement |
+| Configurar quadro Kanban no GitHub Projects | kanban, scrum, documentation |
+| Planejar sprints do ciclo de 6 meses | scrum, documentation |
+
+Labels recomendadas: `frontend`, `backend`, `database`, `documentation`, `deploy`, `testing`, `scrum`, `kanban`, `bug`, `enhancement`.
+
 ## Status atual do projeto
 
-O monorepo esta organizado com `frontend/`, `backend/`, `database/` e `docs/`. Os remotes historicos foram verificados e os commits mais recentes de frontend/backend foram comparados. O commit mais recente do backend teve alteracoes seguras incorporadas seletivamente para avatar/capa e schema Prisma. As alteracoes de frontend ja estavam parcialmente presentes; foi adicionada a chamada de upload de capa no service.
+O monorepo esta organizado com `frontend/`, `backend/`, `database/`, `render.yaml` e `README.md`. Os remotes historicos foram verificados e os commits mais recentes de frontend/backend foram comparados. O commit mais recente do backend teve alteracoes seguras incorporadas seletivamente para avatar/capa e schema Prisma. As alteracoes de frontend ja estavam parcialmente presentes; foi adicionada a chamada de upload de capa no service.
 
 Pendencias funcionais futuras incluem envio real de email para reset de senha, ampliacao de testes automatizados, revisao completa de fluxo de imagens em producao, observabilidade, painel administrativo dedicado e validacao com credenciais reais de Supabase/Render/Vercel.
 
@@ -245,8 +281,8 @@ Pendencias funcionais futuras incluem envio real de email para reset de senha, a
 - Validar migrations em banco Supabase de homologacao.
 - Executar testes E2E de login, marketplace e agendamento.
 - Revisar fluxo visual de upload de avatar e capa.
-- Configurar GitHub Projects ou manter `docs/kanban.md` como quadro operacional.
-- Criar issues oficiais a partir de `docs/issues-sugeridas.md`.
+- Configurar GitHub Projects usando o quadro Kanban descrito neste README.
+- Criar issues oficiais a partir da tabela de issues sugeridas neste README.
 - Revisar secrets nos paineis Render/Vercel, sem versiona-los.
 - Preparar Pull Request com checklist de build e deploy.
 
