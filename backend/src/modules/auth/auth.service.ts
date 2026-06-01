@@ -73,52 +73,60 @@ export async function register(input: RegisterInput) {
   });
 
   if (existingUser) {
-    throw new AppError('Ja existe um usuario com este email.', 409);
+    throw new AppError('Este e-mail ja esta cadastrado. Entre na sua conta ou use outro e-mail.', 409);
   }
 
   const passwordHash = await bcrypt.hash(input.password, 10);
 
-  const user = await prisma.$transaction(async (transaction) => {
-    const createdUser = await transaction.usuario.create({
-      data: {
-        nome: input.nome.trim(),
-        email,
-        passwordHash,
-        role: input.role,
-      },
+  try {
+    const user = await prisma.$transaction(async (transaction) => {
+      const createdUser = await transaction.usuario.create({
+        data: {
+          nome: input.nome.trim(),
+          email,
+          passwordHash,
+          role: input.role,
+        },
+      });
+
+      if (input.role === 'PROFISSIONAL') {
+        const perfil = await transaction.perfilProfissional.create({
+          data: {
+            usuarioId: createdUser.id,
+            nomeExibicao: input.nome.trim(),
+            profissao: 'Profissional',
+            categoriaPrincipal: 'Geral',
+            modalidadePrincipal: 'PRESENCIAL',
+            tipoVendedor: 'AUTONOMO',
+            publicado: false,
+          },
+        });
+
+        await transaction.loja.create({
+          data: {
+            usuarioId: createdUser.id,
+            perfilProfissionalId: perfil.id,
+            nome: `${input.nome.trim()} Studio`,
+            slug: `${slugify(input.nome)}-${createdUser.id.slice(0, 8)}`,
+            onboardingConcluido: false,
+          },
+        });
+      }
+
+      return createdUser;
     });
 
-    if (input.role === 'PROFISSIONAL') {
-      const perfil = await transaction.perfilProfissional.create({
-        data: {
-          usuarioId: createdUser.id,
-          nomeExibicao: input.nome.trim(),
-          profissao: 'Profissional',
-          categoriaPrincipal: 'Geral',
-          modalidadePrincipal: 'PRESENCIAL',
-          tipoVendedor: 'AUTONOMO',
-          publicado: false,
-        },
-      });
-
-      await transaction.loja.create({
-        data: {
-          usuarioId: createdUser.id,
-          perfilProfissionalId: perfil.id,
-          nome: `${input.nome.trim()} Studio`,
-          slug: `${slugify(input.nome)}-${createdUser.id.slice(0, 8)}`,
-          onboardingConcluido: false,
-        },
-      });
+    return {
+      token: buildToken(user),
+      user: mapAuthUser(user),
+    };
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+      throw new AppError('Este e-mail ja esta cadastrado. Entre na sua conta ou use outro e-mail.', 409);
     }
 
-    return createdUser;
-  });
-
-  return {
-    token: buildToken(user),
-    user: mapAuthUser(user),
-  };
+    throw error;
+  }
 }
 
 export async function login(emailInput: string, password: string) {

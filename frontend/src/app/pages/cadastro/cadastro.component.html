@@ -140,10 +140,17 @@
           </div>
         </div>
 
+        <div *ngIf="errorMessage"
+          class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700"
+          role="alert">
+          {{ errorMessage }}
+        </div>
+
         <button (click)="onSubmit()"
-          class="flex w-full justify-center rounded-xl bg-slate-900 px-4 py-3.5 text-sm font-bold text-white shadow-md hover:bg-slate-800 hover:-translate-y-0.5 transition-all active:scale-95"
+          [disabled]="isLoading"
+          class="flex w-full justify-center rounded-xl bg-slate-900 px-4 py-3.5 text-sm font-bold text-white shadow-md hover:bg-slate-800 hover:-translate-y-0.5 transition-all active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
           type="button">
-          Criar Minha Conta
+          {{ isLoading ? 'Criando conta...' : 'Criar Minha Conta' }}
         </button>
       </form>
 

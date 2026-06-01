@@ -102,9 +102,27 @@ export class CadastroComponent {
       error: (err) => {
         this.isLoading = false;
         console.error('Erro ao realizar cadastro:', err);
-        this.errorMessage = 'Erro ao realizar cadastro. Verifique os dados e tente novamente.';
+        this.errorMessage = this.getRegisterErrorMessage(err);
       }
     });
+  }
+
+  private getRegisterErrorMessage(err: any): string {
+    const apiMessage = err?.error?.message;
+
+    if (err?.status === 409) {
+      return apiMessage || 'Este e-mail ja esta cadastrado. Entre na sua conta ou use outro e-mail.';
+    }
+
+    if (err?.status === 400) {
+      return apiMessage || 'Verifique os dados informados e tente novamente.';
+    }
+
+    if (err?.status === 0) {
+      return 'Nao foi possivel conectar ao servidor. Tente novamente em instantes.';
+    }
+
+    return apiMessage || 'Erro ao realizar cadastro. Verifique os dados e tente novamente.';
   }
   
   isValidEmail(email: string): boolean {
