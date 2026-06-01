@@ -5,22 +5,14 @@ Este guia publica o Booka na ordem correta: Supabase, Render e Vercel.
 ## 1. Supabase
 
 1. Crie um projeto no Supabase.
-2. Anote a senha do banco com seguranca.
-3. Abra `SQL Editor`.
-4. Rode `database/schema.sql`.
-5. Opcionalmente rode `database/seed.sql` apenas em ambiente de teste/homologacao.
-6. Em `Connect`, copie a connection string do `Session pooler`/Supavisor.
-7. Use essa connection string como `DATABASE_URL` no backend. Ela deve apontar para `pooler.supabase.com:5432`, nao para `db.[PROJECT-REF].supabase.co:5432`.
+2. Guarde a senha do banco com seguranca.
+3. Configure as connection strings:
+   - `DATABASE_URL`: connection string do pooler/Supavisor para a aplicacao.
+   - `DIRECT_URL`: connection string direta para migrations do Prisma.
+4. Rode as migrations pelo backend com `npm run prisma:deploy`.
+5. Use `database/seed.sql` ou `npm run seed` apenas em ambiente de teste/homologacao.
 
-Variaveis Supabase:
-
-- `DATABASE_URL`: connection string do Supavisor Session pooler para o backend.
-- `DIRECT_URL`: connection string direta para o banco de dados (necessária para `prisma migrate deploy`).
-- `SUPABASE_URL`: Project URL em `Project Settings > API`.
-- `SUPABASE_ANON_KEY`: anon public key, se necessario.
-- `SUPABASE_SERVICE_ROLE_KEY`: service role key, somente no backend e somente se houver uso real.
-
-Nao coloque `SUPABASE_SERVICE_ROLE_KEY`, `DATABASE_URL` ou `JWT_SECRET` no frontend.
+Nao coloque `SUPABASE_SERVICE_ROLE_KEY`, `DATABASE_URL`, `DIRECT_URL` ou `JWT_SECRET` no frontend.
 
 ## 2. Render
 
@@ -39,14 +31,14 @@ Variaveis:
 NODE_ENV=production
 PORT=10000
 DATABASE_URL=postgresql://postgres.PROJECT_REF:SUA_SENHA@REGION.pooler.supabase.com:6543/postgres?pgbouncer=true
-DIRECT_URL=postgresql://postgres.PROJECT_REF:SUA_SENHA@REGION.db.supabase.com:5432/postgres
+DIRECT_URL=postgresql://postgres:SUA_SENHA@db.PROJECT_REF.supabase.co:5432/postgres
 JWT_SECRET=SEGREDO_ALEATORIO_DE_PELO_MENOS_16_CARACTERES
 JWT_TTL_SECONDS=604800
-FRONTEND_URL=
-CLIENT_ORIGINS=
-SUPABASE_URL=
-SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
+FRONTEND_URL=https://SEU-FRONTEND.vercel.app
+CLIENT_ORIGINS=https://SEU-FRONTEND.vercel.app
+SUPABASE_URL=https://PROJECT_REF.supabase.co
+SUPABASE_ANON_KEY=CHAVE_PUBLICA_FICTICIA
+SUPABASE_SERVICE_ROLE_KEY=CHAVE_PRIVADA_FICTICIA_SOMENTE_BACKEND
 ```
 
 Depois do deploy, teste:
@@ -66,17 +58,7 @@ Respostas esperadas:
 { "database": "connected", "status": "ok" }
 ```
 
-Se CORS falhar, confirme que `FRONTEND_URL` aponta para a URL final da Vercel. Para multiplas origens, use `CLIENT_ORIGINS` com URLs separadas por virgula.
-
-### Observações sobre as variáveis do Render:
-
-- **`DATABASE_URL`**: Use a connection string do Supabase **Session Pooler (Supavisor)**, preferencialmente com a porta `6543` e `?pgbouncer=true` para melhor desempenho e compatibilidade com o Render. O usuário geralmente é `postgres.PROJECT_REF`.
-- **`DIRECT_URL`**: Use a connection string **direta** do Supabase, sem o pooler, para que o Prisma possa executar operações de migração. O usuário geralmente é `postgres`.
-- **`JWT_SECRET`**: Deve ser um segredo longo e aleatório (mínimo 16 caracteres).
-- **`FRONTEND_URL`**: A URL pública do seu frontend na Vercel.
-- **`CLIENT_ORIGINS`**: Lista de URLs permitidas para CORS, separadas por vírgula. Inclua a URL do seu frontend na Vercel.
-- **Codificação de Senhas**: Se sua senha do Supabase contiver caracteres especiais como `@`, `#`, `%`, `&`, `/`, `?`, ou `:`, eles devem ser **URL encoded** na connection string. Por exemplo, `@` vira `%40`.
-- **Não comite segredos reais**: As variáveis acima devem ser configuradas diretamente no painel do Render, não no `render.yaml`.
+Se CORS falhar, confirme `FRONTEND_URL` e `CLIENT_ORIGINS`. Para multiplas origens, use URLs separadas por virgula. Se a senha do Supabase tiver caracteres especiais, use URL encoding na connection string.
 
 ## 3. Vercel
 
@@ -94,31 +76,22 @@ Variavel:
 BOOKA_API_URL=https://SEU-BACKEND.onrender.com
 ```
 
-O build gera `public/env.js` automaticamente a partir de `BOOKA_API_URL`. Esse arquivo e carregado antes da aplicacao Angular.
-
-Depois do deploy:
-
-1. Acesse a URL da Vercel.
-2. Abra o marketplace.
-3. Tente login/cadastro.
-4. Teste chamada publica para profissionais.
-5. Valide no backend se `FRONTEND_URL` permite a origem da Vercel.
+O build gera `public/env.js` automaticamente a partir de `BOOKA_API_URL`.
 
 ## Validacao final
 
-Checklist:
-
-- `database/schema.sql` rodou sem erro.
+- Supabase recebeu as migrations.
 - Render responde `/health`.
 - Render responde `/test/db-status`.
 - Vercel carrega a aplicacao.
 - `BOOKA_API_URL` aponta para Render.
-- `FRONTEND_URL` aponta para Vercel.
+- `FRONTEND_URL` e `CLIENT_ORIGINS` permitem a origem da Vercel.
+- Uploads de avatar/capa foram validados em ambiente persistente.
 - `.env` reais nao foram commitados.
-- `DATABASE_URL`, `JWT_SECRET` e service role key existem somente no backend.
+- `DATABASE_URL`, `DIRECT_URL`, `JWT_SECRET` e service role key existem somente no backend.
 
 ## Observacoes
 
 - Nao faca deploy real com tokens pessoais hardcoded.
-- Nao rode `seed.sql` em producao com dados de teste.
-- Para reset de senha em producao, ainda falta integrar envio real de email; a API nao retorna o token quando `NODE_ENV=production`.
+- Nao rode seeds de teste em producao.
+- Para reset de senha em producao, ainda falta integrar envio real de email.

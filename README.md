@@ -1,82 +1,156 @@
 # Booka
 
-Booka e uma plataforma SaaS para conectar negocios de alimentacao, com foco inicial em restaurantes de sushi, a profissionais/freelancers e servicos com agenda. O estado atual do monorepo entrega cadastro/login, marketplace publico de profissionais, perfil de loja/profissional, servicos, clientes, agendamentos, bloqueios de agenda, dashboard, onboarding e recuperacao de senha por token.
+## Resumo do projeto
 
-## Contexto do monorepo
+Booka e uma plataforma SaaS para gestao de agendamentos, servicos, clientes, disponibilidade e presenca digital de profissionais/pequenas empresas. O sistema resolve a dificuldade de organizar agenda, atendimento e oferta de servicos em um unico fluxo, com marketplace publico para clientes e painel operacional para profissionais.
 
-O repositorio oficial e `Booka-SaaS/booka-platform`. Ele foi criado a partir da uniao de projetos separados de frontend e backend, preservando `frontend/` e `backend/` como areas independentes.
+O publico-alvo sao profissionais autonomos, pequenos negocios de atendimento e equipes que precisam controlar horarios, servicos, clientes e comunicacao de forma simples.
 
-Repositorios historicos detectados nos remotes do monorepo:
+## Objetivo do sistema
 
-- Frontend principal: `https://github.com/TrueTrailBlazer/booka-frontend`
-- Backend principal: `https://github.com/RubensGJ/BookaBackendV2`
-- Frontend alternativo: `https://github.com/Giullianoads/booka-frontend`
-- App alternativo: `https://github.com/Giullianoads/booka-app`
+O objetivo principal do Booka e centralizar o processo de agendamento: o cliente encontra um profissional, visualiza servicos e disponibilidade, realiza uma reserva, e o profissional acompanha clientes, agenda, bloqueios, servicos, loja/perfil e indicadores em dashboard.
 
-Os repositorios `https://github.com/Booka-SaaS/booka-frontend` e `https://github.com/Booka-SaaS/booka-backend` devem ser verificados quando estiverem acessiveis; nesta base, as origens efetivas estao registradas como remotes auxiliares.
+## Projeto de adequacao do trabalho remoto
 
-## Arquitetura
+No contexto de trabalho remoto ou hibrido, o Booka funciona como ferramenta de organizacao operacional. A plataforma reduz dependencia de controles manuais, melhora o acompanhamento de entregas e facilita a distribuicao de tarefas relacionadas a atendimento, disponibilidade, cadastro de servicos, revisao de agenda e relacionamento com clientes.
 
-```text
-Frontend Angular na Vercel
-  -> Backend Express no Render
-    -> PostgreSQL no Supabase
-```
+Para a equipe do projeto, o monorepo favorece comunicacao e produtividade porque frontend, backend, banco e documentacao ficam no mesmo fluxo de versionamento. O planejamento em Scrum e Kanban permite acompanhar progresso, prioridades, bloqueios, revisoes de codigo e validacao de entregas.
 
-## Estrutura
+## Duracao do projeto: 6 meses
+
+O planejamento proposto considera 6 meses de execucao, com evolucao incremental: descoberta e arquitetura no inicio, implementacao das funcionalidades principais nos meses centrais, testes/deploy no quinto mes e lockdown controlado no sexto mes.
+
+## Metodologia utilizada: Scrum
+
+O projeto usa Scrum como metodologia central.
+
+- Sprints: ciclos curtos de entrega, sugeridos em periodos de 2 semanas.
+- Backlog: lista priorizada de requisitos, melhorias, bugs, riscos e tarefas tecnicas.
+- Daily meetings: alinhamentos rapidos para progresso, impedimentos e proximas acoes.
+- Sprint planning: definicao do escopo da sprint, criterios de aceite e responsaveis.
+- Sprint review: demonstracao do incremento entregue.
+- Sprint retrospective: avaliacao do processo, dificuldades e melhorias para o proximo ciclo.
+- Papeis principais: Product Owner, Scrum Master, Desenvolvedor Frontend, Desenvolvedor Backend, Responsavel por Banco de Dados, Testes, Documentacao e Deploy/DevOps.
+- Incrementos entregaveis: funcionalidades integradas, documentacao atualizada, migrations, builds validados e cards movidos no Kanban.
+
+## Estrategia de gestao da equipe para os proximos 6 meses
+
+A equipe deve trabalhar com sprints quinzenais, reunioes semanais de acompanhamento e revisoes de codigo antes de cada merge. As prioridades devem considerar impacto no usuario, risco tecnico, dependencia de credenciais/infraestrutura e valor academico da entrega.
+
+A comunicacao deve ocorrer por GitHub Issues/Projects, Pull Requests e reunioes curtas. Riscos devem ser registrados no Kanban como bloqueados quando dependerem de Supabase, Render, Vercel, GitHub Projects ou variaveis sensiveis. Entregas devem ser aceitas apenas com build validado, documentacao atualizada e ausencia de segredos reais no codigo.
+
+## Definicao das atividades que serao realizadas
+
+- Levantamento e refinamento de requisitos.
+- Modelagem e evolucao do banco de dados.
+- Configuracao dos ambientes local, homologacao e producao.
+- Desenvolvimento e manutencao do backend.
+- Desenvolvimento e manutencao do frontend.
+- Integracao frontend/backend.
+- Autenticacao, autorizacao e recuperacao de senha.
+- Testes unitarios, E2E e de integracao.
+- Deploy em Vercel, Render e Supabase.
+- Documentacao tecnica, Scrum, Kanban e operacao.
+- Validacao final e apresentacao.
+
+## Definicao dos responsaveis por cada atividade
+
+| Atividade | Responsavel proposto |
+| --- | --- |
+| Priorizacao e requisitos | Product Owner |
+| Cerimonias Scrum e remocao de impedimentos | Scrum Master |
+| Interfaces Angular e experiencia do usuario | Desenvolvedor Frontend |
+| API Express, regras de negocio e seguranca | Desenvolvedor Backend |
+| Prisma, migrations e Supabase/PostgreSQL | Responsavel pelo Banco de Dados |
+| Testes unitarios, E2E e validacao final | Responsavel por Testes |
+| README, docs e relatorios | Responsavel pela Documentacao |
+| Render, Vercel, variaveis e pipeline | Responsavel por Deploy/DevOps |
+
+## Estrategia de lockdown
+
+No ultimo mes, o projeto deve entrar em lockdown: congelamento de novas funcionalidades, correcao apenas de bugs criticos, revisao de seguranca, testes finais, validacao de deploy, backup do banco, revisao da documentacao e checklist final antes da entrega. Mudancas nesse periodo devem ser pequenas, rastreaveis e aprovadas em Pull Request.
+
+## Elaboracao de cronograma
+
+| Mes | Foco | Entregas esperadas |
+| --- | --- | --- |
+| 1 | Planejamento, requisitos, arquitetura e backlog | Escopo validado, backlog inicial, estrutura do monorepo revisada |
+| 2 | Modelagem, autenticacao e base do backend | Schema Prisma, migrations, auth, rotas base e ambiente local |
+| 3 | Frontend inicial, telas principais e integracao parcial | Login, cadastro, marketplace, servicos e chamadas API |
+| 4 | Funcionalidades principais e regras de negocio | Agenda, disponibilidade, clientes, bloqueios, dashboard e upload |
+| 5 | Testes, melhorias, deploy e documentacao | Builds validados, deploy configurado, docs e testes ampliados |
+| 6 | Lockdown, validacao final, apresentacao e entrega | Correcoes criticas, checklist final, backup e PR de entrega |
+
+## Definir cidade da empresa
+
+Definicao proposta: a empresa do estudo de caso esta localizada em Campo Grande/MS. O contexto e uma pequena empresa de servicos que atende clientes locais e tambem opera processos administrativos em modelo hibrido.
+
+## Quantidade de funcionarios
+
+Definicao proposta: 25 funcionarios.
+
+| Area | Quantidade |
+| --- | ---: |
+| Administracao | 4 |
+| Atendimento | 5 |
+| Operacoes | 7 |
+| Tecnologia | 4 |
+| Comercial | 3 |
+| Gestao | 2 |
+
+## Porte da empresa
+
+Com 25 funcionarios, a empresa e classificada como empresa de pequeno porte para o estudo de caso. A justificativa e o numero reduzido de colaboradores, a estrutura enxuta de gestao e a necessidade de ferramentas digitais para organizar processos sem grande complexidade corporativa.
+
+## Tecnologias utilizadas
+
+- Angular 19
+- Tailwind CSS
+- Node.js
+- Express
+- TypeScript
+- Prisma
+- PostgreSQL
+- Supabase
+- Render
+- Vercel
+- Cypress
+- Karma/Jasmine
+- Swagger UI
+
+## Arquitetura do projeto
 
 ```text
 booka-platform/
-|-- frontend/        Angular 19, Angular SSR/static build, Tailwind, RxJS
-|-- backend/         Node.js, Express, TypeScript, Prisma, PostgreSQL
-|-- database/        SQL para Supabase e consultas de validacao
-|-- docs/            analises e documentacao historica
-|-- render.yaml      blueprint do backend no Render
-|-- DEPLOY.md        passo a passo de deploy
-|-- .env.example     referencia de variaveis
-`-- README.md
+|-- frontend/   Aplicacao Angular 19 com Tailwind, SSR/static build e testes
+|-- backend/    API Node.js/Express/TypeScript com Prisma e Swagger
+|-- database/   Scripts SQL de schema, seed e consultas de apoio
+|-- docs/       Planejamento, Kanban, Scrum, cronograma e analises
+|-- render.yaml Blueprint do backend no Render
+|-- DEPLOY.md   Guia de publicacao
+`-- README.md   Documentacao principal
 ```
 
-## Tecnologias
+Fluxo esperado:
 
-Frontend:
-
-- Angular 19
-- Angular SSR/build application
-- Tailwind CSS
-- RxJS
-- Cypress e Karma/Jasmine configurados
-
-Backend:
-
-- Node.js
-- TypeScript
-- Express
-- Prisma
-- PostgreSQL/Supabase
-- Zod
-- JWT
-- bcryptjs
-- Swagger UI
+```text
+Frontend Angular na Vercel -> Backend Express no Render -> PostgreSQL/Supabase
+```
 
 ## Funcionalidades atuais
 
-- Cadastro, login e `GET /auth/me`
-- Recuperacao de senha por token interno
-- Onboarding profissional
-- Perfil/loja do profissional
-- Marketplace publico de profissionais
-- Detalhe publico e disponibilidade por data
-- Servicos
-- Clientes
-- Agendamentos publicos e privados
-- Bloqueios de agenda
-- Dashboard/resumo
-- Notificacoes no schema
+- Cadastro, login e `GET /auth/me`.
+- Recuperacao de senha por token interno.
+- Onboarding profissional.
+- Perfil/loja do profissional.
+- Upload de avatar e capa da loja.
+- Marketplace publico de profissionais.
+- Detalhe publico e disponibilidade por data.
+- Servicos, clientes, agendamentos e bloqueios de agenda.
+- Dashboard/resumo.
+- Schema com notificacoes.
 
-Ainda nao ha tabelas/rotas reais para vagas, candidaturas, convites, administradores dedicados, CPF ou avaliacoes como entidade separada. Avaliacao existe hoje como campos agregados no perfil profissional.
-
-## Rodando localmente
+## Como executar localmente
 
 Backend:
 
@@ -107,122 +181,75 @@ URLs locais:
 - Health: `http://localhost:3001/health`
 - Banco: `GET http://localhost:3001/test/db-status`
 
-## Variaveis
+## Variaveis de ambiente
 
-Backend:
+Backend (`backend/.env`):
 
 ```env
-NODE_ENV=production
-PORT=10000
-DIRECT_URL=
-DATABASE_URL=
-JWT_SECRET=
+NODE_ENV=development
+PORT=3001
+DATABASE_URL=postgresql://USER:PASSWORD@HOST:5432/postgres?schema=public
+DIRECT_URL=postgresql://USER:PASSWORD@HOST:5432/postgres?schema=public
+JWT_SECRET=change-me-use-a-long-random-secret
 JWT_TTL_SECONDS=604800
-FRONTEND_URL=
-CLIENT_ORIGINS=
-SUPABASE_URL=
-SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
+FRONTEND_URL=http://localhost:4200
+CLIENT_ORIGINS=http://localhost:4200,http://localhost:5173,http://localhost:3000
+SUPABASE_URL=https://PROJECT_REF.supabase.co
+SUPABASE_ANON_KEY=fake-anon-key
+SUPABASE_SERVICE_ROLE_KEY=fake-service-role-key
+SEED_PASSWORD=senha-de-teste
+SEED_PASSWORD_HASH=
 ```
 
-Frontend:
+Frontend (`frontend/.env`):
 
 ```env
-BOOKA_API_URL=
+BOOKA_API_URL=http://localhost:3001
 ```
 
-`BOOKA_API_URL` deve apontar para a URL publica do backend no Render. O build tambem aceita `VITE_API_URL`, `NG_APP_API_URL` ou `NEXT_PUBLIC_API_URL` como alias, mas `BOOKA_API_URL` e o padrao documentado para este Angular.
-
-Nunca exponha no frontend:
-
-- `DATABASE_URL`
-- `JWT_SECRET`
-- `SUPABASE_SERVICE_ROLE_KEY`
-- tokens privados
-- segredos relacionados a CPF, caso essa funcionalidade exista no futuro
-
-## Scripts
-
-Backend:
-
-- `npm run dev`
-- `npm run build`
-- `npm start`
-- `npm run prisma:generate`
-- `npm run prisma:migrate`
-- `npm run prisma:deploy`
-- `npm run prisma:studio`
-- `npm run seed`
-
-Frontend:
-
-- `npm start`
-- `npm run build`
-- `npm test`
-- `npm run cypress:open`
-- `npm run cypress:run`
-
-## Rotas principais
-
-Publicas:
-
-- `GET /health`
-- `GET /test/db-status`
-- `GET /docs`
-- `POST /auth/register`
-- `POST /auth/login`
-- `POST /auth/recuperar-senha`
-- `POST /auth/nova-senha`
-- `GET /profissionais`
-- `GET /profissionais/:id`
-- `GET /profissionais/:id/disponibilidade?data=YYYY-MM-DD`
-- `POST /agendamentos/publicos`
-
-Protegidas:
-
-- `GET /auth/me`
-- `GET /loja`
-- `PUT /loja`
-- `POST /onboarding/finalizar`
-- `GET /servicos`
-- `POST /servicos`
-- `PUT /servicos/:id`
-- `DELETE /servicos/:id`
-- `GET /clientes`
-- `GET /clientes/:id`
-- `POST /clientes`
-- `PUT /clientes/:id`
-- `DELETE /clientes/:id`
-- `GET /agendamentos`
-- `POST /agendamentos`
-- `PUT /agendamentos/:id`
-- `DELETE /agendamentos/:id`
-- `GET /bloqueios`
-- `GET /bloqueios/:id`
-- `POST /bloqueios`
-- `PUT /bloqueios/:id`
-- `DELETE /bloqueios/:id`
-- `GET /dashboard/resumo`
+Nunca exponha no frontend `DATABASE_URL`, `DIRECT_URL`, `JWT_SECRET`, `SUPABASE_SERVICE_ROLE_KEY`, tokens privados, senhas ou chaves reais.
 
 ## Deploy
 
-Leia [DEPLOY.md](./DEPLOY.md).
+O deploy esta documentado em [DEPLOY.md](./DEPLOY.md).
 
-Ordem correta:
+- Frontend: Vercel, com root directory `frontend` e `BOOKA_API_URL` apontando para o backend.
+- Backend: Render, com root directory `backend`, build `npm ci && npm run prisma:generate && npm run prisma:deploy && npm run build` e start `npm start`.
+- Banco: Supabase/PostgreSQL, com migrations Prisma e variaveis `DATABASE_URL` e `DIRECT_URL`.
 
-1. Supabase: criar projeto, rodar `database/schema.sql`, copiar connection string.
-2. Render: publicar `backend/`, configurar variaveis e testar `/health` e `/test/db-status`.
-3. Vercel: publicar `frontend/`, configurar `BOOKA_API_URL` e validar chamadas para a API.
+## Testes
 
-## Seguranca
+Scripts disponiveis:
 
-- `.env` reais nao devem ser versionados.
-- Senhas sao armazenadas como hash bcrypt.
-- `DATABASE_URL` e `JWT_SECRET` ficam apenas no backend.
-- Reset de senha nao retorna token em `NODE_ENV=production`.
-- CORS usa `FRONTEND_URL`/`CLIENT_ORIGINS`; nao use `*` em producao.
-- Erros de banco sao retornados de forma controlada.
+```bash
+cd frontend
+npm test
+npm run cypress:run
+```
 
-## Status e proximos passos
+```bash
+cd backend
+npm run build
+```
 
-O projeto esta preparado para Supabase/Render/Vercel no nivel de configuracao e documentacao. Pendencias funcionais futuras incluem envio real de email para reset de senha, avaliacoes como entidade propria, vagas/candidaturas/convites, painel administrativo dedicado, observabilidade e testes automatizados de fluxo completo.
+Ainda nao ha suite automatizada completa no backend. Proposta futura: testes unitarios para services, testes de integracao para rotas Express, E2E de autenticacao/agendamento e validacao automatizada de deploy.
+
+## Status atual do projeto
+
+O monorepo esta organizado com `frontend/`, `backend/`, `database/` e `docs/`. Os remotes historicos foram verificados e os commits mais recentes de frontend/backend foram comparados. O commit mais recente do backend teve alteracoes seguras incorporadas seletivamente para avatar/capa e schema Prisma. As alteracoes de frontend ja estavam parcialmente presentes; foi adicionada a chamada de upload de capa no service.
+
+Pendencias funcionais futuras incluem envio real de email para reset de senha, ampliacao de testes automatizados, revisao completa de fluxo de imagens em producao, observabilidade, painel administrativo dedicado e validacao com credenciais reais de Supabase/Render/Vercel.
+
+## Proximos passos
+
+- Validar migrations em banco Supabase de homologacao.
+- Executar testes E2E de login, marketplace e agendamento.
+- Revisar fluxo visual de upload de avatar e capa.
+- Configurar GitHub Projects ou manter `docs/kanban.md` como quadro operacional.
+- Criar issues oficiais a partir de `docs/issues-sugeridas.md`.
+- Revisar secrets nos paineis Render/Vercel, sem versiona-los.
+- Preparar Pull Request com checklist de build e deploy.
+
+## Licenca
+
+Licenca nao identificada no monorepo. Definicao proposta: adicionar uma licenca antes de distribuicao publica ou uso comercial.

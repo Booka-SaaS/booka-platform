@@ -48,7 +48,20 @@ export class LojaService {
       );
   }
 
-  // Métodos legados para compatibilidade
+  // Upload de foto de capa da loja
+  uploadCapa(file: File): Observable<{ imagemUrl: string }> {
+    const form = new FormData();
+    form.append('capa', file);
+    return this.http.post<{ imagemUrl: string }>(`${environment.apiUrl}/upload/capa-loja`, form)
+      .pipe(
+        catchError(err => {
+          console.error('Erro ao enviar foto de capa:', err);
+          return throwError(() => err);
+        })
+      );
+  }
+
+  // Metodos legados para compatibilidade
   buscarDados(): Observable<Loja> {
     return this.obter();
   }
