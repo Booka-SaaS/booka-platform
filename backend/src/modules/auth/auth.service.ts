@@ -154,7 +154,7 @@ export async function getMe(userId: string) {
   }
 
   return {
-    user: { ...mapAuthUser(user), imagemUrl: user.loja?.imagemUrl ?? null },
+    user: { ...mapAuthUser(user), imagemUrl: user.imagemUrl ?? user.loja?.imagemUrl ?? null },
     loja: mapLojaContext(user.loja),
   };
 }
