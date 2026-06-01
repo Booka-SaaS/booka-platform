@@ -15,7 +15,7 @@
         <p class="mt-3 text-base text-slate-500">Crie uma senha forte e segura para proteger sua conta.</p>
       </div>
       
-      <form class="space-y-5">
+      <form class="space-y-5" (ngSubmit)="onSubmit()">
         
         <div class="relative">
           <div class="space-y-5">
@@ -56,8 +56,16 @@
           </div>
         </div>
         
-        <button routerLink="/login" class="flex w-full justify-center rounded-xl bg-slate-900 px-4 py-3.5 text-sm font-bold text-white shadow-md hover:bg-slate-800 hover:-translate-y-0.5 transition-all active:scale-95 mt-6" type="button">
-          Redefinir Senha
+        <p *ngIf="successMessage" class="rounded-xl bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700">
+          {{ successMessage }}
+        </p>
+
+        <p *ngIf="errorMessage" class="rounded-xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
+          {{ errorMessage }}
+        </p>
+
+        <button class="flex w-full justify-center rounded-xl bg-slate-900 px-4 py-3.5 text-sm font-bold text-white shadow-md hover:bg-slate-800 hover:-translate-y-0.5 transition-all active:scale-95 mt-6 disabled:opacity-60 disabled:cursor-not-allowed" type="submit" [disabled]="isLoading">
+          {{ isLoading ? 'Redefinindo...' : 'Redefinir Senha' }}
         </button>
       </form>
       

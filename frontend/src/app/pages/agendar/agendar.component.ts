@@ -17,7 +17,7 @@ import { Profissional } from '../../models';
   styleUrl: './agendar.component.css'
 })
 export class AgendarComponent implements OnInit {
-  slug: string | null = null;
+  profissionalId: string | null = null;
   lojaId: string | null = null;
   profissional: Profissional | null = null;
   step = 1;
@@ -70,10 +70,10 @@ export class AgendarComponent implements OnInit {
 
   carregarProfissional() {
     this.route.paramMap.subscribe(params => {
-      this.slug = params.get('slug');
-      if (this.slug) {
+      this.profissionalId = params.get('id') ?? params.get('idLoja') ?? params.get('slug');
+      if (this.profissionalId) {
         this.isLoading = true;
-        this.profissionalService.obterPorSlug(this.slug).subscribe({
+        this.profissionalService.obterPorId(this.profissionalId).subscribe({
           next: (response) => {
             this.profissional = response;
 
@@ -152,9 +152,9 @@ export class AgendarComponent implements OnInit {
     this.horarioSelecionado = null;
 
     // Buscar horários disponíveis da API
-    if (this.slug && this.dataSelecionada) {
+    if (this.profissionalId && this.dataSelecionada) {
       const dataFormatada = this.dataSelecionada.toISOString().split('T')[0];
-      this.profissionalService.obterDisponibilidade(this.slug, dataFormatada).subscribe({
+      this.profissionalService.obterDisponibilidade(this.profissionalId, dataFormatada).subscribe({
         next: (response) => {
           this.horariosDisponiveis = response.horarios || [];
         },
