@@ -1,17 +1,23 @@
-# Apresentacao local do Booka
+# Apresentação local do Booka
 
-Esta apresentacao e local e nao deve ser integrada ao frontend, publicada na Vercel ou movida para pastas publicas do deploy.
+Esta apresentação é local e serve apenas como material acadêmico de apresentação.
 
 ## Como abrir
 
-1. Abra esta pasta no VS Code.
-2. Use Live Server em `index.html` ou abra o arquivo diretamente no navegador.
-3. Navegue pelos botoes `Anterior` e `Proximo` ou pelas setas do teclado.
+1. Abra a pasta `docs/apresentacao-booka/` no VS Code.
+2. Inicie o Live Server no arquivo `index.html`.
+3. Navegue com os botões `Anterior` e `Próximo` ou com as setas esquerda e direita do teclado.
 
-Arquivos:
+Arquivo principal:
 
-- `index.html`
-- `style.css`
-- `script.js`
+```txt
+docs/apresentacao-booka/index.html
+```
 
-Nao importar esses arquivos em rotas Angular/Ionic.
+## Regras
+
+- Não integrar ao frontend Angular/Ionic.
+- Não adicionar rota para esta apresentação.
+- Não mover para `frontend/public`, `frontend/src/assets`, `dist` ou qualquer pasta de deploy.
+- Não publicar no site online.
+- Não depender de internet ou bibliotecas externas.
