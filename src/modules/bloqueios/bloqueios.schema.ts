@@ -15,6 +15,10 @@ export const createBloqueioSchema = z
     path: ['fim'],
   });
 
+export const createBloqueiosLoteSchema = z.object({
+  bloqueios: z.array(createBloqueioSchema).min(1).max(60),
+});
+
 export const updateBloqueioSchema = z.object({
   inicio: z.string().datetime().optional(),
   fim: z.string().datetime().optional(),

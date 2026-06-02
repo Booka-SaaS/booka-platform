@@ -561,11 +561,13 @@ const schemas = {
       modalidade: { type: 'string', example: 'PRESENCIAL' },
       vendedor: { type: 'string', example: 'AUTONOMO' },
       cidade: { type: 'string', nullable: true, example: 'Cuiaba' },
+      avatarUrl: { type: 'string', nullable: true, example: '/uploads/avatars/avatar.webp' },
+      capaUrl: { type: 'string', nullable: true, example: '/uploads/capas/capa.webp' },
       img: { type: 'string', format: 'uri', nullable: true },
       precoInicial: { type: 'number', example: 35 },
       rating: { type: 'number', example: 4.9 },
     },
-    required: ['id', 'nome', 'profissao', 'categoria', 'modalidade', 'vendedor', 'cidade', 'img', 'precoInicial', 'rating'],
+    required: ['id', 'nome', 'profissao', 'categoria', 'modalidade', 'vendedor', 'cidade', 'avatarUrl', 'capaUrl', 'img', 'precoInicial', 'rating'],
   },
   ProfissionalServicoPublico: {
     type: 'object',
@@ -587,6 +589,8 @@ const schemas = {
       descricao: { type: 'string', nullable: true, example: 'Atendimento profissional com hora marcada.' },
       telefone: { type: 'string', nullable: true, example: '65999990000' },
       cidade: { type: 'string', nullable: true, example: 'Cuiaba' },
+      avatarUrl: { type: 'string', nullable: true, example: '/uploads/avatars/avatar.webp' },
+      capaUrl: { type: 'string', nullable: true, example: '/uploads/capas/capa.webp' },
       img: { type: 'string', format: 'uri', nullable: true },
       rating: { type: 'number', example: 4.9 },
       servicos: {
@@ -596,7 +600,7 @@ const schemas = {
         },
       },
     },
-    required: ['id', 'nome', 'profissao', 'descricao', 'telefone', 'cidade', 'img', 'rating', 'servicos'],
+    required: ['id', 'nome', 'profissao', 'descricao', 'telefone', 'cidade', 'avatarUrl', 'capaUrl', 'img', 'rating', 'servicos'],
   },
   DisponibilidadeResponse: {
     type: 'object',
@@ -632,6 +636,20 @@ const schemas = {
       motivo: { type: 'string', nullable: true, example: 'Almoco' },
     },
     required: ['inicio', 'fim'],
+  },
+  BloqueioAgendaLoteInput: {
+    type: 'object',
+    properties: {
+      bloqueios: {
+        type: 'array',
+        minItems: 1,
+        maxItems: 60,
+        items: {
+          $ref: '#/components/schemas/BloqueioAgendaInput',
+        },
+      },
+    },
+    required: ['bloqueios'],
   },
   BloqueioAgendaUpdateInput: {
     type: 'object',
@@ -1529,6 +1547,47 @@ const paths = {
             'application/json': {
               schema: {
                 $ref: '#/components/schemas/BloqueioAgenda',
+              },
+            },
+          },
+        },
+        400: {
+          $ref: '#/components/responses/ValidationError',
+        },
+        401: {
+          $ref: '#/components/responses/UnauthorizedError',
+        },
+        403: {
+          $ref: '#/components/responses/ForbiddenError',
+        },
+      },
+    },
+  },
+  '/bloqueios/lote': {
+    post: {
+      tags: ['Bloqueios'],
+      summary: 'Cria bloqueios de agenda em lote',
+      security: [{ bearerAuth: [] }],
+      requestBody: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/BloqueioAgendaLoteInput',
+            },
+          },
+        },
+      },
+      responses: {
+        201: {
+          description: 'Bloqueios criados com sucesso',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'array',
+                items: {
+                  $ref: '#/components/schemas/BloqueioAgenda',
+                },
               },
             },
           },

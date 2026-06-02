@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { requireAuth, AuthenticatedRequest } from '../../middleware/auth';
 import { requireRole } from '../../middleware/role';
-import { bloqueioIdParamSchema, createBloqueioSchema, updateBloqueioSchema } from './bloqueios.schema';
-import { createBloqueio, deleteBloqueio, getBloqueio, listBloqueios, updateBloqueio } from './bloqueios.service';
+import { bloqueioIdParamSchema, createBloqueioSchema, createBloqueiosLoteSchema, updateBloqueioSchema } from './bloqueios.schema';
+import { createBloqueio, createBloqueiosLote, deleteBloqueio, getBloqueio, listBloqueios, updateBloqueio } from './bloqueios.service';
 
 export function buildBloqueiosRouter() {
   const router = Router();
@@ -14,6 +14,17 @@ export function buildBloqueiosRouter() {
       const authenticatedRequest = request as AuthenticatedRequest;
       const result = await listBloqueios(authenticatedRequest.auth!.userId);
       response.json(result);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  router.post('/lote', async (request, response, next) => {
+    try {
+      const authenticatedRequest = request as AuthenticatedRequest;
+      const payload = createBloqueiosLoteSchema.parse(request.body);
+      const result = await createBloqueiosLote(authenticatedRequest.auth!.userId, payload.bloqueios);
+      response.status(201).json(result);
     } catch (error) {
       next(error);
     }
