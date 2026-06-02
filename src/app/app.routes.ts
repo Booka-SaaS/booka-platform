@@ -15,7 +15,7 @@ export const routes: Routes = [
       import('./pages/explorar/explorar.component').then(m => m.ExplorarComponent)
   },
   {
-    path: 'agendar/:slug',
+    path: 'agendar/:id',
     loadComponent: () =>
       import('./pages/agendar/agendar.component').then(m => m.AgendarComponent)
   },

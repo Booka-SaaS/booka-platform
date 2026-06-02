@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Booka</string>
+    <string name="title_activity_main">Booka</string>
+    <string name="package_name">com.booka.app</string>
+    <string name="custom_url_scheme">com.booka.app</string>
+</resources>

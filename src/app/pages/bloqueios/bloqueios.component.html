@@ -46,7 +46,7 @@
             <div class="min-w-0">
               <p class="text-sm font-bold text-slate-900 truncate">{{ bloqueio.motivo }}</p>
               <p class="text-xs text-slate-500 mt-0.5">
-                {{ bloqueio.data_inicio | date:'dd/MM' }} → {{ bloqueio.data_fim | date:'dd/MM' }}
+                {{ bloqueio.inicio | date:'dd/MM' }} → {{ bloqueio.fim | date:'dd/MM' }}
               </p>
             </div>
           </div>
@@ -84,12 +84,12 @@
       <div class="space-y-4">
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wide">Data Início</label>
-          <input type="date" [(ngModel)]="novoBloqueio.data_inicio"
+          <input type="date" [(ngModel)]="novoBloqueio.inicio"
             class="block w-full rounded-xl border border-slate-200 bg-surface py-3 px-4 text-sm outline-none" />
         </div>
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wide">Data Fim</label>
-          <input type="date" [(ngModel)]="novoBloqueio.data_fim"
+          <input type="date" [(ngModel)]="novoBloqueio.fim"
             class="block w-full rounded-xl border border-slate-200 bg-surface py-3 px-4 text-sm outline-none" />
         </div>
         <div>

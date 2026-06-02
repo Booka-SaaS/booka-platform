@@ -17,7 +17,7 @@ import { AuthService } from '../../services/auth.service';
 export class LoginComponent {
   email = '';
   password = '';
-  
+
   private authService = inject(AuthService);
   private router = inject(Router);
 
@@ -27,8 +27,8 @@ export class LoginComponent {
       return;
     }
     this.authService.login(this.email, this.password).subscribe({
-      next: () => {
-        const role = this.authService.getRole();
+      next: async () => {
+        const role = await this.authService.getRole();
         if (role === 'PROFISSIONAL') {
           this.router.navigate(['/painel/dashboard']);
         } else {

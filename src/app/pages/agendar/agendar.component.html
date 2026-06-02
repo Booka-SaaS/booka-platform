@@ -36,10 +36,10 @@
       <div class="px-4 pt-4 pb-5">
         <div class="flex items-center gap-4">
           <div class="w-16 h-16 rounded-2xl overflow-hidden bg-slate-100 shrink-0 shadow-sm">
-            <img [src]="profissional.img || 'https://via.placeholder.com/64'" [alt]="profissional.nome" class="w-full h-full object-cover" />
+            <img [src]="profissional.imagemUrl || 'https://via.placeholder.com/64'" [alt]="profissional.nomeExibicao" class="w-full h-full object-cover" />
           </div>
           <div class="min-w-0">
-            <h2 class="text-lg font-bold text-slate-900 truncate">{{ profissional.nome }}</h2>
+            <h2 class="text-lg font-bold text-slate-900 truncate">{{ profissional.nomeExibicao }}</h2>
             <p class="text-sm text-primary font-medium">{{ profissional.profissao || 'Profissional' }}</p>
             <div class="flex items-center gap-2 mt-1 text-xs text-slate-500">
               <span class="flex items-center gap-0.5">⭐ 4.9</span>
@@ -68,7 +68,7 @@
                 <div class="min-w-0">
                   <p class="text-sm font-bold text-slate-900 truncate">{{ servico.nome }}</p>
                   <p class="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
-                    <ion-icon name="time-outline"></ion-icon> {{ servico.duracao }} min
+                    <ion-icon name="time-outline"></ion-icon> {{ servico.duracaoMinutos }} min
                   </p>
                 </div>
               </div>

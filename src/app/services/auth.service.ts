@@ -1,74 +1,88 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable, from } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-import { tap } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { Usuario, LojaContext } from '../models';
+import { StorageService } from './storage.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+export interface AuthResponse {
+  token: string;
+  user: { id: string; nome: string; email: string; role: string };
+}
+
+export interface MeResponse {
+  user: Usuario & { imagemUrl: string | null };
+  loja: LojaContext | null;
+}
+
+@Injectable({ providedIn: 'root' })
 export class AuthService {
-  private http = inject(HttpClient);
-  private apiUrl = environment.apiUrl;
+  private readonly http = inject(HttpClient);
+  private readonly storage = inject(StorageService);
+  private readonly apiUrl = environment.apiUrl;
 
-  login(email: string, senha: string) {
-    // Login chumbado para teste como Profissional
-    if (email === 'admin@teste.com' && senha === '123456') {
-      return of({ token: 'mock-token-admin', usuario: { role: 'PROFISSIONAL' } }).pipe(
-        tap(response => {
-          localStorage.setItem('token', response.token);
-          localStorage.setItem('role', response.usuario.role);
-        })
-      );
-    }
-
-    // Login chumbado para teste como Cliente
-    if (email === 'cliente@teste.com' && senha === '123456') {
-      return of({ token: 'mock-token-cliente', usuario: { role: 'CLIENTE' } }).pipe(
-        tap(response => {
-          localStorage.setItem('token', response.token);
-          localStorage.setItem('role', response.usuario.role);
-        })
-      );
-    }
-
-    return this.http.post<{ token: string, usuario?: any }>(`${this.apiUrl}/auth/login`, { email, senha })
-      .pipe(
-        tap(response => {
-          if (response.token) {
-            localStorage.setItem('token', response.token);
-            const role = response.usuario?.role || 'CLIENTE';
-            localStorage.setItem('role', role);
-          }
-        })
-      );
+  login(email: string, password: string): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, { email, password })
+      .pipe(switchMap(async res => {
+        await this.persistAuth(res);
+        return res;
+      }));
   }
 
-  register(nome: string, email: string, senha: string, role: string) {
-    return this.http.post<{ token: string, usuario?: any }>(`${this.apiUrl}/auth/register`, { nome, email, senha, role })
-      .pipe(
-        tap(response => {
-          if (response.token) {
-            localStorage.setItem('token', response.token);
-            const userRole = response.usuario?.role || role || 'CLIENTE';
-            localStorage.setItem('role', userRole);
-          }
-        })
-      );
+  register(nome: string, email: string, password: string, role: string): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/register`, { nome, email, password, role })
+      .pipe(switchMap(async res => {
+        await this.persistAuth(res);
+        return res;
+      }));
   }
 
-  logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('role');
+  async logout(): Promise<void> {
+    await this.clearAuth();
   }
 
-  isLoggedIn(): boolean {
-    if (typeof window === 'undefined') return false; // Compatibilidade SSR
-    return !!localStorage.getItem('token');
+  getMe(): Observable<MeResponse> {
+    return this.http.get<MeResponse>(`${this.apiUrl}/auth/me`);
   }
-  
-  getRole(): string {
-    if (typeof window === 'undefined') return 'CLIENTE';
-    return localStorage.getItem('role') || 'CLIENTE';
+
+  updateMe(dados: { nome?: string; email?: string }): Observable<Usuario> {
+    return this.http.put<Usuario>(`${this.apiUrl}/auth/me`, dados);
+  }
+
+  updateSenha(senhaAtual: string, novaSenha: string): Observable<{ message: string }> {
+    return this.http.put<{ message: string }>(`${this.apiUrl}/auth/senha`, { senhaAtual, novaSenha });
+  }
+
+  recuperarSenha(email: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/auth/recuperar-senha`, { email });
+  }
+
+  novaSenha(token: string, novaSenha: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/auth/nova-senha`, { token, novaSenha });
+  }
+
+  async isLoggedIn(): Promise<boolean> {
+    const token = await this.storage.getItem('token');
+    return !!token;
+  }
+
+  async getRole(): Promise<string> {
+    const role = await this.storage.getItem('role');
+    return role || 'CLIENTE';
+  }
+
+  async getToken(): Promise<string | null> {
+    return await this.storage.getItem('token');
+  }
+
+  private async persistAuth(res: AuthResponse): Promise<void> {
+    await this.storage.setItem('token', res.token);
+    await this.storage.setItem('role', res.user.role);
+  }
+
+  private async clearAuth(): Promise<void> {
+    await this.storage.removeItem('token');
+    await this.storage.removeItem('role');
   }
 }

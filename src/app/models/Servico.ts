@@ -1,10 +1,10 @@
-export interface Servico {
-  id?: number | string;
+import { BaseEntity } from './BaseEntity';
+
+export interface Servico extends BaseEntity {
+  lojaId?: string;
   nome: string;
-  descricao?: string;
-  preco: number;
-  duracaoMinutos?: number;
-  lojaId?: number | string;
-  criadoEm?: Date | string;
-  atualizadoEm?: Date | string;
+  descricao?: string | null;
+  duracaoMinutos: number;
+  preco: number;            // API retorna em reais (convertido de centavos no backend)
+  ativo: boolean;
 }

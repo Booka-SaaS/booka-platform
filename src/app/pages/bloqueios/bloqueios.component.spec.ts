@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideRouter } from '@angular/router';
 
 import { BloqueiosComponent } from './bloqueios.component';
 
@@ -8,7 +10,8 @@ describe('BloqueiosComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BloqueiosComponent]
+      imports: [BloqueiosComponent],
+      providers: [provideHttpClient(), provideRouter([])]
     })
     .compileComponents();
 

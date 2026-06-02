@@ -1,10 +1,9 @@
-export interface Cliente {
-  id?: number | string;
+import { BaseEntity } from './BaseEntity';
+
+export interface Cliente extends BaseEntity {
+  lojaId: string;
   nome: string;
-  email?: string;
-  telefone?: string;
-  lojaId?: number | string;
-  anotacoes?: string;
-  criadoEm?: Date | string;
-  atualizadoEm?: Date | string;
+  email?: string | null;
+  telefone: string;         // Obrigatório no V2
+  anotacoes?: string | null;
 }

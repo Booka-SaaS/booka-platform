@@ -1,10 +1,11 @@
-export interface Usuario {
-  id?: number | string;
+import { BaseEntity } from './BaseEntity';
+
+export type UserRole = 'CLIENTE' | 'PROFISSIONAL';
+
+export interface Usuario extends BaseEntity {
   nome: string;
   email: string;
-  senha?: string;
-  role?: string;
-  lojaId?: number | string;
-  criadoEm?: Date | string;
-  atualizadoEm?: Date | string;
+  role: UserRole;
+  ativo?: boolean;
+  imagemUrl?: string | null;
 }

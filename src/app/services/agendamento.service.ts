@@ -1,25 +1,33 @@
-import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment';
-import { Agendamento } from '../models';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { BaseApiService } from './base-api.service';
+import { Agendamento } from '../models';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class AgendamentoService {
-  private http = inject(HttpClient);
-  private apiUrl = `${environment.apiUrl}/agendamentos`;
+/**
+ * Serviço para gestão de agendamentos.
+ * Herda CRUD de BaseApiService e adiciona endpoints específicos.
+ */
+@Injectable({ providedIn: 'root' })
+export class AgendamentoService extends BaseApiService<Agendamento> {
+  constructor() { super('/agendamentos'); }
 
-  listar(): Observable<Agendamento[]> {
-    return this.http.get<Agendamento[]>(this.apiUrl);
+  /** Lista agendamentos com filtros opcionais (data, status, clienteId, servicoId). */
+  listarComFiltros(filtros: {
+    data?: string;
+    status?: string;
+    clienteId?: string;
+    servicoId?: string;
+  }): Observable<Agendamento[]> {
+    return this.listar(filtros as Record<string, string>);
   }
 
-  criar(agendamento: Agendamento): Observable<Agendamento> {
-    return this.http.post<Agendamento>(this.apiUrl, agendamento);
+  /** Agendamentos do usuário logado (qualquer role). */
+  listarMeus(): Observable<Agendamento[]> {
+    return this.http.get<Agendamento[]>(`${this.baseUrl}/meus`);
   }
 
-  criarPublico(dados: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/publico`, dados);
+  /** Agendamento público via marketplace (sem autenticação). */
+  criarPublico(dados: Record<string, unknown>): Observable<Agendamento> {
+    return this.http.post<Agendamento>(`${this.baseUrl}/publicos`, dados);
   }
 }

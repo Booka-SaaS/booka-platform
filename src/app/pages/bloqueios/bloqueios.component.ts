@@ -9,8 +9,9 @@ import {
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { addOutline, lockClosedOutline, closeOutline, trashOutline } from 'ionicons/icons';
-import { BloqueioService, Bloqueio } from '../../services/bloqueio.service';
+import { BloqueioService } from '../../services/bloqueio.service';
 import { ModalService } from '../../services/modal.service';
+import { BloqueioAgenda } from '../../models';
 
 @Component({
   selector: 'app-bloqueios',
@@ -26,7 +27,7 @@ import { ModalService } from '../../services/modal.service';
   styleUrl: './bloqueios.component.css'
 })
 export class BloqueiosComponent implements OnInit {
-  bloqueios: Bloqueio[] = [];
+  bloqueios: BloqueioAgenda[] = [];
   isLoading = true;
   isSaving = false;
   showModal = false;
@@ -54,10 +55,10 @@ export class BloqueiosComponent implements OnInit {
   }
 
   salvarBloqueio() {
-    if (!this.novoBloqueio.data_inicio || !this.novoBloqueio.data_fim) return;
+    if (!this.novoBloqueio.inicio || !this.novoBloqueio.fim) return;
 
     this.isSaving = true;
-    this.bloqueioService.criar(this.novoBloqueio as Bloqueio).subscribe({
+    this.bloqueioService.criar(this.novoBloqueio as BloqueioAgenda).subscribe({
       next: () => {
         this.isSaving = false;
         this.fecharModal();
@@ -71,7 +72,7 @@ export class BloqueiosComponent implements OnInit {
     });
   }
 
-  deletarBloqueio(id: number) {
+  deletarBloqueio(id: string) {
     if (!this.modalService.confirm('Remover Bloqueio', 'Tem certeza que deseja remover este bloqueio?')) return;
 
     this.bloqueioService.deletar(id).subscribe({
@@ -91,7 +92,7 @@ export class BloqueiosComponent implements OnInit {
     this.novoBloqueio = this.criarBloqueioVazio();
   }
 
-  private criarBloqueioVazio(): Partial<Bloqueio> {
-    return { data_inicio: '', data_fim: '', motivo: 'Férias' };
+  private criarBloqueioVazio(): Partial<BloqueioAgenda> {
+    return { inicio: '', fim: '', motivo: 'Férias' };
   }
 }

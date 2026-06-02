@@ -34,8 +34,8 @@
           <div class="flex items-start justify-between">
             <div class="flex items-center gap-3">
               <div class="flex flex-col items-center bg-primary/10 rounded-xl px-3 py-2 min-w-[52px]">
-                <span class="text-xs text-primary/80 font-medium">{{ ag.dataHora | date:'HH' }}</span>
-                <span class="text-lg font-black text-primary leading-tight">{{ ag.dataHora | date:'mm' }}</span>
+                <span class="text-xs text-primary/80 font-medium">{{ ag.inicio | date:'HH' }}</span>
+                <span class="text-lg font-black text-primary leading-tight">{{ ag.inicio | date:'mm' }}</span>
                 <span class="text-[10px] text-primary/60">h min</span>
               </div>
               <div>
@@ -46,7 +46,7 @@
             </div>
             <div class="flex flex-col gap-1.5">
               <button class="bg-emerald-500 text-white px-3 py-1 rounded-lg text-xs font-bold">Concluir</button>
-              <button class="border border-red-200 text-red-600 px-3 py-1 rounded-lg text-xs font-bold">Faltou</button>
+              <button (click)="cancelar(ag.id!)" class="border border-red-200 text-red-600 px-3 py-1 rounded-lg text-xs font-bold">Faltou</button>
             </div>
           </div>
         </div>

@@ -15,7 +15,7 @@ import {
 import { ProfissionalService } from '../../services/profissional.service';
 import { AgendamentoService } from '../../services/agendamento.service';
 import { ModalService } from '../../services/modal.service';
-import { Profissional } from '../../models';
+import { Profissional, Servico } from '../../models';
 
 @Component({
   selector: 'app-agendar',
@@ -30,12 +30,12 @@ import { Profissional } from '../../models';
   styleUrl: './agendar.component.css'
 })
 export class AgendarComponent implements OnInit {
-  slug: string | null = null;
+  profissionalId: string | null = null;
   profissional: Profissional | null = null;
   isLoading = true;
   isSaving = false;
 
-  servicoSelecionado: any = null;
+  servicoSelecionado: Servico | null = null;
   dataSelecionada: Date | null = null;
   horarioSelecionado: string | null = null;
   horariosDisponiveis: string[] = [];
@@ -68,11 +68,12 @@ export class AgendarComponent implements OnInit {
   // ─── Dados do Profissional ──────────────────────────────────────────
   carregarProfissional() {
     this.route.paramMap.subscribe(params => {
-      this.slug = params.get('slug');
-      if (!this.slug) return;
+      // Aceita tanto :id quanto :slug para compatibilidade de rota
+      this.profissionalId = params.get('id') || params.get('slug');
+      if (!this.profissionalId) return;
 
       this.isLoading = true;
-      this.profissionalService.obterPorSlug(this.slug).subscribe({
+      this.profissionalService.obterPorId(this.profissionalId).subscribe({
         next: (res) => {
           this.profissional = res;
           if (res?.servicos?.length) {
@@ -107,7 +108,7 @@ export class AgendarComponent implements OnInit {
   }
 
   // ─── Seleções ───────────────────────────────────────────────────────
-  selecionarServico(servico: any) {
+  selecionarServico(servico: Servico) {
     this.servicoSelecionado = servico;
   }
 
@@ -124,10 +125,10 @@ export class AgendarComponent implements OnInit {
 
   // ─── Horários da API ───────────────────────────────────────────────
   private buscarHorarios() {
-    if (!this.slug || !this.dataSelecionada) return;
+    if (!this.profissionalId || !this.dataSelecionada) return;
 
     const dataFormatada = this.dataSelecionada.toISOString().split('T')[0];
-    this.profissionalService.obterDisponibilidade(this.slug, dataFormatada).subscribe({
+    this.profissionalService.obterDisponibilidade(this.profissionalId, dataFormatada).subscribe({
       next: (res) => this.horariosDisponiveis = res.slots || [],
       error: () => this.horariosDisponiveis = []
     });
@@ -145,10 +146,9 @@ export class AgendarComponent implements OnInit {
     const dataFormatada = this.dataSelecionada.toISOString().split('T')[0];
 
     const dados = {
-      servico_id: this.servicoSelecionado.id,
-      profissional_id: this.profissional?.id,
-      data_hora: `${dataFormatada}T${this.horarioSelecionado}:00`,
-      modalidade: this.profissional?.modalidades?.[0] || 'PRESENCIAL'
+      servicoId: this.servicoSelecionado!.id,
+      profissionalId: this.profissional?.id,
+      inicio: `${dataFormatada}T${this.horarioSelecionado}:00`,
     };
 
     this.agendamentoService.criarPublico(dados).subscribe({

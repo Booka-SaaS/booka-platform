@@ -40,4 +40,14 @@ export class AgendaComponent implements OnInit {
       error: () => event.target.complete()
     });
   }
+
+  cancelar(id: string) {
+    this.agendamentoService.deletar(id).subscribe({
+      next: () => {
+        this.agendamentos = this.agendamentos.filter(a => a.id !== id);
+        alert('Cancelado com sucesso!');
+      },
+      error: (err: any) => console.error(err)
+    });
+  }
 }

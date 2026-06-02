@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideRouter } from '@angular/router';
 
 import { ServicosComponent } from './servicos.component';
 
@@ -8,7 +10,8 @@ describe('ServicosComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ServicosComponent]
+      imports: [ServicosComponent],
+      providers: [provideHttpClient(), provideRouter([])]
     })
     .compileComponents();
 
