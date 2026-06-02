@@ -9,6 +9,8 @@ const envSchema = z.object({
   DATABASE_URL: z.string().min(1),
   JWT_SECRET: z.string().min(16),
   JWT_TTL_SECONDS: z.coerce.number().int().positive().default(604800),
+  RESEND_API_KEY: z.string().min(1).default('re_placeholder'),
+  EMAIL_FROM: z.string().min(1).default('Booka <noreply@booka.app>'),
 });
 
 export const env = envSchema.parse(process.env);
