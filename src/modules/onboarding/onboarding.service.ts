@@ -4,8 +4,14 @@ import { AppError } from '../../lib/errors';
 type FinalizeOnboardingInput = {
   nome: string;
   telefone: string;
-  endereco: string;
-  cidade?: string;
+  endereco?: string;
+  cep: string;
+  logradouro: string;
+  numero: string;
+  bairro: string;
+  complemento?: string;
+  estado: string;
+  cidade: string;
   descricao?: string;
   profissao: string;
   categoriaPrincipal: string;
@@ -49,7 +55,13 @@ export async function finalizeOnboarding(userId: string, input: FinalizeOnboardi
       data: {
         nome: input.nome,
         telefone: input.telefone,
-        endereco: input.endereco,
+        endereco: input.endereco ?? `${input.logradouro}, ${input.numero} - ${input.bairro}, ${input.cidade}/${input.estado}`,
+        cep: input.cep,
+        logradouro: input.logradouro,
+        numero: input.numero,
+        bairro: input.bairro,
+        complemento: input.complemento,
+        estado: input.estado,
         cidade: input.cidade,
         descricao: input.descricao,
         onboardingConcluido: true,
