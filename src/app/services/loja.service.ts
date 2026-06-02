@@ -11,6 +11,12 @@ export interface UpdateLojaRequest {
   email?: string | null;
   telefone?: string | null;
   endereco?: string | null;
+  cep?: string | null;
+  logradouro?: string | null;
+  numero?: string | null;
+  bairro?: string | null;
+  complemento?: string | null;
+  estado?: string | null;
   cidade?: string | null;
   descricao?: string | null;
   imagemUrl?: string | null;

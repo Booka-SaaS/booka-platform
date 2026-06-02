@@ -7,6 +7,7 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
 import { LojaService } from '../../services/loja.service';
 import { DisponibilidadeService, UpdateDisponibilidadeItem } from '../../services/disponibilidade.service';
+import { ViaCepService } from '../../services/viacep.service';
 import { Loja } from '../../models';
 import { forkJoin } from 'rxjs';
 import { environment } from '../../../environments/environment';
@@ -31,6 +32,12 @@ export class DadosLojaComponent implements OnInit {
     nome: '',
     telefone: '',
     endereco: '',
+    cep: '',
+    logradouro: '',
+    numero: '',
+    bairro: '',
+    complemento: '',
+    estado: '',
     email: '',
     cidade: '',
     descricao: '',
@@ -48,10 +55,15 @@ export class DadosLojaComponent implements OnInit {
   isUploadingCapa = false;
   capaPreview: string | null = null;
 
+  isBuscandoCep = false;
+  cepNaoEncontrado = false;
+  cepPreenchido = false;
+
   readonly apiUrl = environment.apiUrl;
 
   private lojaService = inject(LojaService);
   private disponibilidadeService = inject(DisponibilidadeService);
+  private viaCepService = inject(ViaCepService);
 
   ngOnInit() {
     this.carregarDados();
@@ -65,6 +77,7 @@ export class DadosLojaComponent implements OnInit {
     }).subscribe({
       next: ({ loja, disponibilidade }) => {
         this.loja = loja;
+        this.cepPreenchido = !!loja.cep;
 
         for (const grupo of this.horarios) {
           const primeiroDia = grupo.dias[0];
@@ -79,6 +92,38 @@ export class DadosLojaComponent implements OnInit {
       error: (err) => {
         console.error(err);
         this.isLoading = false;
+      },
+    });
+  }
+
+  onCepInput(valor: string) {
+    const cepLimpo = valor.replace(/\D/g, '');
+    this.loja.cep = cepLimpo;
+    this.cepNaoEncontrado = false;
+
+    if (cepLimpo.length === 8) {
+      this.buscarCep(cepLimpo);
+    } else {
+      this.cepPreenchido = false;
+    }
+  }
+
+  private buscarCep(cep: string) {
+    this.isBuscandoCep = true;
+    this.cepPreenchido = false;
+    this.viaCepService.buscarPorCep(cep).subscribe({
+      next: (endereco) => {
+        this.loja.logradouro = endereco.logradouro;
+        this.loja.bairro = endereco.bairro;
+        this.loja.cidade = endereco.cidade;
+        this.loja.estado = endereco.estado;
+        this.isBuscandoCep = false;
+        this.cepPreenchido = true;
+      },
+      error: () => {
+        this.isBuscandoCep = false;
+        this.cepNaoEncontrado = true;
+        this.cepPreenchido = false;
       },
     });
   }
