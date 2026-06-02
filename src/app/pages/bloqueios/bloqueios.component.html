@@ -1,5 +1,4 @@
 <div class="bg-slate-50 font-sans text-slate-900 antialiased h-screen flex flex-col overflow-hidden">
-
   <app-navbar></app-navbar>
 
   <div class="flex-1 flex overflow-hidden pt-20">
@@ -10,7 +9,6 @@
 
       <main class="flex-1 overflow-y-auto p-8 space-y-8">
         <div class="w-full">
-
           <a routerLink="/configuracoes" class="inline-flex items-center gap-2 text-slate-500 hover:text-indigo-600 text-sm font-semibold mb-6 transition-colors cursor-pointer group">
             <span class="material-symbols-outlined text-[18px] group-hover:-translate-x-1 transition-transform">arrow_back</span>
             Voltar para Configurações
@@ -21,7 +19,6 @@
             <p class="text-slate-500 mt-1">Gerencie os períodos de indisponibilidade da sua agenda.</p>
           </div>
 
-          <!-- Cards de resumo -->
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div class="p-5 bg-white border border-slate-200 rounded-xl flex items-center gap-4 shadow-sm">
               <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600">
@@ -60,7 +57,6 @@
             </div>
           </div>
 
-          <!-- Formulário novo bloqueio -->
           <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-8">
             <div class="p-6 border-b border-slate-100">
               <h3 class="text-lg font-bold text-slate-800">Novo Bloqueio</h3>
@@ -68,6 +64,17 @@
             </div>
 
             <div class="p-8 space-y-6">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <button (click)="aplicarPreset('ferias')" type="button" class="flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50 hover:border-blue-200 text-sm font-bold text-slate-700 transition-colors">
+                  <span class="material-symbols-outlined text-[18px] text-[#004ac6]">beach_access</span>
+                  Preset Férias
+                </button>
+                <button (click)="aplicarPreset('almoco')" type="button" class="flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-200 text-sm font-bold text-slate-700 transition-colors">
+                  <span class="material-symbols-outlined text-[18px] text-emerald-600">restaurant</span>
+                  Preset Almoço
+                </button>
+              </div>
+
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-2">
                   <label class="text-sm font-semibold text-slate-700">Data Inicial</label>
@@ -114,9 +121,13 @@
                 </div>
               </div>
 
-              <div class="pt-6 flex justify-end items-center border-t border-slate-100">
-                <button (click)="limparForm()" [disabled]="isSaving" class="px-6 py-2.5 text-sm font-medium text-slate-600 hover:text-slate-900 mr-4 transition-colors" type="button">Limpar</button>
-                <button (click)="salvarBloqueio()" [disabled]="isSaving" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-8 py-2.5 rounded-xl transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2 disabled:opacity-75" type="button">
+              <div class="pt-6 flex flex-col md:flex-row md:justify-end md:items-center gap-3 border-t border-slate-100">
+                <button (click)="limparForm()" [disabled]="isSaving" class="px-6 py-2.5 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors" type="button">Limpar</button>
+                <button (click)="bloquearAlmocoDiasUteis()" [disabled]="isSaving" class="bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-2.5 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-75" type="button">
+                  <span class="material-symbols-outlined text-xl">restaurant</span>
+                  Bloquear Almoço em Dias Úteis
+                </button>
+                <button (click)="salvarBloqueio()" [disabled]="isSaving" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-8 py-2.5 rounded-xl transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 disabled:opacity-75" type="button">
                   @if (isSaving) {
                     <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                     Salvando...
@@ -129,7 +140,6 @@
             </div>
           </div>
 
-          <!-- Lista de bloqueios existentes -->
           <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
             <div class="p-6 border-b border-slate-100 flex items-center justify-between">
               <div>
@@ -171,7 +181,6 @@
               </div>
             }
           </div>
-
         </div>
       </main>
     </div>

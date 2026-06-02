@@ -8,6 +8,7 @@ import { AuthService } from '../../services/auth.service';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { ModalService } from '../../services/modal.service';
 import { ProfissionalDetalhe, ProfissionalServico } from '../../models';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-agendar',
@@ -31,6 +32,7 @@ export class AgendarComponent implements OnInit {
   clienteNome: string = '';
   clienteEmail: string = '';
   clienteWhatsapp: string = '';
+  readonly apiUrl = environment.apiUrl;
 
   mesAtualNome: string = '';
   diasDoMes: (number | null)[] = [];
@@ -166,6 +168,13 @@ export class AgendarComponent implements OnInit {
 
   selecionarHorario(hora: string) {
     this.horarioSelecionado = hora;
+  }
+
+  getImageUrl(value?: string | null): string | null {
+    if (!value) return null;
+    if (/^(https?:|data:|blob:)/.test(value)) return value;
+    if (value.startsWith('/')) return `${this.apiUrl}${value}`;
+    return value;
   }
 
   finalizarAgendamento() {
