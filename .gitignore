@@ -17,3 +17,16 @@ Thumbs.db
 .vscode/
 .prisma/client
 generated/
+
+.expo/
+.expo-shared/
+
+android/.gradle/
+android/app/build/
+mobile/android/.gradle/
+mobile/android/app/build/
+
+ios/Pods/
+ios/build/
+mobile/ios/Pods/
+mobile/ios/build/
