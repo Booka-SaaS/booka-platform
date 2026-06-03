@@ -19,6 +19,8 @@ const envSchema = z.object({
   SUPABASE_ANON_KEY: optionalString,
   SUPABASE_SERVICE_ROLE_KEY: optionalString,
   GOOGLE_CLIENT_ID: optionalString,
+  RESEND_API_KEY: z.string().min(1).default('re_placeholder'),
+  EMAIL_FROM: z.string().min(1).default('Booka <noreply@booka.app>'),
 });
 
 const parsedEnv = envSchema.parse(process.env);

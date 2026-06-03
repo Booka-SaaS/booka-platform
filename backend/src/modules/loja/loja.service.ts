@@ -6,6 +6,12 @@ type LojaPayload = {
   email?: string | null;
   telefone?: string | null;
   endereco?: string | null;
+  cep?: string | null;
+  logradouro?: string | null;
+  numero?: string | null;
+  bairro?: string | null;
+  complemento?: string | null;
+  estado?: string | null;
   cidade?: string | null;
   descricao?: string | null;
   imagemUrl?: string | null;
@@ -21,6 +27,12 @@ function mapLoja(loja: {
   email: string | null;
   telefone: string | null;
   endereco: string | null;
+  cep: string | null;
+  logradouro: string | null;
+  numero: string | null;
+  bairro: string | null;
+  complemento: string | null;
+  estado: string | null;
   cidade: string | null;
   descricao: string | null;
   imagemUrl: string | null;
@@ -38,6 +50,12 @@ function mapLoja(loja: {
     email: loja.email,
     telefone: loja.telefone,
     endereco: loja.endereco,
+    cep: loja.cep,
+    logradouro: loja.logradouro,
+    numero: loja.numero,
+    bairro: loja.bairro,
+    complemento: loja.complemento,
+    estado: loja.estado,
     cidade: loja.cidade,
     descricao: loja.descricao,
     imagemUrl: loja.imagemUrl,
@@ -80,6 +98,12 @@ export async function updateOwnLoja(userId: string, payload: LojaPayload) {
         email: payload.email ?? undefined,
         telefone: payload.telefone ?? undefined,
         endereco: payload.endereco ?? undefined,
+        cep: payload.cep ?? undefined,
+        logradouro: payload.logradouro ?? undefined,
+        numero: payload.numero ?? undefined,
+        bairro: payload.bairro ?? undefined,
+        complemento: payload.complemento ?? undefined,
+        estado: payload.estado ?? undefined,
         cidade: payload.cidade ?? undefined,
         descricao: payload.descricao ?? undefined,
         imagemUrl: payload.imagemUrl ?? undefined,

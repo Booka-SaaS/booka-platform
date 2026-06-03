@@ -1,6 +1,7 @@
 import { Prisma, StatusAgendamento } from '@prisma/client';
 import { prisma } from '../../lib/db';
 import { AppError } from '../../lib/errors';
+import { enviarEmailSolicitacao, enviarEmailConfirmacao } from '../../lib/email/email.service';
 
 type ListAgendamentosFilters = {
   data?: string;
@@ -32,11 +33,12 @@ type CreateAgendamentoPublicoInput = {
 };
 
 function startOfDay(date: string) {
-  return new Date(`${date}T00:00:00.000Z`);
+  // Interpreta a data como local do servidor (não UTC fixo)
+  return new Date(`${date}T00:00:00`);
 }
 
 function endOfDay(date: string) {
-  return new Date(`${date}T23:59:59.999Z`);
+  return new Date(`${date}T23:59:59.999`);
 }
 
 function calculateEnd(inicioIso: string | Date, duracaoMinutos: number) {
@@ -244,13 +246,16 @@ export async function updateAgendamento(userId: string, agendamentoId: string, i
   const inicio = new Date(input.inicio ?? current.inicio);
 
   const servico = await getServicoFromStore(lojaId, servicoId);
-  await ensureClienteFromStore(lojaId, clienteId);
+  const cliente = await ensureClienteFromStore(lojaId, clienteId);
 
   const fim = calculateEnd(inicio, servico.duracaoMinutos);
 
   if ((input.status ?? current.status) !== 'CANCELADO') {
     await assertNoConflict(lojaId, inicio, fim, current.id);
   }
+
+  const novoStatus = input.status ?? current.status;
+  const confirmaAgora = novoStatus === 'CONFIRMADO' && current.status !== 'CONFIRMADO';
 
   const agendamento = await prisma.agendamento.update({
     where: { id: current.id },
@@ -260,7 +265,7 @@ export async function updateAgendamento(userId: string, agendamentoId: string, i
       inicio,
       fim,
       observacoes: input.observacoes ?? undefined,
-      status: input.status ?? undefined,
+      status: novoStatus,
     },
     include: {
       cliente: {
@@ -271,6 +276,40 @@ export async function updateAgendamento(userId: string, agendamentoId: string, i
       },
     },
   });
+
+  if (confirmaAgora && cliente.email) {
+    const loja = await prisma.loja.findUnique({
+      where: { id: lojaId },
+      select: {
+        nome: true,
+        telefone: true,
+        endereco: true,
+        logradouro: true,
+        numero: true,
+        bairro: true,
+        cidade: true,
+        estado: true,
+      },
+    });
+
+    if (loja) {
+      enviarEmailConfirmacao({
+        clienteEmail: cliente.email,
+        clienteNome: cliente.nome,
+        lojaNome: loja.nome,
+        servicoNome: servico.nome,
+        inicio,
+        fim,
+        lojaEndereco: loja.endereco,
+        lojaLogradouro: loja.logradouro,
+        lojaNumero: loja.numero,
+        lojaBairro: loja.bairro,
+        lojaCidade: loja.cidade,
+        lojaEstado: loja.estado,
+        lojaTelefone: loja.telefone,
+      });
+    }
+  }
 
   return mapAgendamento(agendamento);
 }
@@ -361,6 +400,16 @@ export async function createPublicAgendamento(input: CreateAgendamentoPublicoInp
       },
     },
   });
+
+  if (cliente.email) {
+    enviarEmailSolicitacao({
+      clienteEmail: cliente.email,
+      clienteNome: cliente.nome,
+      lojaNome: loja.nome,
+      servicoNome: servico.nome,
+      inicio,
+    });
+  }
 
   return mapAgendamento(agendamento);
 }

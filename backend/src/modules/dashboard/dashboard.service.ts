@@ -3,12 +3,12 @@ import { AppError } from '../../lib/errors';
 
 function startOfToday() {
   const now = new Date();
-  return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0, 0));
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
 }
 
 function endOfToday() {
   const now = new Date();
-  return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 23, 59, 59, 999));
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
 }
 
 export async function getDashboardResumo(userId: string) {
