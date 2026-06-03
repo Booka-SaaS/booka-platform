@@ -1,0 +1,286 @@
+<!-- Injetando as classes do body via container wrapper -->
+<div class="bg-surface font-body text-on-surface antialiased bg-[#f7f9fb] min-h-screen">
+    <header class="fixed top-0 w-full z-50 bg-[#f7f9fb]/90 glass-nav shadow-sm border-b border-slate-200/60">
+        <nav class="flex justify-between items-center px-8 h-20 max-w-7xl mx-auto w-full font-['Inter'] antialiased tracking-tight">
+            <div class="flex items-center gap-2">
+                <svg class="w-8 h-8" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                    <rect fill="#004ac6" height="64" rx="18" width="64"></rect>
+                    <g transform="translate(8, 8)">
+                        <path clip-rule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="#FFFFFF" fill-rule="evenodd"></path>
+                    </g>
+                </svg>
+                <span class="text-2xl font-black tracking-tighter text-[#004ac6]">Booka</span>
+            </div>
+            <div class="hidden md:flex items-center gap-8">
+                <a routerLink="/explorar" class="text-[#004ac6] font-bold border-b-2 border-[#004ac6] pb-1 hover:scale-105 transition-transform duration-200 cursor-pointer">Explorar</a>
+                <a routerLink="/cadastro" class="text-slate-600 hover:text-[#004ac6] hover:scale-105 transition-transform duration-200 cursor-pointer">Seja um Profissional</a>
+            </div>
+            <div class="flex items-center gap-4">
+                <button routerLink="/login" class="text-slate-600 font-medium px-4 py-2 hover:text-[#004ac6] transition-colors scale-95 transition-all w-none border-none bg-transparent cursor-pointer">Entrar</button>
+                <button routerLink="/cadastro" class="bg-[#004ac6] text-white font-bold px-6 py-2.5 rounded-full hover:scale-105 transition-all shadow-md cursor-pointer">Cadastrar</button>
+            </div>
+        </nav>
+    </header>
+    <main class="pt-20">
+        <!-- Hero Section -->
+        <section class="bg-surface py-20 lg:py-32 overflow-hidden">
+            <div class="max-w-7xl mx-auto px-8 flex flex-col items-center text-center">
+                <h1
+                    class="text-5xl lg:text-7xl font-extrabold text-on-surface text-editorial-hero mb-6 max-w-4xl leading-[1.1] text-slate-800">
+                    Encontre os melhores profissionais para o que você precisa.
+                </h1>
+                <p class="text-lg lg:text-xl text-on-surface-variant max-w-2xl mb-12 leading-relaxed text-slate-600">
+                    Conectamos você aos talentos mais qualificados do mercado para transformar seus projetos em
+                    realidade, com segurança e praticidade.
+                </p>
+                <!-- Search Bar Container -->
+                <div
+                    class="w-full max-w-3xl bg-surface-container-lowest bg-white p-2 rounded-2xl shadow-lg flex flex-col md:flex-row gap-2 border border-outline-variant/10">
+                    <div class="flex-1 flex items-center px-4 gap-3">
+                        <span class="material-symbols-outlined text-outline text-slate-400">search</span>
+                        <input
+                            class="w-full bg-transparent border-none focus:ring-0 text-on-surface placeholder:text-outline py-4"
+                            placeholder="O que você está procurando hoje?" type="text" [(ngModel)]="termoBusca" />
+                    </div>
+                    <div class="hidden md:block w-px h-10 bg-outline-variant/30 self-center bg-slate-200"></div>
+                    <div class="flex-1 flex items-center px-4 gap-3">
+                        <span class="material-symbols-outlined text-outline text-slate-400">location_on</span>
+                        <input
+                            class="w-full bg-transparent border-none focus:ring-0 text-on-surface placeholder:text-outline py-4"
+                            placeholder="São Paulo, SP" type="text" [(ngModel)]="cidadeBusca" />
+                    </div>
+                    <button (click)="buscarServico()"
+                        class="bg-[#004ac6] hover:bg-blue-700 text-white font-bold px-8 py-4 rounded-xl transition-all hover:scale-[1.02] active:scale-95 shadow-lg">
+                        Buscar agora
+                    </button>
+                </div>
+                <!-- Trusted Badges -->
+                <div class="mt-12 flex flex-wrap justify-center gap-8 opacity-60 grayscale text-slate-600">
+                    <div class="flex items-center gap-2 font-medium"><span
+                            class="material-symbols-outlined">verified</span> Milhares de profissionais</div>
+                    <div class="flex items-center gap-2 font-medium"><span
+                            class="material-symbols-outlined">security</span> Pagamento Seguro</div>
+                    <div class="flex items-center gap-2 font-medium"><span
+                            class="material-symbols-outlined">support_agent</span> Suporte 24/7</div>
+                </div>
+            </div>
+        </section>
+        <!-- Categories Grid -->
+        <section class="py-24 bg-surface-container-low bg-slate-100">
+            <div class="max-w-7xl mx-auto px-8">
+                <div class="flex justify-between items-end mb-12">
+                    <div>
+                        <span
+                            class="text-[#004ac6] font-bold tracking-[0.05em] text-sm uppercase mb-2 block">Categorias</span>
+                        <h2 class="text-3xl font-extrabold text-on-surface tracking-tight text-slate-800">Explore por
+                            áreas de interesse</h2>
+                    </div>
+                    <a routerLink="/explorar" class="text-[#004ac6] font-semibold flex items-center gap-1 hover:underline cursor-pointer">Ver tudo
+                        <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-6">
+                    <!-- Consultoria -->
+                    <div
+                        class="group bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all hover:-translate-y-2 cursor-pointer flex flex-col items-center text-center">
+                        <div
+                            class="w-16 h-16 rounded-2xl bg-blue-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-[#004ac6] text-3xl">query_stats</span>
+                        </div>
+                        <h3 class="font-bold text-slate-800">Consultoria</h3>
+                    </div>
+                    <!-- Aulas -->
+                    <div
+                        class="group bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all hover:-translate-y-2 cursor-pointer flex flex-col items-center text-center">
+                        <div
+                            class="w-16 h-16 rounded-2xl bg-primary/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-primary text-3xl">school</span>
+                        </div>
+                        <h3 class="font-bold text-slate-800">Aulas</h3>
+                    </div>
+                    <!-- Beleza -->
+                    <div
+                        class="group bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all hover:-translate-y-2 cursor-pointer flex flex-col items-center text-center">
+                        <div
+                            class="w-16 h-16 rounded-2xl bg-teal-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-teal-700 text-3xl">face</span>
+                        </div>
+                        <h3 class="font-bold text-slate-800">Beleza</h3>
+                    </div>
+                    <!-- Manutenção -->
+                    <div
+                        class="group bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all hover:-translate-y-2 cursor-pointer flex flex-col items-center text-center">
+                        <div
+                            class="w-16 h-16 rounded-2xl bg-red-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-red-600 text-3xl">handyman</span>
+                        </div>
+                        <h3 class="font-bold text-slate-800">Manutenção</h3>
+                    </div>
+                    <!-- Saúde -->
+                    <div
+                        class="group bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all hover:-translate-y-2 cursor-pointer flex flex-col items-center text-center">
+                        <div
+                            class="w-16 h-16 rounded-2xl bg-green-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-green-700 text-3xl">medical_services</span>
+                        </div>
+                        <h3 class="font-bold text-slate-800">Saúde</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Recommended Professionals -->
+        <section class="py-24 bg-surface bg-[#f7f9fb]">
+            <div class="max-w-7xl mx-auto px-8">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+                    <div class="max-w-2xl">
+                        <span
+                            class="text-teal-700 font-bold tracking-[0.05em] text-sm uppercase mb-2 block">Destaques</span>
+                        <h2 class="text-3xl lg:text-4xl font-extrabold text-slate-800 tracking-tight">Profissionais
+                            recomendados para você</h2>
+                        <p class="text-slate-600 mt-2">Selecionamos especialistas com as melhores avaliações na sua
+                            região.</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Professional Card 1 -->
+                    <div
+                        class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-2xl transition-all duration-300 border border-slate-100">
+                        <div class="flex items-start justify-between mb-6">
+                            <div class="flex items-center gap-4">
+                                <img alt="" class="w-16 h-16 rounded-full object-cover"
+                                    data-alt="professional portrait of a friendly male IT consultant in a business casual attire with soft office lighting"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlmfgo6Kxn_z7ZBiZT9Uto-k4k3Bcl-sC1AqA11Vk2PtEXhgebXNzPFDh-q_EgrLXT7GTDah5udAwMFct_ZRi6beBAB4tfcfGfGp7s-4tpkxZVzOY-BtNwWaPwhaz6wCNowAWlzV3xWJOYZ6-zKlFicEAYJvby83AkBqkGBSOCEBspaif1uv_W1ZutG05Wr5AO3Mj1Q6H0_8Slh2QUPGSWtcYQb3nxBlsJSmyJQHrU3VigeNrcu6Db8zI27Q1EX8X6xK4pXudIfhI" />
+                                <div>
+                                    <h3 class="font-bold text-lg text-slate-800">João Silva</h3>
+                                    <p class="text-sm text-slate-500">Consultor de TI</p>
+                                </div>
+                            </div>
+                            <div class="bg-teal-50 px-3 py-1 rounded-full flex items-center gap-1">
+                                <span class="material-symbols-outlined text-teal-600 text-xs"
+                                    style="font-variation-settings: 'FILL' 1;">star</span>
+                                <span class="text-teal-700 text-xs font-bold">4.9</span>
+                            </div>
+                        </div>
+                        <div class="space-y-3 mb-6">
+                            <div class="flex items-center gap-2 text-sm text-slate-500">
+                                <span class="material-symbols-outlined text-lg">verified</span>
+                                <span>Verificado pela Booka</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-slate-500">
+                                <span class="material-symbols-outlined text-lg">schedule</span>
+                                <span>Disponível esta semana</span>
+                            </div>
+                        </div>
+                        <div class="pt-6 border-t border-slate-100 flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">A partir de</p>
+                                <p class="text-xl font-black text-slate-800">R$ 80,00</p>
+                            </div>
+                            <button routerLink="/agendar/1"
+                                class="border-2 border-[#004ac6] text-[#004ac6] font-bold px-4 py-2 rounded-xl hover:bg-[#004ac6] hover:text-white transition-all text-sm">Ver
+                                Perfil</button>
+                        </div>
+                    </div>
+                    <!-- Professional Card 2 -->
+                    <div
+                        class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-2xl transition-all duration-300 border border-slate-100">
+                        <div class="flex items-start justify-between mb-6">
+                            <div class="flex items-center gap-4">
+                                <img alt="" class="w-16 h-16 rounded-full object-cover"
+                                    data-alt="close-up portrait of a professional female teacher smiling with bright and natural outdoor lighting"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDw5qUrR6xy_y0L6qNbCdcNSP844riBNyfDx_n3EXjAeWOj2jL30UUZnG4j9L8JMEjjg41TOvcqybo3ibQgF5MS618nSNyMX8b7Ah3-_UZh6ndnMmI_VjUepvsQTJzH2lBZk2q0RVijJDdHmnAsqUb80SlKRUBhwh14qisDdB8e_SqtSPfc1sL86d8avzMFnYPJAcaZR4Ze_kA9oGQQ2IED73o_Ncvgb62qyEqtCnIfO6eggbnO4hSCSSV5gDb0Lb2EuXEPaTQjPco" />
+                                <div>
+                                    <h3 class="font-bold text-lg text-slate-800">Maria Oliveira</h3>
+                                    <p class="text-sm text-slate-500">Professora de Inglês</p>
+                                </div>
+                            </div>
+                            <div class="bg-teal-50 px-3 py-1 rounded-full flex items-center gap-1">
+                                <span class="material-symbols-outlined text-teal-600 text-xs"
+                                    style="font-variation-settings: 'FILL' 1;">star</span>
+                                <span class="text-teal-700 text-xs font-bold">5.0</span>
+                            </div>
+                        </div>
+                        <div class="space-y-3 mb-6">
+                            <div class="flex items-center gap-2 text-sm text-slate-500">
+                                <span class="material-symbols-outlined text-lg">verified</span>
+                                <span>Verificado pela Booka</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-slate-500">
+                                <span class="material-symbols-outlined text-lg">translate</span>
+                                <span>Fluente em 3 idiomas</span>
+                            </div>
+                        </div>
+                        <div class="pt-6 border-t border-slate-100 flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">A partir de</p>
+                                <p class="text-xl font-black text-slate-800">R$ 120,00</p>
+                            </div>
+                            <button routerLink="/agendar/1"
+                                class="border-2 border-[#004ac6] text-[#004ac6] font-bold px-4 py-2 rounded-xl hover:bg-[#004ac6] hover:text-white transition-all text-sm">Ver
+                                Perfil</button>
+                        </div>
+                    </div>
+                    <!-- Professional Card 3 -->
+                    <div
+                        class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-2xl transition-all duration-300 border border-slate-100">
+                        <div class="flex items-start justify-between mb-6">
+                            <div class="flex items-center gap-4">
+                                <img alt="" class="w-16 h-16 rounded-full object-cover"
+                                    data-alt="professional headshot of a smiling male contractor in a clean workshop setting with warm directional light"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZWy57Dkx_S9Y_fnfixVeaBiBWw9Zo745BZrmFkYW2xhHTrk7K1MMcLJ7JVyMHOK3GvicXf4EuBNMidxRzFo27kqbiS-dIrJVn0IYQUo1iHXqXEzqPREe_kC58D5iNv6fGobGGsMb9Qz5JDjVh7hw4D0CtP6CouRU-4_vkJCxqMTBWITGn4i7Ceg-x6vco2RWl4Q1iJRfelHO3MYLbJE7fD1z-rEVza5Q6SDUKu50lbCU459IBrnVb_T_sGptLzyNBK8PyCRcf2OE" />
+                                <div>
+                                    <h3 class="font-bold text-lg text-slate-800">Ricardo Alves</h3>
+                                    <p class="text-sm text-slate-500">Eletricista Residencial</p>
+                                </div>
+                            </div>
+                            <div class="bg-teal-50 px-3 py-1 rounded-full flex items-center gap-1">
+                                <span class="material-symbols-outlined text-teal-600 text-xs"
+                                    style="font-variation-settings: 'FILL' 1;">star</span>
+                                <span class="text-teal-700 text-xs font-bold">4.8</span>
+                            </div>
+                        </div>
+                        <div class="space-y-3 mb-6">
+                            <div class="flex items-center gap-2 text-sm text-slate-500">
+                                <span class="material-symbols-outlined text-lg">verified</span>
+                                <span>Verificado pela Booka</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-slate-500">
+                                <span class="material-symbols-outlined text-lg">bolt</span>
+                                <span>Atendimento de emergência</span>
+                            </div>
+                        </div>
+                        <div class="pt-6 border-t border-slate-100 flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">A partir de</p>
+                                <p class="text-xl font-black text-slate-800">R$ 95,00</p>
+                            </div>
+                            <button routerLink="/agendar/1"
+                                class="border-2 border-[#004ac6] text-[#004ac6] font-bold px-4 py-2 rounded-xl hover:bg-[#004ac6] hover:text-white transition-all text-sm">Ver
+                                Perfil</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Call to Action Banner -->
+        <section class="py-20 px-8">
+            <div
+                class="max-w-7xl mx-auto bg-gradient-to-br from-[#004ac6] to-blue-700 rounded-[2.5rem] p-12 lg:p-20 relative overflow-hidden flex flex-col items-center text-center shadow-2xl">
+                <div
+                    class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl">
+                </div>
+                <div
+                    class="absolute bottom-0 left-0 w-64 h-64 bg-teal-400/20 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl">
+                </div>
+                <h2 class="text-4xl lg:text-5xl font-black text-white mb-8 relative z-10">Você é um
+                    profissional?<br />Comece a faturar hoje.</h2>
+                <p class="text-blue-100/90 text-lg mb-10 max-w-xl relative z-10 leading-relaxed">Junte-se a milhares de
+                    especialistas e encontre novos clientes todos os dias. Cadastro simples e rápido.</p>
+                <button routerLink="/cadastro"
+                    class="bg-white text-[#004ac6] font-black px-10 py-5 rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-xl text-lg relative z-10 border-none">Cadastrar
+                    meu Perfil</button>
+            </div>
+        </section>
+    </main>
+    <!-- Footer Componentizado -->
+    <app-footer></app-footer>
+</div>

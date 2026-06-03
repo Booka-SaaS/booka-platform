@@ -1,0 +1,46 @@
+<ion-header [translucent]="true">
+  <ion-toolbar class="bg-surface/90 backdrop-blur-md">
+    <ion-title><span class="font-bold text-slate-900">Notificações</span></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="px-4 pt-4 pb-6 space-y-3">
+
+    <div class="flex items-center gap-3 bg-primary/10 rounded-2xl p-4 border border-primary/20">
+      <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
+        <ion-icon name="calendar-outline" class="text-primary text-xl"></ion-icon>
+      </div>
+      <div class="flex-1">
+        <p class="text-sm font-bold text-slate-900">Novo agendamento!</p>
+        <p class="text-xs text-slate-500 mt-0.5">Mariana Silva agendou Corte Feminino</p>
+        <p class="text-xs text-primary/60 mt-1">Há 5 minutos</p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-3 bg-white rounded-2xl p-4 border border-slate-100 shadow-sm">
+      <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
+        <ion-icon name="person-add-outline" class="text-emerald-600 text-xl"></ion-icon>
+      </div>
+      <div class="flex-1">
+        <p class="text-sm font-bold text-slate-900">Novo cliente cadastrado</p>
+        <p class="text-xs text-slate-500 mt-0.5">João Pereira acabou de criar uma conta</p>
+        <p class="text-xs text-slate-400 mt-1">Há 2 horas</p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-3 bg-white rounded-2xl p-4 border border-slate-100 shadow-sm">
+      <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
+        <ion-icon name="alert-circle-outline" class="text-amber-600 text-xl"></ion-icon>
+      </div>
+      <div class="flex-1">
+        <p class="text-sm font-bold text-slate-900">Lembrete: Consulta às 14h</p>
+        <p class="text-xs text-slate-500 mt-0.5">Ana Beatriz tem Manicure em 30 minutos</p>
+        <p class="text-xs text-slate-400 mt-1">Hoje às 13:30</p>
+      </div>
+    </div>
+
+  </div>
+</ion-content>
+
+

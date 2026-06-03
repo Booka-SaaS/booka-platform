@@ -1,0 +1,142 @@
+<ion-header [translucent]="true">
+  <ion-toolbar class="bg-surface/90 backdrop-blur-md">
+    <ion-title>
+      <div class="flex items-center gap-2">
+        <div class="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">
+          <svg class="w-4 h-4" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <g transform="translate(8, 8)">
+              <path clip-rule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="#FFFFFF" fill-rule="evenodd"></path>
+            </g>
+          </svg>
+        </div>
+        <span class="font-bold text-slate-900">Visão Geral</span>
+      </div>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/painel/notificacoes">
+        <ion-icon name="notifications-outline" color="dark"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <!-- Saudação -->
+  <div class="px-4 pt-4 pb-2">
+    <h2 class="text-base font-semibold text-slate-500">Seja bem-vindo!</h2>
+    <p class="text-xs text-slate-400">Veja como está o desempenho hoje.</p>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="px-4 grid grid-cols-2 gap-3 mt-2">
+    <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+      <span class="text-xs font-medium text-slate-500">Faturamento</span>
+      <div class="flex items-end justify-between mt-1">
+        <span class="text-xl font-bold text-slate-800">R$ 12.5k</span>
+        <span class="text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded text-xs font-bold">+12%</span>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+      <span class="text-xs font-medium text-slate-500">Ocupação</span>
+      <div class="flex items-end justify-between mt-1">
+        <span class="text-xl font-bold text-slate-800">85%</span>
+        <span class="text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded text-xs font-bold">+5%</span>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+      <span class="text-xs font-medium text-slate-500">Novos Clientes</span>
+      <div class="flex items-end justify-between mt-1">
+        <span class="text-xl font-bold text-slate-800">42</span>
+        <span class="text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded text-xs font-bold">+8%</span>
+      </div>
+    </div>
+
+    <div class="bg-primary rounded-2xl p-4 shadow-sm">
+      <span class="text-xs font-medium text-primary/30">Agendamentos</span>
+      <div class="mt-1">
+        <span class="text-xl font-bold text-white">28</span>
+        <span class="block text-primary/30 text-xs mt-0.5">hoje</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Próximos Agendamentos -->
+  <div class="px-4 mt-6">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-sm font-bold text-slate-800">Próximos Agendamentos</h3>
+      <a routerLink="/painel/agenda" class="text-xs font-semibold text-primary">Ver todos</a>
+    </div>
+
+    <div class="space-y-3">
+      <!-- Item 1 -->
+      <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">MS</div>
+          <div>
+            <p class="text-sm font-semibold text-slate-900">Mariana Silva</p>
+            <p class="text-xs text-slate-500">Corte Feminino · 09:00</p>
+          </div>
+        </div>
+        <div class="flex gap-2">
+          <button class="bg-emerald-500 text-white px-3 py-1 rounded-lg text-xs font-bold">Concluir</button>
+        </div>
+      </div>
+
+      <!-- Item 2 -->
+      <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">JP</div>
+          <div>
+            <p class="text-sm font-semibold text-slate-900">João Pereira</p>
+            <p class="text-xs text-slate-500">Barba e Cabelo · 10:30</p>
+          </div>
+        </div>
+        <div class="flex gap-2">
+          <button class="bg-emerald-500 text-white px-3 py-1 rounded-lg text-xs font-bold">Concluir</button>
+        </div>
+      </div>
+
+      <!-- Item 3 -->
+      <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">AB</div>
+          <div>
+            <p class="text-sm font-semibold text-slate-900">Ana Beatriz</p>
+            <p class="text-xs text-slate-500">Manicure · 14:00</p>
+          </div>
+        </div>
+        <div class="flex gap-2">
+          <button class="bg-emerald-500 text-white px-3 py-1 rounded-lg text-xs font-bold">Concluir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ações Rápidas -->
+  <div class="px-4 mt-6 mb-8">
+    <h3 class="text-sm font-bold text-slate-800 mb-3">Ações Rápidas</h3>
+    <div class="grid grid-cols-2 gap-3">
+      <button routerLink="/painel/agenda" class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex flex-col items-start gap-2 text-left">
+        <div class="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center">
+          <ion-icon name="add-outline" class="text-primary text-xl"></ion-icon>
+        </div>
+        <span class="text-sm font-semibold text-slate-800">Novo Agend.</span>
+      </button>
+
+      <button routerLink="/painel/bloqueios" class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex flex-col items-start gap-2 text-left">
+        <div class="w-9 h-9 rounded-xl bg-amber-50 flex items-center justify-center">
+          <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
+        <span class="text-sm font-semibold text-slate-800">Bloquear Almoço</span>
+      </button>
+    </div>
+  </div>
+
+</ion-content>
+
+

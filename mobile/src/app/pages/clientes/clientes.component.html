@@ -1,0 +1,117 @@
+<ion-header [translucent]="true">
+  <ion-toolbar class="bg-surface/90 backdrop-blur-md">
+    <ion-title>
+      <span class="font-bold text-slate-900">Clientes</span>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="abrirModal()">
+        <ion-icon name="add-outline" color="primary"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar class="bg-surface/90 backdrop-blur-md">
+    <ion-searchbar placeholder="Buscar cliente..." animated="true" [debounce]="300"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <!-- Loading -->
+  @if (isLoading) {
+    <div class="flex flex-col items-center justify-center h-48 gap-3">
+      <div class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+      <p class="text-sm text-slate-500">Carregando clientes...</p>
+    </div>
+  }
+
+  <!-- Empty State -->
+  @if (!isLoading && clientes.length === 0) {
+    <div class="flex flex-col items-center justify-center h-48 gap-3 px-8 text-center">
+      <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center">
+        <ion-icon name="people-outline" class="text-2xl text-slate-400"></ion-icon>
+      </div>
+      <p class="text-sm text-slate-500 font-medium">Nenhum cliente cadastrado ainda.</p>
+      <button (click)="abrirModal()" class="text-primary text-sm font-bold">+ Adicionar primeiro cliente</button>
+    </div>
+  }
+
+  <!-- Lista de Clientes -->
+  @if (!isLoading && clientes.length > 0) {
+    <div class="px-4 pt-3 space-y-3 pb-6">
+      @for (cliente of clientes; track cliente.id) {
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex items-center gap-3">
+          <div class="w-11 h-11 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-sm shrink-0">
+            {{ cliente.nome.substring(0, 2).toUpperCase() }}
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold text-slate-900 truncate">{{ cliente.nome }}</p>
+            <p class="text-xs text-slate-500">{{ cliente.telefone || 'Sem telefone' }}</p>
+          </div>
+          <button class="flex items-center gap-1 bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold shrink-0">
+            <ion-icon name="logo-whatsapp" class="text-base"></ion-icon>
+            Chat
+          </button>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- FAB -->
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button color="primary" (click)="abrirModal()">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>
+
+<!-- Modal Novo Cliente -->
+<ion-modal [isOpen]="showModal" (didDismiss)="fecharModal()">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar class="bg-surface/90 backdrop-blur-md">
+        <ion-title>Novo Cliente</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="fecharModal()">
+            <ion-icon name="close-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content class="ion-padding">
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wide">Nome Completo</label>
+          <input type="text" [(ngModel)]="novoCliente.nome" placeholder="Ex: João da Silva"
+            class="block w-full rounded-xl border border-slate-200 bg-surface py-3 px-4 text-slate-900 placeholder:text-slate-400 text-sm outline-none" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wide">E-mail</label>
+          <input type="email" [(ngModel)]="novoCliente.email" placeholder="Ex: joao@email.com"
+            class="block w-full rounded-xl border border-slate-200 bg-surface py-3 px-4 text-slate-900 placeholder:text-slate-400 text-sm outline-none" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wide">WhatsApp</label>
+          <input type="text" [(ngModel)]="novoCliente.telefone" placeholder="(11) 99999-9999"
+            class="block w-full rounded-xl border border-slate-200 bg-surface py-3 px-4 text-slate-900 placeholder:text-slate-400 text-sm outline-none" />
+        </div>
+
+        <button (click)="salvarCliente()" [disabled]="isSaving"
+          class="flex w-full justify-center rounded-xl bg-primary px-4 py-3.5 text-sm font-bold text-white shadow-sm disabled:opacity-70 mt-4 gap-2">
+          @if (isSaving) {
+            <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Salvando...
+          } @else {
+            Salvar Cliente
+          }
+        </button>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+

@@ -1,0 +1,75 @@
+<ion-header [translucent]="true">
+  <ion-toolbar class="bg-surface/90 backdrop-blur-md">
+    <ion-title><span class="font-bold text-slate-900">Configurações</span></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding-bottom">
+
+  <!-- Perfil Summary -->
+  <div class="flex flex-col items-center py-8">
+    <div class="w-20 h-20 rounded-full bg-primary flex items-center justify-center text-white text-2xl font-black mb-3">B</div>
+    <p class="font-bold text-slate-900">Meu Negócio</p>
+    <p class="text-sm text-slate-500">Plano Premium</p>
+  </div>
+
+  <!-- Lista de Configurações -->
+  <div class="px-4 space-y-4">
+
+    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Conta</p>
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+      <a routerLink="/painel/perfil" class="flex items-center gap-3 p-4 border-b border-slate-50">
+        <div class="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+          <ion-icon name="person-outline" class="text-primary"></ion-icon>
+        </div>
+        <div class="flex-1"><p class="text-sm font-semibold text-slate-900">Meu Perfil</p></div>
+        <ion-icon name="chevron-forward-outline" class="text-slate-300"></ion-icon>
+      </a>
+      <a routerLink="/painel/dados-loja" class="flex items-center gap-3 p-4">
+        <div class="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0">
+          <ion-icon name="storefront-outline" class="text-emerald-600"></ion-icon>
+        </div>
+        <div class="flex-1"><p class="text-sm font-semibold text-slate-900">Dados da Loja</p></div>
+        <ion-icon name="chevron-forward-outline" class="text-slate-300"></ion-icon>
+      </a>
+    </div>
+
+    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Agenda</p>
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+      <a routerLink="/painel/bloqueios" class="flex items-center gap-3 p-4 border-b border-slate-50">
+        <div class="w-9 h-9 rounded-xl bg-amber-50 flex items-center justify-center shrink-0">
+          <ion-icon name="lock-closed-outline" class="text-amber-600"></ion-icon>
+        </div>
+        <div class="flex-1"><p class="text-sm font-semibold text-slate-900">Bloqueios de Horário</p></div>
+        <ion-icon name="chevron-forward-outline" class="text-slate-300"></ion-icon>
+      </a>
+      <a routerLink="/painel/notificacoes" class="flex items-center gap-3 p-4">
+        <div class="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+          <ion-icon name="notifications-outline" class="text-blue-600"></ion-icon>
+        </div>
+        <div class="flex-1"><p class="text-sm font-semibold text-slate-900">Notificações</p></div>
+        <ion-icon name="chevron-forward-outline" class="text-slate-300"></ion-icon>
+      </a>
+    </div>
+
+    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Suporte</p>
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+      <a href="#" class="flex items-center gap-3 p-4 border-b border-slate-50">
+        <div class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center shrink-0">
+          <ion-icon name="help-circle-outline" class="text-slate-600"></ion-icon>
+        </div>
+        <div class="flex-1"><p class="text-sm font-semibold text-slate-900">Central de Ajuda</p></div>
+        <ion-icon name="chevron-forward-outline" class="text-slate-300"></ion-icon>
+      </a>
+      <a routerLink="/login" class="flex items-center gap-3 p-4">
+        <div class="w-9 h-9 rounded-xl bg-red-50 flex items-center justify-center shrink-0">
+          <ion-icon name="log-out-outline" class="text-red-500"></ion-icon>
+        </div>
+        <div class="flex-1"><p class="text-sm font-semibold text-red-600">Sair da Conta</p></div>
+      </a>
+    </div>
+  </div>
+
+</ion-content>
+
+

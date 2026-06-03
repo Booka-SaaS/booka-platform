@@ -1,0 +1,59 @@
+<ion-header [translucent]="true">
+  <ion-toolbar class="bg-surface/90 backdrop-blur-md">
+    <ion-title><span class="font-bold text-slate-900">Dados da Loja</span></ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="salvarDados()" [disabled]="isSaving" color="primary">
+        <ion-icon name="save-outline" slot="start"></ion-icon>
+        {{ isSaving ? 'Salvando...' : 'Salvar' }}
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  @if (isLoading) {
+    <div class="flex items-center justify-center h-48">
+      <div class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+    </div>
+  }
+
+  @if (!isLoading) {
+    <div class="space-y-5">
+
+      <!-- Logo da Loja -->
+      <div class="flex flex-col items-center py-6">
+        <div class="w-20 h-20 rounded-2xl bg-primary flex items-center justify-center text-white text-2xl font-black shadow-lg shadow-primary/20">
+          {{ loja.nome ? loja.nome.charAt(0).toUpperCase() : 'B' }}
+        </div>
+        <p class="text-sm text-slate-500 mt-3">Logo da loja</p>
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wide">Nome do Estabelecimento</label>
+        <input type="text" [(ngModel)]="loja.nome" placeholder="Ex: Barbearia do João"
+          class="block w-full rounded-xl border border-slate-200 bg-white py-3 px-4 text-sm text-slate-900 outline-none shadow-sm" />
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wide">Telefone / WhatsApp</label>
+        <input type="tel" [(ngModel)]="loja.telefone" placeholder="(11) 99999-9999"
+          class="block w-full rounded-xl border border-slate-200 bg-white py-3 px-4 text-sm text-slate-900 outline-none shadow-sm" />
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wide">Endereço</label>
+        <input type="text" [(ngModel)]="loja.endereco" placeholder="Rua, número, bairro, cidade"
+          class="block w-full rounded-xl border border-slate-200 bg-white py-3 px-4 text-sm text-slate-900 outline-none shadow-sm" />
+      </div>
+
+      <button (click)="salvarDados()" [disabled]="isSaving"
+        class="flex w-full justify-center rounded-xl bg-primary px-4 py-3.5 text-sm font-bold text-white shadow-sm disabled:opacity-70 mt-4">
+        {{ isSaving ? 'Salvando...' : 'Salvar Dados da Loja' }}
+      </button>
+    </div>
+  }
+
+</ion-content>
+
+
