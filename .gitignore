@@ -17,6 +17,7 @@ Thumbs.db
 .vscode/
 .prisma/client
 generated/
+backend/uploads/
 
 .expo/
 .expo-shared/
