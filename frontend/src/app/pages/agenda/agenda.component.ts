@@ -83,8 +83,12 @@ export class AgendaComponent implements OnInit {
     });
   }
 
-  getTopPercent(inicio: string): number {
+  getTopPercent(inicio: string | Date | undefined): number {
+    if (!inicio) return 0;
+
     const data = new Date(inicio);
+    if (Number.isNaN(data.getTime())) return 0;
+
     const horas = data.getHours() + data.getMinutes() / 60;
     const inicioGrid = 8;
     const totalHoras = 11;

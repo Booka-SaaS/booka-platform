@@ -50,10 +50,13 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  atualizarStatus(id: string, status: 'CONCLUIDO' | 'CANCELADO') {
-    this.agendamentoService.atualizarStatus(id, status).subscribe({
+  atualizarStatus(id: string | number | undefined, status: 'CONCLUIDO' | 'CANCELADO') {
+    if (id == null) return;
+
+    const agendamentoId = String(id);
+    this.agendamentoService.atualizarStatus(agendamentoId, status).subscribe({
       next: (updated) => {
-        const index = this.agendamentosHoje.findIndex((agendamento) => agendamento.id === id);
+        const index = this.agendamentosHoje.findIndex((agendamento) => String(agendamento.id) === agendamentoId);
         if (index !== -1) this.agendamentosHoje[index] = updated;
       },
       error: (err) => {
