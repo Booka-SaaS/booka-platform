@@ -1,0 +1,183 @@
+<ion-header [translucent]="true">
+  <ion-toolbar class="bg-surface/90 backdrop-blur-md">
+    <ion-buttons slot="start">
+      <ion-button (click)="voltar()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title><span class="font-bold text-slate-900">Agendar</span></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <!-- Loading -->
+  @if (isLoading) {
+    <div class="flex flex-col items-center justify-center h-64 gap-3">
+      <div class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+      <p class="text-sm text-slate-500">Carregando profissional...</p>
+    </div>
+  }
+
+  @if (!isLoading && !profissional) {
+    <div class="flex flex-col items-center justify-center h-64 gap-3 px-8 text-center">
+      <div class="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center">
+        <span class="text-3xl">😕</span>
+      </div>
+      <p class="font-semibold text-slate-700">Profissional não encontrado</p>
+      <button (click)="voltar()" class="text-primary text-sm font-bold">← Voltar ao Explorar</button>
+    </div>
+  }
+
+  @if (!isLoading && profissional) {
+    <div class="pb-8">
+      
+      <!-- Hero Card -->
+      <div class="px-4 pt-4 pb-5">
+        <div class="flex items-center gap-4">
+          <div class="w-16 h-16 rounded-2xl overflow-hidden bg-slate-100 shrink-0 shadow-sm">
+            <img [src]="profissional.imagemUrl || 'https://via.placeholder.com/64'" [alt]="profissional.nomeExibicao" class="w-full h-full object-cover" />
+          </div>
+          <div class="min-w-0">
+            <h2 class="text-lg font-bold text-slate-900 truncate">{{ profissional.nomeExibicao }}</h2>
+            <p class="text-sm text-primary font-medium">{{ profissional.profissao || 'Profissional' }}</p>
+            <div class="flex items-center gap-2 mt-1 text-xs text-slate-500">
+              <span class="flex items-center gap-0.5">⭐ 4.9</span>
+              <span>•</span>
+              <span>120+ avaliações</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Serviços -->
+      <div class="px-4 mb-5">
+        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Escolha o Serviço</h3>
+        <div class="space-y-2">
+          @for (servico of profissional.servicos; track servico.id) {
+            <button (click)="selecionarServico(servico)"
+              class="w-full bg-white rounded-2xl p-4 border shadow-sm flex items-center justify-between transition-all text-left"
+              [ngClass]="servicoSelecionado?.id === servico.id ? 'border-primary/80 ring-2 ring-primary/30' : 'border-slate-100'">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0"
+                  [ngClass]="servicoSelecionado?.id === servico.id ? 'border-primary bg-primary' : 'border-slate-300'">
+                  @if (servicoSelecionado?.id === servico.id) {
+                    <ion-icon name="checkmark-circle-outline" class="text-white text-xs"></ion-icon>
+                  }
+                </div>
+                <div class="min-w-0">
+                  <p class="text-sm font-bold text-slate-900 truncate">{{ servico.nome }}</p>
+                  <p class="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
+                    <ion-icon name="time-outline"></ion-icon> {{ servico.duracaoMinutos }} min
+                  </p>
+                </div>
+              </div>
+              <span class="text-base font-black text-slate-900 shrink-0">{{ servico.preco | currency:'BRL' }}</span>
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Calendário -->
+      <div class="px-4 mb-5">
+        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Escolha a Data</h3>
+        <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm">
+          <!-- Navegação do mês -->
+          <div class="flex items-center justify-between mb-4">
+            <button (click)="mudarMes(-1)" class="p-1.5 hover:bg-slate-100 rounded-lg">
+              <ion-icon name="chevron-back-outline" class="text-slate-500"></ion-icon>
+            </button>
+            <span class="font-bold text-sm text-slate-800">{{ mesAtualNome }}</span>
+            <button (click)="mudarMes(1)" class="p-1.5 hover:bg-slate-100 rounded-lg">
+              <ion-icon name="chevron-forward-outline" class="text-slate-500"></ion-icon>
+            </button>
+          </div>
+          <!-- Dias da semana -->
+          <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-bold text-slate-400 mb-2">
+            <span>D</span><span>S</span><span>T</span><span>Q</span><span>Q</span><span>S</span><span>S</span>
+          </div>
+          <!-- Grid de dias -->
+          <div class="grid grid-cols-7 gap-1">
+            @for (dia of diasDoMes; track $index) {
+              @if (dia === null) {
+                <div class="aspect-square"></div>
+              } @else {
+                <button (click)="selecionarData(dia)"
+                  class="aspect-square rounded-xl flex items-center justify-center text-sm font-bold transition-all"
+                  [class.bg-primary]="diaSelecionado === dia"
+                  [class.text-white]="diaSelecionado === dia"
+                  [class.text-slate-700]="diaSelecionado !== dia">
+                  {{ dia }}
+                </button>
+              }
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Horários -->
+      @if (horariosDisponiveis.length > 0) {
+        <div class="px-4 mb-5">
+          <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Horários Disponíveis</h3>
+          <div class="grid grid-cols-4 gap-2">
+            @for (hora of horariosDisponiveis; track hora) {
+              <button (click)="selecionarHorario(hora)"
+                class="py-2.5 rounded-xl border text-xs font-bold text-center transition-all"
+                [class.bg-primary]="horarioSelecionado === hora"
+                [class.text-white]="horarioSelecionado === hora"
+                [class.border-primary]="horarioSelecionado === hora"
+                [class.bg-white]="horarioSelecionado !== hora"
+                [class.text-slate-600]="horarioSelecionado !== hora"
+                [class.border-slate-200]="horarioSelecionado !== hora">
+                {{ hora }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Resumo -->
+      <div class="px-4 mb-5">
+        <div class="bg-slate-900 p-4 rounded-2xl text-white shadow-lg">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-[10px] font-bold uppercase text-slate-400">Serviço</span>
+            <span class="text-xs font-medium text-slate-100 truncate max-w-[160px]">{{ servicoSelecionado?.nome || '--' }}</span>
+          </div>
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-[10px] font-bold uppercase text-slate-400">Quando</span>
+            <span class="text-xs font-medium text-slate-100">
+              {{ dataSelecionada ? (dataSelecionada | date:'dd/MM') : '--' }}
+              {{ horarioSelecionado ? ' às ' + horarioSelecionado : '' }}
+            </span>
+          </div>
+          <div class="pt-2 border-t border-slate-700 flex justify-between items-end">
+            <span class="text-xs font-bold text-slate-300">Total</span>
+            <span class="text-xl font-black">{{ (servicoSelecionado?.preco || 0) | currency:'BRL' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botão Confirmar -->
+      <div class="px-4">
+        <button (click)="finalizarAgendamento()" [disabled]="!podeFinalizar || isSaving"
+          class="flex w-full justify-center rounded-2xl px-4 py-4 text-sm font-bold shadow-sm transition-all gap-2 items-center"
+          [class.bg-primary]="podeFinalizar && !isSaving"
+          [class.text-white]="podeFinalizar && !isSaving"
+          [class.bg-slate-200]="!podeFinalizar || isSaving"
+          [class.text-slate-400]="!podeFinalizar || isSaving">
+          @if (isSaving) {
+            <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Confirmando...
+          } @else {
+            Confirmar Agendamento
+          }
+        </button>
+      </div>
+
+    </div>
+  }
+
+</ion-content>

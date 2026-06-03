@@ -97,6 +97,32 @@ export async function createBloqueio(userId: string, input: BloqueioInput) {
   return mapBloqueio(bloqueio);
 }
 
+export async function createBloqueiosLote(userId: string, inputs: BloqueioInput[]) {
+  const lojaId = await getLojaId(userId);
+  const bloqueios = inputs.map((input) => {
+    const inicio = new Date(input.inicio);
+    const fim = new Date(input.fim);
+    assertPeriodoValido(inicio, fim);
+
+    return {
+      lojaId,
+      inicio,
+      fim,
+      motivo: input.motivo ?? null,
+    };
+  });
+
+  const created = await prisma.$transaction(
+    bloqueios.map((bloqueio) =>
+      prisma.bloqueioAgenda.create({
+        data: bloqueio,
+      }),
+    ),
+  );
+
+  return created.map(mapBloqueio);
+}
+
 export async function updateBloqueio(userId: string, bloqueioId: string, input: UpdateBloqueioInput) {
   const lojaId = await getLojaId(userId);
   const current = await getBloqueioFromStore(lojaId, bloqueioId);

@@ -193,6 +193,7 @@ pdflatex main.tex
 booka-platform/
 |-- frontend/   Aplicacao frontend Angular/Ionic
 |-- backend/    API Node.js/Express/TypeScript com Prisma
+|-- mobile/     App Angular/Ionic/Capacitor para Android e iOS
 |-- database/   Scripts SQL de schema, seed e consultas de apoio
 |-- docs/
 |   |-- documentacao-latex/
@@ -205,6 +206,7 @@ Fluxo esperado:
 
 ```text
 Frontend -> Backend API REST -> PostgreSQL/Supabase
+Mobile -> Backend API REST -> PostgreSQL/Supabase
 ```
 
 ## Como executar localmente
@@ -230,9 +232,18 @@ npm install
 npm start
 ```
 
+Mobile:
+
+```bash
+cd mobile
+npm install
+npm start
+```
+
 URLs locais:
 
 - Frontend: `http://localhost:4200`
+- Mobile dev server: `http://localhost:4200`
 - Backend: `http://localhost:3001`
 - Swagger: `http://localhost:3001/docs`
 - Health: `http://localhost:3001/health`
@@ -266,6 +277,14 @@ BOOKA_API_URL=http://localhost:3001
 BOOKA_GOOGLE_CLIENT_ID=fake-google-client-id.apps.googleusercontent.com
 ```
 
+Mobile (`mobile/.env.example`):
+
+```env
+API_URL=http://localhost:3001
+```
+
+No app mobile, a URL da API tambem deve ser conferida em `mobile/src/environments/environment*.ts` antes de builds Android/iOS.
+
 Nunca exponha no frontend `DATABASE_URL`, `DIRECT_URL`, `JWT_SECRET`, `SUPABASE_SERVICE_ROLE_KEY`, tokens privados, senhas ou chaves reais.
 
 ## Deploy
@@ -273,6 +292,7 @@ Nunca exponha no frontend `DATABASE_URL`, `DIRECT_URL`, `JWT_SECRET`, `SUPABASE_
 - Frontend: Vercel, com root directory `frontend` e `BOOKA_API_URL` apontando para o backend.
 - Backend: Render, com root directory `backend`, build `npm ci && npm run prisma:generate && npm run prisma:deploy && npm run build` e start `npm start`.
 - Banco: Supabase/PostgreSQL, com migrations Prisma e variaveis `DATABASE_URL` e `DIRECT_URL`.
+- Mobile: preparar builds nativos via Capacitor. Para Google Play e App Store, revisar bundle id, assinatura, versionamento, icones, politicas de privacidade e URLs de producao.
 
 ## Testes
 

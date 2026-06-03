@@ -5,6 +5,8 @@ dotenv.config();
 
 const optionalString = z.preprocess((value) => (value === '' ? undefined : value), z.string().optional());
 const optionalUrl = z.preprocess((value) => (value === '' ? undefined : value), z.string().url().optional());
+const stringWithDefault = (defaultValue: string) =>
+  z.preprocess((value) => (value === '' || value == null ? defaultValue : value), z.string().min(1));
 
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
@@ -19,6 +21,8 @@ const envSchema = z.object({
   SUPABASE_ANON_KEY: optionalString,
   SUPABASE_SERVICE_ROLE_KEY: optionalString,
   GOOGLE_CLIENT_ID: optionalString,
+  RESEND_API_KEY: stringWithDefault('re_placeholder'),
+  EMAIL_FROM: stringWithDefault('Booka <noreply@booka.app>'),
 });
 
 const parsedEnv = envSchema.parse(process.env);

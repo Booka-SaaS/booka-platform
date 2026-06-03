@@ -20,6 +20,9 @@ function mapProfissionalListItem(loja: {
   nome: string;
   cidade: string | null;
   imagemUrl: string | null;
+  usuario: {
+    imagemUrl: string | null;
+  };
   perfilProfissional: {
     nomeExibicao: string;
     profissao: string;
@@ -46,7 +49,9 @@ function mapProfissionalListItem(loja: {
     modalidade: loja.perfilProfissional?.modalidadePrincipal ?? 'PRESENCIAL',
     vendedor: loja.perfilProfissional?.tipoVendedor ?? 'AUTONOMO',
     cidade: loja.cidade,
-    img: loja.perfilProfissional?.imagemUrl ?? loja.imagemUrl,
+    avatarUrl: loja.usuario.imagemUrl,
+    capaUrl: loja.imagemUrl,
+    img: loja.usuario.imagemUrl ?? loja.perfilProfissional?.imagemUrl ?? loja.imagemUrl,
     precoInicial,
     rating: loja.perfilProfissional?.rating ?? 0,
   };
@@ -62,6 +67,9 @@ export async function listProfissionais(filters: ProfissionaisFilters) {
       },
     },
     include: {
+      usuario: {
+        select: { imagemUrl: true },
+      },
       perfilProfissional: true,
       servicos: {
         where: { ativo: true },
@@ -123,6 +131,9 @@ export async function getProfissionalDetalhe(lojaId: string) {
       },
     },
     include: {
+      usuario: {
+        select: { imagemUrl: true },
+      },
       perfilProfissional: true,
       servicos: {
         where: { ativo: true },
@@ -142,7 +153,9 @@ export async function getProfissionalDetalhe(lojaId: string) {
     descricao: loja.descricao ?? loja.perfilProfissional.bio,
     telefone: loja.telefone,
     cidade: loja.cidade,
-    img: loja.perfilProfissional.imagemUrl ?? loja.imagemUrl,
+    avatarUrl: loja.usuario.imagemUrl,
+    capaUrl: loja.imagemUrl,
+    img: loja.usuario.imagemUrl ?? loja.perfilProfissional.imagemUrl ?? loja.imagemUrl,
     rating: loja.perfilProfissional.rating,
     servicos: loja.servicos.map((servico) => ({
       id: servico.id,
