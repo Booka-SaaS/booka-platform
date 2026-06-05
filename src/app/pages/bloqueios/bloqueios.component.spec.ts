@@ -4,14 +4,14 @@ import { of } from 'rxjs';
 
 import { BloqueiosComponent } from './bloqueios.component';
 import { BloqueioService } from '../../services/bloqueio.service';
-import { ModalService } from '../../services/modal.service';
+import { ToastService } from '../../services/toast.service';
 import { AuthService } from '../../services/auth.service';
 
 describe('BloqueiosComponent', () => {
   let component: BloqueiosComponent;
   let fixture: ComponentFixture<BloqueiosComponent>;
   let bloqueioService: jasmine.SpyObj<BloqueioService>;
-  let modalService: jasmine.SpyObj<ModalService>;
+  let toastService: jasmine.SpyObj<ToastService>;
   let authService: jasmine.SpyObj<AuthService>;
 
   beforeEach(async () => {
@@ -21,7 +21,7 @@ describe('BloqueiosComponent', () => {
       'criarLote',
       'deletar',
     ]);
-    modalService = jasmine.createSpyObj<ModalService>('ModalService', ['alert', 'success', 'confirm']);
+    toastService = jasmine.createSpyObj<ToastService>('ToastService', ['success', 'warning', 'error', 'info']);
     authService = jasmine.createSpyObj<AuthService>('AuthService', ['isLoggedIn', 'getRole', 'logout']);
 
     bloqueioService.listar.and.returnValue(of([]));
@@ -34,7 +34,7 @@ describe('BloqueiosComponent', () => {
       providers: [
         provideRouter([]),
         { provide: BloqueioService, useValue: bloqueioService },
-        { provide: ModalService, useValue: modalService },
+        { provide: ToastService, useValue: toastService },
         { provide: AuthService, useValue: authService },
       ],
     }).compileComponents();
@@ -62,7 +62,7 @@ describe('BloqueiosComponent', () => {
     const payload = bloqueioService.criarLote.calls.mostRecent().args[0];
     expect(payload.length).toBe(5);
     expect(payload.every((bloqueio) => bloqueio.motivo === 'Almoço')).toBeTrue();
-    expect(modalService.success).toHaveBeenCalled();
+    expect(toastService.success).toHaveBeenCalled();
   });
 
   it('should reject lunch preset when end time is not after start time', () => {
@@ -77,9 +77,6 @@ describe('BloqueiosComponent', () => {
     component.bloquearAlmocoDiasUteis();
 
     expect(bloqueioService.criarLote).not.toHaveBeenCalled();
-    expect(modalService.alert).toHaveBeenCalledWith(
-      'Atenção',
-      'O horário final do almoço deve ser posterior ao horário inicial.'
-    );
+    expect(toastService.warning).toHaveBeenCalledWith('O horário final do almoço deve ser posterior ao horário inicial.');
   });
 });
