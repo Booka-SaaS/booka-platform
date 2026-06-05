@@ -5,6 +5,7 @@ import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { TopbarComponent } from '../../components/topbar/topbar.component';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { ClienteService, CreateClienteRequest } from '../../services/cliente.service';
+import { ToastService } from '../../services/toast.service';
 import { Cliente } from '../../models';
 
 @Component({
@@ -27,6 +28,7 @@ export class ClientesComponent implements OnInit {
   };
 
   private clienteService = inject(ClienteService);
+  private toastService = inject(ToastService);
 
   ngOnInit() {
     this.carregarClientes();
@@ -42,6 +44,7 @@ export class ClientesComponent implements OnInit {
       error: (err) => {
         console.error('Erro ao buscar clientes', err);
         this.isLoading = false;
+        this.toastService.error('Erro ao buscar clientes.');
       }
     });
   }
@@ -56,7 +59,10 @@ export class ClientesComponent implements OnInit {
   }
 
   salvarCliente() {
-    if (!this.novoCliente.nome || !this.novoCliente.telefone) return;
+    if (!this.novoCliente.nome || !this.novoCliente.telefone) {
+      this.toastService.warning('Preencha os campos obrigatórios (Nome e Telefone).');
+      return;
+    }
 
     this.isSaving = true;
     this.clienteService.criar(this.novoCliente).subscribe({
@@ -64,11 +70,12 @@ export class ClientesComponent implements OnInit {
         this.isSaving = false;
         this.fecharModal();
         this.carregarClientes();
+        this.toastService.success('Cliente cadastrado com sucesso!');
       },
       error: (err) => {
         this.isSaving = false;
         console.error(err);
-        alert('Erro ao salvar cliente. Tente novamente.');
+        this.toastService.error('Erro ao salvar cliente. Tente novamente.');
       }
     });
   }

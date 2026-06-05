@@ -5,6 +5,7 @@ import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { TopbarComponent } from '../../components/topbar/topbar.component';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { ServicoService, CreateServicoRequest } from '../../services/servico.service';
+import { ToastService } from '../../services/toast.service';
 import { Servico } from '../../models';
 
 interface ServicoForm {
@@ -36,6 +37,7 @@ export class ServicosComponent implements OnInit {
   };
 
   private servicoService = inject(ServicoService);
+  private toastService = inject(ToastService);
 
   ngOnInit() {
     this.carregarServicos();
@@ -51,6 +53,7 @@ export class ServicosComponent implements OnInit {
       error: (err) => {
         console.error('Erro ao buscar serviços', err);
         this.isLoading = false;
+        this.toastService.error('Erro ao buscar serviços.');
       }
     });
   }
@@ -99,7 +102,20 @@ export class ServicosComponent implements OnInit {
   }
 
   salvarServico() {
-    if (!this.form.nome || !this.form.preco || !this.form.duracao) return;
+    if (!this.form.nome || this.form.preco === null || this.form.preco === undefined || this.form.duracao === null || this.form.duracao === undefined) {
+      this.toastService.warning('Preencha todos os campos.');
+      return;
+    }
+
+    if (this.form.preco <= 0) {
+      this.toastService.warning('O preço deve ser maior que zero.');
+      return;
+    }
+
+    if (this.form.duracao <= 0) {
+      this.toastService.warning('A duração deve ser maior que zero.');
+      return;
+    }
 
     const duracaoMinutos = this.form.unidadeDuracao === 'horas'
       ? Math.round(this.form.duracao * 60)
@@ -122,11 +138,12 @@ export class ServicosComponent implements OnInit {
         this.isSaving = false;
         this.fecharModal();
         this.carregarServicos();
+        this.toastService.success(this.editandoId ? 'Serviço atualizado com sucesso!' : 'Serviço criado com sucesso!');
       },
       error: (err) => {
         this.isSaving = false;
         console.error(err);
-        alert('Erro ao salvar serviço. Tente novamente.');
+        this.toastService.error('Erro ao salvar serviço. Tente novamente.');
       }
     });
   }

@@ -10,6 +10,7 @@ import { DisponibilidadeService, UpdateDisponibilidadeItem } from '../../service
 import { ViaCepService } from '../../services/viacep.service';
 import { Loja } from '../../models';
 import { forkJoin } from 'rxjs';
+import { ToastService } from '../../services/toast.service';
 import { environment } from '../../../environments/environment';
 
 interface HorarioDia {
@@ -64,6 +65,7 @@ export class DadosLojaComponent implements OnInit {
   private lojaService = inject(LojaService);
   private disponibilidadeService = inject(DisponibilidadeService);
   private viaCepService = inject(ViaCepService);
+  private toastService = inject(ToastService);
 
   ngOnInit() {
     this.carregarDados();
@@ -145,11 +147,11 @@ export class DadosLojaComponent implements OnInit {
 
     const allowed = ['image/jpeg', 'image/png', 'image/webp'];
     if (!allowed.includes(file.type)) {
-      alert('Apenas imagens JPEG, PNG ou WEBP são permitidas.');
+      this.toastService.warning('Apenas imagens JPEG, PNG ou WEBP são permitidas.');
       return;
     }
     if (file.size > 10 * 1024 * 1024) {
-      alert('A imagem deve ter no máximo 10MB.');
+      this.toastService.warning('A imagem deve ter no máximo 10MB.');
       return;
     }
 
@@ -168,7 +170,7 @@ export class DadosLojaComponent implements OnInit {
         console.error(err);
         this.capaPreview = null;
         this.isUploadingCapa = false;
-        alert('Erro ao enviar a imagem. Tente novamente.');
+        this.toastService.error('Erro ao enviar a imagem. Tente novamente.');
       },
     });
   }
@@ -196,12 +198,12 @@ export class DadosLojaComponent implements OnInit {
       next: ({ loja }) => {
         this.loja = loja;
         this.isSaving = false;
-        alert('Dados salvos com sucesso!');
+        this.toastService.success('Dados salvos com sucesso!');
       },
       error: (err) => {
         console.error(err);
         this.isSaving = false;
-        alert('Erro ao salvar dados.');
+        this.toastService.error('Erro ao salvar dados.');
       },
     });
   }

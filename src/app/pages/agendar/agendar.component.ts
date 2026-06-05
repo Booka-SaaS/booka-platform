@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ProfissionalService } from '../../services/profissional.service';
 import { AgendamentoService, CreateAgendamentoPublicoRequest } from '../../services/agendamento.service';
 import { AuthService } from '../../services/auth.service';
+import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { ModalService } from '../../services/modal.service';
 import { ProfissionalDetalhe, ProfissionalServico } from '../../models';
@@ -13,7 +14,7 @@ import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-agendar',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, FooterComponent],
+  imports: [CommonModule, FormsModule, RouterModule, FooterComponent, NavbarComponent],
   templateUrl: './agendar.component.html',
   styleUrl: './agendar.component.css'
 })

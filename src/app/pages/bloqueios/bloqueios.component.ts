@@ -7,6 +7,7 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
 import { BloqueioService, BloqueioAgenda, CreateBloqueioRequest } from '../../services/bloqueio.service';
 import { ModalService } from '../../services/modal.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-bloqueios',
@@ -30,6 +31,7 @@ export class BloqueiosComponent implements OnInit {
 
   private bloqueioService = inject(BloqueioService);
   private modalService = inject(ModalService);
+  private toastService = inject(ToastService);
 
   ngOnInit() {
     this.carregarBloqueios();
@@ -45,14 +47,14 @@ export class BloqueiosComponent implements OnInit {
       error: (err) => {
         console.error('Erro ao buscar bloqueios', err);
         this.isLoading = false;
-        this.modalService.alert('Erro', 'Não foi possível carregar os bloqueios da agenda.');
+        this.toastService.error('Não foi possível carregar os bloqueios da agenda.');
       },
     });
   }
 
   salvarBloqueio() {
     if (!this.form.dataInicio || !this.form.horaInicio || !this.form.dataFim || !this.form.horaFim) {
-      this.modalService.alert('Atenção', 'Preencha todos os campos de data e hora.');
+      this.toastService.warning('Preencha todos os campos de data e hora.');
       return;
     }
 
@@ -60,7 +62,7 @@ export class BloqueiosComponent implements OnInit {
     const fim = this.toIsoLocal(this.form.dataFim, this.form.horaFim);
 
     if (new Date(fim) <= new Date(inicio)) {
-      this.modalService.alert('Atenção', 'A data/hora de fim deve ser posterior ao início.');
+      this.toastService.warning('A data/hora de fim deve ser posterior ao início.');
       return;
     }
 
@@ -72,12 +74,12 @@ export class BloqueiosComponent implements OnInit {
         this.isSaving = false;
         this.limparForm();
         this.carregarBloqueios();
-        this.modalService.success('Agenda bloqueada', 'O período foi bloqueado com sucesso.');
+        this.toastService.success('O período foi bloqueado com sucesso.');
       },
       error: (err) => {
         this.isSaving = false;
         console.error(err);
-        this.modalService.alert('Erro', 'Erro ao salvar bloqueio. Tente novamente.');
+        this.toastService.error('Erro ao salvar bloqueio. Tente novamente.');
       },
     });
   }
@@ -89,18 +91,18 @@ export class BloqueiosComponent implements OnInit {
     const horaFim = this.form.horaFim || '13:00';
 
     if (new Date(`${dataFim}T00:00:00`) < new Date(`${dataInicio}T00:00:00`)) {
-      this.modalService.alert('Atenção', 'A data final do almoço não pode ser anterior à data inicial.');
+      this.toastService.warning('A data final do almoço não pode ser anterior à data inicial.');
       return;
     }
 
     if (new Date(`2000-01-01T${horaFim}:00`) <= new Date(`2000-01-01T${horaInicio}:00`)) {
-      this.modalService.alert('Atenção', 'O horário final do almoço deve ser posterior ao horário inicial.');
+      this.toastService.warning('O horário final do almoço deve ser posterior ao horário inicial.');
       return;
     }
 
     const bloqueios = this.gerarBloqueiosAlmoco(dataInicio, dataFim, horaInicio, horaFim);
     if (bloqueios.length === 0) {
-      this.modalService.alert('Atenção', 'O período selecionado não possui dias úteis para bloquear.');
+      this.toastService.warning('O período selecionado não possui dias úteis para bloquear.');
       return;
     }
 
@@ -110,12 +112,12 @@ export class BloqueiosComponent implements OnInit {
         this.isSaving = false;
         this.aplicarPreset('almoco');
         this.carregarBloqueios();
-        this.modalService.success('Almoço bloqueado', `${bloqueios.length} horário(s) de almoço foram bloqueados.`);
+        this.toastService.success(`${bloqueios.length} horário(s) de almoço foram bloqueados.`);
       },
       error: (err) => {
         this.isSaving = false;
         console.error(err);
-        this.modalService.alert('Erro', 'Erro ao bloquear almoços. Tente novamente.');
+        this.toastService.error('Erro ao bloquear almoços. Tente novamente.');
       },
     });
   }
@@ -129,7 +131,7 @@ export class BloqueiosComponent implements OnInit {
           next: () => this.carregarBloqueios(),
           error: (err) => {
             console.error(err);
-            this.modalService.alert('Erro', 'Erro ao deletar bloqueio.');
+            this.toastService.error('Erro ao deletar bloqueio.');
           },
         });
       },

@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { ToastService } from '../../services/toast.service';
 import { MeResponse } from '../../models';
 import { environment } from '../../../environments/environment';
 
@@ -20,6 +21,7 @@ export class PerfilComponent implements OnInit {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   private authService = inject(AuthService);
+  private toastService = inject(ToastService);
 
   isLoading = true;
   isSavingPerfil = false;
@@ -77,11 +79,11 @@ export class PerfilComponent implements OnInit {
 
     const allowed = ['image/jpeg', 'image/png', 'image/webp'];
     if (!allowed.includes(file.type)) {
-      alert('Apenas imagens JPEG, PNG ou WEBP são permitidas.');
+      this.toastService.warning('Apenas imagens JPEG, PNG ou WEBP são permitidas.');
       return;
     }
     if (file.size > 10 * 1024 * 1024) {
-      alert('A imagem deve ter no máximo 10MB.');
+      this.toastService.warning('A imagem deve ter no máximo 10MB.');
       return;
     }
 
@@ -99,55 +101,62 @@ export class PerfilComponent implements OnInit {
         console.error(err);
         this.avatarPreview = null;
         this.isUploadingAvatar = false;
-        alert('Erro ao enviar a imagem. Tente novamente.');
+        this.toastService.error('Erro ao enviar a imagem. Tente novamente.');
       },
     });
   }
 
-  salvarPerfil() {
-    this.isSavingPerfil = true;
+  isSavingAll = false;
+
+  salvarTudo() {
+    let tentarSenha = !!(this.senha.senhaAtual || this.senha.novaSenha);
+    
+    if (tentarSenha) {
+      if (!this.senha.senhaAtual || !this.senha.novaSenha) {
+        this.toastService.warning('Para alterar a senha, preencha a senha atual e a nova senha.');
+        return;
+      }
+      if (this.senha.novaSenha !== this.senha.confirmarSenha) {
+        this.toastService.warning('A nova senha e a confirmação não coincidem.');
+        return;
+      }
+      if (this.senha.novaSenha.length < 8) {
+        this.toastService.warning('A nova senha deve ter pelo menos 8 caracteres.');
+        return;
+      }
+    }
+
+    this.isSavingAll = true;
+    
     this.authService.updateMe({ nome: this.usuario.nome, email: this.usuario.email }).subscribe({
       next: (result) => {
         this.usuario.iniciais = this.gerarIniciais(result.nome);
-        this.isSavingPerfil = false;
-        alert('Dados pessoais salvos com sucesso!');
+        
+        if (tentarSenha) {
+          this.authService.updateSenha(this.senha.senhaAtual, this.senha.novaSenha).subscribe({
+            next: () => {
+              this.senha = { senhaAtual: '', novaSenha: '', confirmarSenha: '' };
+              this.isSavingAll = false;
+              this.toastService.success('Perfil e senha alterados com sucesso!');
+            },
+            error: (err: any) => {
+              console.error(err);
+              const msg = err?.error?.message || 'Erro ao alterar senha.';
+              this.toastService.error('Perfil salvo, mas ocorreu erro na senha: ' + msg);
+              this.isSavingAll = false;
+            }
+          });
+        } else {
+          this.isSavingAll = false;
+          this.toastService.success('Dados pessoais salvos com sucesso!');
+        }
       },
       error: (err: any) => {
         console.error(err);
         const msg = err?.error?.message || 'Erro ao salvar dados pessoais.';
-        alert(msg);
-        this.isSavingPerfil = false;
-      },
-    });
-  }
-
-  salvarSenha() {
-    if (!this.senha.senhaAtual || !this.senha.novaSenha) {
-      alert('Preencha a senha atual e a nova senha.');
-      return;
-    }
-    if (this.senha.novaSenha !== this.senha.confirmarSenha) {
-      alert('A nova senha e a confirmação não coincidem.');
-      return;
-    }
-    if (this.senha.novaSenha.length < 8) {
-      alert('A nova senha deve ter pelo menos 8 caracteres.');
-      return;
-    }
-
-    this.isSavingSenha = true;
-    this.authService.updateSenha(this.senha.senhaAtual, this.senha.novaSenha).subscribe({
-      next: () => {
-        this.senha = { senhaAtual: '', novaSenha: '', confirmarSenha: '' };
-        this.isSavingSenha = false;
-        alert('Senha alterada com sucesso!');
-      },
-      error: (err: any) => {
-        console.error(err);
-        const msg = err?.error?.message || 'Erro ao alterar senha.';
-        alert(msg);
-        this.isSavingSenha = false;
-      },
+        this.toastService.error(msg);
+        this.isSavingAll = false;
+      }
     });
   }
 

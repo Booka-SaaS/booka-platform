@@ -4,23 +4,36 @@ import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { TopbarComponent } from '../../components/topbar/topbar.component';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { AgendamentoService } from '../../services/agendamento.service';
+import { ToastService } from '../../services/toast.service';
 import { Agendamento } from '../../models';
+
+import { ModalNovoAgendamentoComponent } from '../../components/modal-novo-agendamento/modal-novo-agendamento.component';
 
 @Component({
   selector: 'app-agenda',
   standalone: true,
-  imports: [SidebarComponent, TopbarComponent, NavbarComponent, CommonModule],
+  imports: [SidebarComponent, TopbarComponent, NavbarComponent, CommonModule, ModalNovoAgendamentoComponent],
   templateUrl: './agenda.component.html',
   styleUrl: './agenda.component.css'
 })
 export class AgendaComponent implements OnInit {
+  showModalAgendamento = false;
   agendamentos: Agendamento[] = [];
   isLoading = true;
   dataSelecionada: Date = new Date();
 
   private agendamentoService = inject(AgendamentoService);
+  private toastService = inject(ToastService);
 
   ngOnInit() {
+    this.carregarAgendamentos();
+  }
+
+  abrirNovoAgendamento() {
+    this.showModalAgendamento = true;
+  }
+
+  onAgendamentoCriado() {
     this.carregarAgendamentos();
   }
 
