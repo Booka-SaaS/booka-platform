@@ -1,25 +1,22 @@
+// src/app/models/Agendamento.ts
 export type StatusAgendamento = 'PENDENTE' | 'CONFIRMADO' | 'CANCELADO' | 'CONCLUIDO';
 export type OrigemAgendamento = 'PUBLICO' | 'PAINEL';
 
 export interface Agendamento {
-  id?: number | string;
-  clienteId?: number | string;
-  clienteNome?: string;
-  lojaId?: number | string;
-  nomeLoja?: string;
-  servicoId?: number | string;
-  servicoNome?: string;
-  nomeServico?: string;
-  data?: Date | string;
-  dataHora?: Date | string;
-  inicio?: Date | string;
-  fim?: Date | string;
-  valor?: number;
+  id: string;
+  clienteId: string;
+  clienteNome: string;
+  servicoId: string;
+  servicoNome: string;
+  inicio: string;
+  fim: string;
   status: StatusAgendamento;
   origem?: OrigemAgendamento;
   observacoes?: string | null;
-  criadoEm?: Date | string;
-  atualizadoEm?: Date | string;
-  createdAt?: Date | string;
-  updatedAt?: Date | string;
+  createdAt: string;
+  updatedAt: string;
+  nomeLoja?: string;
+  nomeServico?: string;
+  data?: string;
+  valor?: number;
 }

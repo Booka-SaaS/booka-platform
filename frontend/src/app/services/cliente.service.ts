@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Cliente } from '../models';
 import { Observable, throwError } from 'rxjs';
@@ -19,13 +19,9 @@ export class ClienteService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}/clientes`;
 
-  listar(params?: { page?: number; limit?: number }): Observable<Cliente[]> {
-    let httpParams = new HttpParams();
-    if (params) {
-      if (params.page) httpParams = httpParams.set('page', params.page);
-      if (params.limit) httpParams = httpParams.set('limit', params.limit);
-    }
-    return this.http.get<Cliente[]>(this.apiUrl, { params: httpParams })
+  // Listar clientes do profissional logado
+  listar(): Observable<Cliente[]> {
+    return this.http.get<Cliente[]>(this.apiUrl)
       .pipe(
         catchError(err => {
           console.error('Erro ao listar clientes:', err);
@@ -34,7 +30,8 @@ export class ClienteService {
       );
   }
 
-  obter(id: string | number): Observable<Cliente> {
+  // Obter um cliente por id
+  obter(id: string): Observable<Cliente> {
     return this.http.get<Cliente>(`${this.apiUrl}/${id}`)
       .pipe(
         catchError(err => {
@@ -44,6 +41,7 @@ export class ClienteService {
       );
   }
 
+  // Criar novo cliente
   criar(dados: CreateClienteRequest): Observable<Cliente> {
     return this.http.post<Cliente>(this.apiUrl, dados)
       .pipe(
@@ -54,7 +52,8 @@ export class ClienteService {
       );
   }
 
-  atualizar(id: string | number, dados: Partial<CreateClienteRequest>): Observable<Cliente> {
+  // Atualizar cliente
+  atualizar(id: string, dados: Partial<CreateClienteRequest>): Observable<Cliente> {
     return this.http.put<Cliente>(`${this.apiUrl}/${id}`, dados)
       .pipe(
         catchError(err => {
@@ -64,7 +63,8 @@ export class ClienteService {
       );
   }
 
-  deletar(id: string | number): Observable<{ success: boolean }> {
+  // Deletar cliente
+  deletar(id: string): Observable<{ success: boolean }> {
     return this.http.delete<{ success: boolean }>(`${this.apiUrl}/${id}`)
       .pipe(
         catchError(err => {

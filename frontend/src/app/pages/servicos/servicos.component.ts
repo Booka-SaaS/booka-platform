@@ -5,6 +5,7 @@ import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { TopbarComponent } from '../../components/topbar/topbar.component';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { ServicoService, CreateServicoRequest } from '../../services/servico.service';
+import { ToastService } from '../../services/toast.service';
 import { Servico } from '../../models';
 
 interface ServicoForm {
@@ -36,6 +37,7 @@ export class ServicosComponent implements OnInit {
   };
 
   private servicoService = inject(ServicoService);
+  private toastService = inject(ToastService);
 
   ngOnInit() {
     this.carregarServicos();
@@ -49,24 +51,23 @@ export class ServicosComponent implements OnInit {
         this.isLoading = false;
       },
       error: (err) => {
-        console.error('Erro ao buscar servicos', err);
+        console.error('Erro ao buscar serviços', err);
         this.isLoading = false;
+        this.toastService.error('Erro ao buscar serviços.');
       }
     });
   }
 
   formatarDuracao(duracaoMinutos: number): string {
     if (duracaoMinutos >= 60 && duracaoMinutos % 60 === 0) {
-      const horas = duracaoMinutos / 60;
-      return `${horas}h`;
+      const h = duracaoMinutos / 60;
+      return `${h}h`;
     }
-
     if (duracaoMinutos >= 60) {
-      const horas = Math.floor(duracaoMinutos / 60);
-      const minutos = duracaoMinutos % 60;
-      return `${horas}h ${minutos}min`;
+      const h = Math.floor(duracaoMinutos / 60);
+      const m = duracaoMinutos % 60;
+      return `${h}h ${m}min`;
     }
-
     return `${duracaoMinutos} min`;
   }
 
@@ -79,8 +80,8 @@ export class ServicosComponent implements OnInit {
   abrirModalEdicao(servico: Servico) {
     this.editandoId = servico.id;
     const duracaoMinutos = servico.duracaoMinutos || 0;
+    // Detecta se a duração é em horas exatas
     const emHoras = duracaoMinutos >= 60 && duracaoMinutos % 60 === 0;
-
     this.form = {
       nome: servico.nome,
       preco: servico.preco,
@@ -97,11 +98,24 @@ export class ServicosComponent implements OnInit {
   }
 
   get tituloModal(): string {
-    return this.editandoId ? 'Editar Servico' : 'Novo Servico';
+    return this.editandoId ? 'Editar Serviço' : 'Novo Serviço';
   }
 
   salvarServico() {
-    if (!this.form.nome || !this.form.preco || !this.form.duracao) return;
+    if (!this.form.nome || this.form.preco === null || this.form.preco === undefined || this.form.duracao === null || this.form.duracao === undefined) {
+      this.toastService.warning('Preencha todos os campos.');
+      return;
+    }
+
+    if (this.form.preco <= 0) {
+      this.toastService.warning('O preço deve ser maior que zero.');
+      return;
+    }
+
+    if (this.form.duracao <= 0) {
+      this.toastService.warning('A duração deve ser maior que zero.');
+      return;
+    }
 
     const duracaoMinutos = this.form.unidadeDuracao === 'horas'
       ? Math.round(this.form.duracao * 60)
@@ -124,11 +138,12 @@ export class ServicosComponent implements OnInit {
         this.isSaving = false;
         this.fecharModal();
         this.carregarServicos();
+        this.toastService.success(this.editandoId ? 'Serviço atualizado com sucesso!' : 'Serviço criado com sucesso!');
       },
       error: (err) => {
         this.isSaving = false;
         console.error(err);
-        alert('Erro ao salvar servico. Tente novamente.');
+        this.toastService.error('Erro ao salvar serviço. Tente novamente.');
       }
     });
   }

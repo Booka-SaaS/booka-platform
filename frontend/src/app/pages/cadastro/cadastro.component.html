@@ -2,7 +2,7 @@
 
   <div
     class="flex w-full flex-col justify-center px-6 py-12 lg:w-1/2 lg:px-24 xl:px-32 bg-white relative z-10 shadow-2xl shadow-slate-900/5 overflow-y-auto">
-    
+
     <a routerLink="/" class="absolute top-8 left-8 flex items-center justify-center w-10 h-10 rounded-full bg-slate-100 text-slate-500 hover:text-[#004ac6] hover:bg-white hover:shadow-md transition-all cursor-pointer">
       <span class="material-symbols-outlined text-xl">arrow_back</span>
     </a>
@@ -140,17 +140,10 @@
           </div>
         </div>
 
-        <div *ngIf="errorMessage"
-          class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700"
-          role="alert">
-          {{ errorMessage }}
-        </div>
-
         <button (click)="onSubmit()"
-          [disabled]="isLoading"
-          class="flex w-full justify-center rounded-xl bg-slate-900 px-4 py-3.5 text-sm font-bold text-white shadow-md hover:bg-slate-800 hover:-translate-y-0.5 transition-all active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
+          class="flex w-full justify-center rounded-xl bg-slate-900 px-4 py-3.5 text-sm font-bold text-white shadow-md hover:bg-slate-800 hover:-translate-y-0.5 transition-all active:scale-95"
           type="button">
-          {{ isLoading ? 'Criando conta...' : 'Criar Minha Conta' }}
+          Criar Minha Conta
         </button>
       </form>
 

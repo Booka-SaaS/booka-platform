@@ -5,11 +5,18 @@ import { Loja } from '../models';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
+
 export interface UpdateLojaRequest {
   nome?: string;
   email?: string | null;
   telefone?: string | null;
   endereco?: string | null;
+  cep?: string | null;
+  logradouro?: string | null;
+  numero?: string | null;
+  bairro?: string | null;
+  complemento?: string | null;
+  estado?: string | null;
   cidade?: string | null;
   descricao?: string | null;
   imagemUrl?: string | null;
@@ -61,7 +68,7 @@ export class LojaService {
       );
   }
 
-  // Metodos legados para compatibilidade
+  // Métodos legados para compatibilidade
   buscarDados(): Observable<Loja> {
     return this.obter();
   }

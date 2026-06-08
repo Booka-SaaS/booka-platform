@@ -1,61 +1,9 @@
 <div class="bg-[#f8fafc] text-slate-800 antialiased min-h-screen flex flex-col font-['Inter']">
 
     <!-- Navbar Padronizada -->
-    <nav class="fixed top-0 w-full z-50 bg-[#f7f9fb]/90 backdrop-blur-md shadow-sm border-b border-slate-200/60">
-        <div class="flex items-center justify-between px-8 h-20 max-w-7xl mx-auto w-full font-['Inter'] antialiased tracking-tight">
-            <!-- Logo -->
-            <div class="flex items-center gap-2 shrink-0 cursor-pointer" routerLink="/">
-                <svg class="w-8 h-8" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-                    <rect fill="#004ac6" height="64" rx="18" width="64"></rect>
-                    <g transform="translate(8, 8)">
-                        <path clip-rule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z"
-                            fill="#FFFFFF" fill-rule="evenodd"></path>
-                    </g>
-                </svg>
-                <span class="text-2xl font-black tracking-tighter text-[#004ac6]">Booka</span>
-            </div>
-            
-            <div class="hidden md:flex items-center gap-8">
-                <a [routerLink]="['/explorar']" class="text-slate-600 hover:text-[#004ac6] hover:scale-105 transition-transform duration-200">Explorar</a>
-                <a *ngIf="isLoggedIn" [routerLink]="['/meus-agendamentos']" class="text-slate-600 hover:text-[#004ac6] hover:scale-105 transition-transform duration-200">Minhas Reservas</a>
-                <a [routerLink]="['/cadastro']" class="text-slate-600 hover:text-[#004ac6] hover:scale-105 transition-transform duration-200">Seja um Profissional</a>
-            </div>
+    <app-navbar></app-navbar>
 
-            <!-- Right Actions -->
-            <div class="flex items-center gap-4">
-                <ng-container *ngIf="!isLoggedIn">
-                    <button [routerLink]="['/login']" class="text-slate-600 font-medium px-4 py-2 hover:text-[#004ac6] transition-colors scale-95 transition-all w-none border-none bg-transparent">Entrar</button>
-                    <button [routerLink]="['/cadastro']" class="bg-[#004ac6] text-white font-bold px-6 py-2.5 rounded-full hover:scale-105 transition-all shadow-md">Cadastrar</button>
-                </ng-container>
-                <ng-container *ngIf="isLoggedIn">
-                    <div class="relative group">
-                        <button class="bg-slate-100 text-slate-700 font-bold px-6 py-2.5 rounded-full hover:bg-slate-200 transition-all shadow-sm flex items-center gap-2">
-                            <span class="material-symbols-outlined text-[20px]">person</span> Meu Perfil
-                        </button>
-                        <div class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 transform origin-top-right group-hover:translate-y-1">
-                            <div class="p-2 space-y-1 flex flex-col">
-                                <a [routerLink]="isProfissional ? ['/dashboard'] : ['/meus-agendamentos']" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-[#004ac6] rounded-lg transition-colors cursor-pointer">
-                                    <span class="material-symbols-outlined text-lg">{{ isProfissional ? 'dashboard' : 'calendar_today' }}</span>
-                                    {{ isProfissional ? 'Painel de Controle' : 'Minhas Reservas' }}
-                                </a>
-                                <a class="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-[#004ac6] rounded-lg transition-colors cursor-pointer">
-                                    <span class="material-symbols-outlined text-lg">settings</span>
-                                    Configurações
-                                </a>
-                                <div class="h-px bg-slate-100 my-1"></div>
-                                <a (click)="logout()" class="flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer">
-                                    <span class="material-symbols-outlined text-lg">logout</span>
-                                    Sair da Conta
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </ng-container>
-            </div>
-        </div>
-    </nav>
-
-    <main class="pt-24 flex-grow">
+    <main class="pt-20 flex-grow">
         <ng-container *ngIf="profissional; else loadingSkeleton">
         <!-- Modern Clean Hero Section Compact -->
         <section class="relative pt-12 pb-8 w-full bg-gradient-to-b from-blue-50/80 via-blue-50/30 to-[#f8fafc] overflow-hidden">
@@ -64,10 +12,10 @@
                 <div class="relative shrink-0">
                     <div class="w-28 h-28 md:w-36 md:h-36 rounded-3xl border-4 border-white shadow-xl overflow-hidden bg-white rotate-[-2deg] hover:rotate-0 transition-transform duration-300">
                         <img alt="{{ profissional.nome }}" class="w-full h-full object-cover"
-                             [src]="profissional.img || 'https://lh3.googleusercontent.com/aida-public/AB6AXuCw8xHBhQsIXqMUIojdvu58Yg9jRmMsxWSqBO57lMWPTzlfSqR38l0NoepOj0RL8pbSZbCZ2aFfgIdWRNml6vvJxq5DrEVEpxDjc55IIxNR-BlafNbx8olvqE0m0vRBd4b7XiLcJ-NB910P1kZdnQ6yzXaNjjaaWPmUFhZs5obbqixnnaNiawEgJ2YJcgRkFxf3oUIdfGkZOFEJ8hXj0g7fJpKsxBt6m8QIgpM-89frgGPBRQMbm_0qwqHLPKhorIeyWDy49gCWSU4'" />
+                             [src]="getImageUrl(profissional.avatarUrl || profissional.img) || 'https://lh3.googleusercontent.com/aida-public/AB6AXuCw8xHBhQsIXqMUIojdvu58Yg9jRmMsxWSqBO57lMWPTzlfSqR38l0NoepOj0RL8pbSZbCZ2aFfgIdWRNml6vvJxq5DrEVEpxDjc55IIxNR-BlafNbx8olvqE0m0vRBd4b7XiLcJ-NB910P1kZdnQ6yzXaNjjaaWPmUFhZs5obbqixnnaNiawEgJ2YJcgRkFxf3oUIdfGkZOFEJ8hXj0g7fJpKsxBt6m8QIgpM-89frgGPBRQMbm_0qwqHLPKhorIeyWDy49gCWSU4'" />
                     </div>
                 </div>
-                
+
                 <!-- Info block Compact -->
                 <div class="flex-1 mt-2 md:mt-0 text-center md:text-left">
                     <h1 class="text-3xl md:text-4xl font-black tracking-tight text-slate-900 mb-1">{{ profissional.nome }}</h1>
@@ -93,7 +41,7 @@
                         <div class="group relative bg-white rounded-2xl transition-all shadow-sm border cursor-pointer hover:shadow-lg hover:-translate-y-0.5 p-5"
                             (click)="selecionarServico(servico)"
                             [ngClass]="servicoSelecionado?.id === servico.id ? 'border-[#004ac6] ring-2 ring-[#004ac6]/10' : 'border-slate-200'">
-                            
+
                             <div class="absolute top-4 right-4 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors"
                                  [ngClass]="servicoSelecionado?.id === servico.id ? 'border-[#004ac6] bg-[#004ac6] text-white' : 'border-slate-300 text-transparent'">
                                 <span class="material-symbols-outlined text-[14px] font-bold">check</span>
@@ -102,7 +50,7 @@
                             <div class="pr-10 mb-3">
                                 <h3 class="text-lg font-bold text-slate-900 mb-1">{{ servico.nome }}</h3>
                             </div>
-                            
+
                             <div class="flex items-center justify-between text-sm">
                                 <span class="bg-slate-50 px-2.5 py-1 rounded text-slate-600 font-bold flex items-center gap-1 border border-slate-100">
                                     <span class="material-symbols-outlined text-[14px]">schedule</span> {{ servico.duracaoMinutos }} min
@@ -143,7 +91,7 @@
                                         @if (dia === null) {
                                             <div class="aspect-square"></div>
                                         } @else {
-                                            <button (click)="selecionarData(dia)" 
+                                            <button (click)="selecionarData(dia)"
                                                     [ngClass]="diaSelecionado === dia ? 'bg-[#004ac6] text-white shadow-sm' : 'hover:bg-slate-100 text-slate-700'"
                                                     class="aspect-square rounded-xl flex items-center justify-center text-sm font-bold transition-all cursor-pointer">
                                                 {{ dia }}
@@ -152,13 +100,13 @@
                                     }
                                 </div>
                             </div>
-                            
+
                             <!-- Time Slots -->
                             <div class="mb-6" *ngIf="horariosDisponiveis.length > 0">
                                 <div class="grid grid-cols-3 gap-2">
                                     @for (hora of horariosDisponiveis; track hora) {
-                                        <button (click)="selecionarHorario(hora)" 
-                                                [ngClass]="horarioSelecionado === hora ? 'bg-[#004ac6] text-white border-[#004ac6]' : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-[#004ac6]/50 hover:bg-blue-50'" 
+                                        <button (click)="selecionarHorario(hora)"
+                                                [ngClass]="horarioSelecionado === hora ? 'bg-[#004ac6] text-white border-[#004ac6]' : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-[#004ac6]/50 hover:bg-blue-50'"
                                                 class="py-2 rounded-lg border transition-all text-xs font-bold text-center">
                                             {{ hora }}
                                         </button>
@@ -221,7 +169,7 @@
             </div>
         </div>
         </ng-container>
-        
+
         <ng-template #loadingSkeleton>
             <div class="animate-pulse">
                 <!-- Skeleton Hero -->
@@ -235,7 +183,7 @@
                         </div>
                     </div>
                 </section>
-                
+
                 <!-- Skeleton Content Layout -->
                 <div class="max-w-6xl mx-auto px-6 lg:px-8 py-6 pb-20">
                     <div class="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8">

@@ -1,10 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideRouter, Router } from '@angular/router';
+import { Router, provideRouter } from '@angular/router';
+import { of, throwError } from 'rxjs';
+
 import { LoginComponent } from './login.component';
 import { AuthService } from '../../services/auth.service';
-import { of, throwError } from 'rxjs';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -13,24 +12,21 @@ describe('LoginComponent', () => {
   let router: Router;
 
   beforeEach(async () => {
-    const authSpy = jasmine.createSpyObj('AuthService', ['login', 'getRole']);
+    authServiceSpy = jasmine.createSpyObj<AuthService>('AuthService', ['login', 'getMe']);
 
     await TestBed.configureTestingModule({
       imports: [LoginComponent],
       providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
         provideRouter([]),
-        { provide: AuthService, useValue: authSpy },
-      ]
-    })
-    .compileComponents();
+        { provide: AuthService, useValue: authServiceSpy },
+      ],
+    }).compileComponents();
+
+    router = TestBed.inject(Router);
+    spyOn(router, 'navigate').and.resolveTo(true);
 
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
-    authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
-    router = TestBed.inject(Router);
-    spyOn(router, 'navigate');
     fixture.detectChanges();
   });
 
@@ -48,7 +44,10 @@ describe('LoginComponent', () => {
 
   it('should call authService.login on submit with valid credentials', () => {
     authServiceSpy.login.and.returnValue(of({ token: 'mock-token' }));
-    authServiceSpy.getRole.and.returnValue('CLIENTE');
+    authServiceSpy.getMe.and.returnValue(of({
+      user: { id: '1', nome: 'Cliente', email: 'test@test.com', role: 'CLIENTE' },
+      loja: null,
+    }));
 
     component.email = 'test@test.com';
     component.password = 'password123';
@@ -59,7 +58,6 @@ describe('LoginComponent', () => {
   });
 
   it('should show error message on login failure', () => {
-    spyOn(console, 'error');
     authServiceSpy.login.and.returnValue(throwError(() => new Error('Login failed')));
 
     component.email = 'wrong@test.com';

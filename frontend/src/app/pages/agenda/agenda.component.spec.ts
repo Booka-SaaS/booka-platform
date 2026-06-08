@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideRouter } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { AgendaComponent } from './agenda.component';
 
@@ -11,8 +10,7 @@ describe('AgendaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AgendaComponent],
-      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])]
+      imports: [AgendaComponent, RouterTestingModule, HttpClientTestingModule]
     })
     .compileComponents();
 

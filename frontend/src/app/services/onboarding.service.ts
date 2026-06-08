@@ -7,8 +7,13 @@ import { catchError } from 'rxjs/operators';
 export interface FinalizeOnboardingRequest {
   nome: string;
   telefone: string;
-  endereco: string;
-  cidade?: string;
+  cep: string;
+  logradouro: string;
+  numero: string;
+  bairro: string;
+  complemento?: string;
+  estado: string;
+  cidade: string;
   descricao?: string;
   profissao: string;
   categoriaPrincipal: string;

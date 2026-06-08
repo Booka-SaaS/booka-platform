@@ -1,4 +1,4 @@
-﻿<div class="bg-slate-50 font-sans text-slate-900 antialiased h-screen flex flex-col overflow-hidden">
+<div class="bg-slate-50 font-sans text-slate-900 antialiased h-screen flex flex-col overflow-hidden">
 
   <app-navbar></app-navbar>
 
@@ -8,191 +8,154 @@
     <div class="flex-1 flex flex-col min-w-0">
       <app-topbar *ngIf="isProfissional"></app-topbar>
 
-      <main class="flex-1 overflow-y-auto p-8 space-y-8">
+      <main class="flex-1 overflow-y-auto p-4 md:p-8 space-y-8 bg-surface/50">
         <div class="w-full">
 
-          <div class="mb-8">
-            <h1 class="text-2xl font-black text-slate-900 tracking-tight">Meu Perfil</h1>
-            <p class="text-slate-500 text-base mt-1">Gerencie suas informações pessoais e senha.</p>
+          <div class="mb-8 flex items-start gap-3">
+            <a *ngIf="isProfissional" routerLink="/configuracoes" class="btn btn-circle btn-ghost btn-sm mt-1 text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 transition-colors" title="Voltar">
+              <span class="material-symbols-outlined text-[22px]">arrow_back</span>
+            </a>
+            <a *ngIf="!isProfissional" routerLink="/" class="btn btn-circle btn-ghost btn-sm mt-1 text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 transition-colors" title="Voltar">
+              <span class="material-symbols-outlined text-[22px]">arrow_back</span>
+            </a>
+            <div>
+              <h1 class="text-3xl font-black text-slate-900 tracking-tight">Meu Perfil</h1>
+              <p class="text-slate-500 font-medium mt-1">Gerencie suas informações pessoais e senha.</p>
+            </div>
           </div>
 
           @if (isLoading) {
             <div class="flex items-center justify-center h-48">
-              <svg class="animate-spin h-8 w-8 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
+              <span class="loading loading-spinner loading-lg text-primary"></span>
             </div>
           } @else {
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-              <div class="p-8">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <form class="space-y-8 relative">
 
-                  <!-- Coluna esquerda: avatar + dados pessoais -->
-                  <div class="space-y-8">
+              <!-- Card: Avatar -->
+              <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="p-6 md:p-8 flex items-center gap-6">
+                  <div class="relative group cursor-pointer flex-shrink-0" (click)="abrirSeletorArquivo()">
+                    @if (avatarSrc) {
+                      <img [src]="avatarSrc" alt="Foto de perfil" class="w-24 h-24 rounded-full object-cover shadow-sm border border-slate-200"/>
+                    } @else {
+                      <div class="w-24 h-24 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 text-3xl font-black shadow-inner select-none group-hover:text-primary transition-colors">
+                        {{ usuario.iniciais }}
+                      </div>
+                    }
 
-                    <!-- Avatar -->
-                    <div class="flex items-center gap-6">
-                      <div class="relative group cursor-pointer flex-shrink-0" (click)="abrirSeletorArquivo()">
+                    <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-[2px] rounded-full flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      @if (isUploadingAvatar) {
+                        <span class="loading loading-spinner loading-sm text-white"></span>
+                      } @else {
+                        <span class="material-symbols-outlined text-white text-[20px]">photo_camera</span>
+                        <span class="text-white text-[10px] font-bold mt-0.5">Alterar</span>
+                      }
+                    </div>
 
-                        <!-- Imagem ou iniciais -->
-                        @if (avatarSrc) {
-                          <img [src]="avatarSrc" alt="Foto de perfil"
-                               class="w-24 h-24 rounded-full object-cover shadow-md border-2 border-white ring-2 ring-indigo-200"/>
-                        } @else {
-                          <div class="w-24 h-24 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 text-3xl font-black shadow-inner select-none">
-                            {{ usuario.iniciais }}
-                          </div>
-                        }
+                    <input #fileInput type="file" accept="image/jpeg,image/png,image/webp" class="hidden" (change)="onArquivoSelecionado($event)"/>
+                  </div>
 
-                        <!-- Overlay hover -->
-                        <div class="absolute inset-0 bg-black/50 rounded-full flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                          @if (isUploadingAvatar) {
-                            <svg class="animate-spin h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                          } @else {
-                            <span class="material-symbols-outlined text-white text-xl">photo_camera</span>
-                            <span class="text-white text-[10px] font-bold mt-0.5">Alterar</span>
-                          }
+                  <div>
+                    <h3 class="text-lg font-black text-slate-800">Foto de Perfil</h3>
+                    <p class="text-xs font-medium text-slate-500 mt-1 mb-3">PNG, JPG ou WEBP — máx. 10MB</p>
+                    <button type="button" (click)="abrirSeletorArquivo()" [disabled]="isUploadingAvatar" class="btn btn-sm bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 font-bold rounded-xl shadow-sm">
+                      <span class="material-symbols-outlined text-[16px]">upload</span>
+                      {{ isUploadingAvatar ? 'Enviando...' : 'Trocar foto' }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Grid inferior -->
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+
+                <!-- Info Pessoal -->
+                <div class="bg-white rounded-3xl border border-slate-200 shadow-sm flex flex-col overflow-hidden">
+                  <div class="p-6 border-b border-slate-100 flex items-center gap-3 bg-slate-50/30">
+                    <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                      <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">person</span>
+                    </div>
+                    <div>
+                      <h3 class="text-lg font-black text-slate-800">Informações Pessoais</h3>
+                      <p class="text-xs font-medium text-slate-500">Seus dados de identificação e contato.</p>
+                    </div>
+                  </div>
+
+                  <div class="p-6 md:p-8 space-y-6">
+                    <div class="space-y-2">
+                      <label class="text-xs font-black uppercase tracking-widest text-slate-500">Nome Completo</label>
+                      <div class="relative">
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">badge</span>
+                        <input name="nome" [(ngModel)]="usuario.nome" class="input input-bordered w-full pl-10 bg-slate-50 font-medium text-slate-700" type="text" placeholder="Seu nome completo"/>
+                      </div>
+                    </div>
+                    <div class="space-y-2">
+                      <label class="text-xs font-black uppercase tracking-widest text-slate-500">E-mail</label>
+                      <div class="relative">
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">mail</span>
+                        <input name="email" [(ngModel)]="usuario.email" class="input input-bordered w-full pl-10 bg-slate-50 font-medium text-slate-700" type="email" placeholder="seu@email.com"/>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Alterar Senha -->
+                <div class="bg-white rounded-3xl border border-slate-200 shadow-sm flex flex-col overflow-hidden">
+                  <div class="p-6 border-b border-slate-100 flex items-center gap-3 bg-slate-50/30">
+                    <div class="w-10 h-10 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+                      <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">lock</span>
+                    </div>
+                    <div>
+                      <h3 class="text-lg font-black text-slate-800">Segurança</h3>
+                      <p class="text-xs font-medium text-slate-500">Deixe em branco para manter a senha atual.</p>
+                    </div>
+                  </div>
+
+                  <div class="p-6 md:p-8 space-y-6">
+                    <div class="space-y-2">
+                      <label class="text-xs font-black uppercase tracking-widest text-slate-500">Senha Atual</label>
+                      <div class="relative">
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">key</span>
+                        <input name="senhaAtual" [(ngModel)]="senha.senhaAtual" class="input input-bordered w-full pl-10 bg-slate-50 font-medium text-slate-700" placeholder="••••••••" type="password"/>
+                      </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div class="space-y-2">
+                        <label class="text-xs font-black uppercase tracking-widest text-slate-500">Nova Senha</label>
+                        <div class="relative">
+                          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">lock_reset</span>
+                          <input name="novaSenha" [(ngModel)]="senha.novaSenha" class="input input-bordered w-full pl-10 bg-slate-50 font-medium text-slate-700" placeholder="Mín. 8 char" type="password"/>
                         </div>
-
-                        <!-- Input oculto -->
-                        <input #fileInput type="file" accept="image/jpeg,image/png,image/webp"
-                               class="hidden" (change)="onArquivoSelecionado($event)"/>
                       </div>
-
-                      <div class="space-y-1">
-                        <h3 class="text-lg font-bold text-slate-900 leading-none">Foto de Perfil</h3>
-                        <p class="text-sm text-slate-500">PNG, JPG ou WEBP — máx. 10MB</p>
-                        <button type="button" (click)="abrirSeletorArquivo()" [disabled]="isUploadingAvatar"
-                                class="mt-1 px-4 py-1.5 border border-slate-300 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors disabled:opacity-50">
-                          {{ isUploadingAvatar ? 'Enviando...' : 'Trocar foto' }}
-                        </button>
+                      <div class="space-y-2">
+                        <label class="text-xs font-black uppercase tracking-widest text-slate-500">Confirmar Senha</label>
+                        <div class="relative">
+                          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">lock_reset</span>
+                          <input name="confirmarSenha" [(ngModel)]="senha.confirmarSenha" class="input input-bordered w-full pl-10 bg-slate-50 font-medium text-slate-700" placeholder="Repetir senha" type="password"/>
+                        </div>
                       </div>
-                    </div>
-
-                    <!-- Dados pessoais -->
-                    <div class="flex items-center gap-2 border-b border-slate-100 pb-2">
-                      <span class="material-symbols-outlined text-indigo-600">person</span>
-                      <h3 class="font-bold text-lg">Informações Pessoais</h3>
-                    </div>
-
-                    <div class="space-y-4">
-                      <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-1.5">Nome Completo</label>
-                        <input name="nome" [(ngModel)]="usuario.nome"
-                               class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none"
-                               type="text"/>
-                      </div>
-                      <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-1.5">E-mail</label>
-                        <input name="email" [(ngModel)]="usuario.email"
-                               class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none"
-                               type="email"/>
-                      </div>
-                    </div>
-
-                    <div class="flex justify-end pt-2">
-                      <button (click)="salvarPerfil()" [disabled]="isSavingPerfil || isUploadingAvatar"
-                              class="px-6 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 shadow-sm transition-all active:scale-95 disabled:opacity-75 flex items-center gap-2"
-                              type="button">
-                        @if (isSavingPerfil) {
-                          <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                          </svg>
-                          Salvando...
-                        } @else {
-                          Salvar Dados Pessoais
-                        }
-                      </button>
                     </div>
                   </div>
-
-                  <!-- Coluna direita: alterar senha -->
-                  <div class="space-y-6 lg:pl-12 lg:border-l border-slate-100">
-                    <div class="flex items-center gap-2 border-b border-slate-100 pb-2">
-                      <span class="material-symbols-outlined text-indigo-600">lock</span>
-                      <h3 class="text-lg font-bold text-slate-900 leading-none">Alterar Senha</h3>
-                    </div>
-                    <p class="text-sm text-slate-500 -mt-2">Deixe em branco para manter a senha atual.</p>
-
-                    <div class="space-y-4">
-                      <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-1.5">Senha Atual</label>
-                        <input name="senhaAtual" [(ngModel)]="senha.senhaAtual"
-                               class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none"
-                               placeholder="••••••••" type="password"/>
-                      </div>
-                      <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-1.5">Nova Senha</label>
-                        <input name="novaSenha" [(ngModel)]="senha.novaSenha"
-                               class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none"
-                               placeholder="Mínimo 8 caracteres" type="password"/>
-                      </div>
-                      <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-1.5">Confirmar Nova Senha</label>
-                        <input name="confirmarSenha" [(ngModel)]="senha.confirmarSenha"
-                               class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none"
-                               placeholder="Repita a nova senha" type="password"/>
-                      </div>
-                    </div>
-
-                    <div class="bg-indigo-50 rounded-xl p-4 border border-indigo-100">
-                      <div class="flex gap-3">
-                        <span class="material-symbols-outlined text-indigo-600 text-[20px]">info</span>
-                        <p class="text-sm text-indigo-800">A senha deve ter no mínimo 8 caracteres.</p>
-                      </div>
-                    </div>
-
-                    <div class="flex justify-end pt-2">
-                      <button (click)="salvarSenha()" [disabled]="isSavingSenha"
-                              class="px-6 py-2.5 bg-slate-800 text-white rounded-xl text-sm font-bold hover:bg-slate-900 shadow-sm transition-all active:scale-95 disabled:opacity-75 flex items-center gap-2"
-                              type="button">
-                        @if (isSavingSenha) {
-                          <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                          </svg>
-                          Alterando...
-                        } @else {
-                          Alterar Senha
-                        }
-                      </button>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-
-              <!-- Rodapé -->
-              <div class="bg-slate-50 border-t border-slate-200 px-8 py-5 flex items-center justify-between">
-                <div>
-                  <a *ngIf="isProfissional" routerLink="/configuracoes"
-                     class="inline-flex items-center gap-2 text-slate-500 hover:text-indigo-600 text-sm font-semibold transition-colors cursor-pointer group">
-                    <span class="material-symbols-outlined text-[18px] group-hover:-translate-x-1 transition-transform">arrow_back</span>
-                    Voltar para Configurações
-                  </a>
-                  <a *ngIf="!isProfissional" routerLink="/"
-                     class="inline-flex items-center gap-2 text-slate-500 hover:text-indigo-600 text-sm font-semibold transition-colors cursor-pointer group">
-                    <span class="material-symbols-outlined text-[18px] group-hover:-translate-x-1 transition-transform">arrow_back</span>
-                    Voltar para Início
-                  </a>
                 </div>
 
-                <button (click)="cancelar()" [disabled]="isSavingPerfil || isSavingSenha"
-                        class="px-6 py-2.5 text-sm font-bold text-slate-600 hover:text-slate-800 transition-colors disabled:opacity-50"
-                        type="button">
-                  Cancelar Alterações
-                </button>
               </div>
-            </div>
+            </form>
           }
 
         </div>
       </main>
+
+      <!-- Footer fixo na base da tela -->
+      <div *ngIf="!isLoading" class="bg-white border-t border-slate-200 px-8 py-4 flex items-center justify-end gap-3 z-20 shrink-0">
+        <button (click)="cancelar()" class="btn btn-ghost text-slate-500 font-bold px-6 h-12 min-h-12 rounded-xl hover:bg-slate-100 transition-colors" type="button">Cancelar</button>
+        <button (click)="salvarTudo()" [disabled]="isSavingAll || isUploadingAvatar" class="btn btn-primary text-white px-8 h-12 min-h-12 rounded-xl font-black text-sm shadow-md shadow-primary/20 gap-2 w-full md:w-auto hover:-translate-y-0.5 transition-transform" type="button">
+          @if (isSavingAll) {
+            <span class="loading loading-spinner loading-sm"></span> Salvando...
+          } @else {
+            <span class="material-symbols-outlined text-[20px]">save</span> Salvar Alterações
+          }
+        </button>
+      </div>
     </div>
   </div>
 </div>

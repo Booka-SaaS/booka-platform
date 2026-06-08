@@ -2,27 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { Agendamento, StatusAgendamento } from '../models';
-
-interface BackendAgendamento {
-  id: string;
-  clienteId: string;
-  clienteNome?: string;
-  lojaId?: string;
-  nomeLoja?: string;
-  servicoId: string;
-  servicoNome?: string;
-  nomeServico?: string;
-  valor?: number;
-  inicio: string;
-  fim: string;
-  status: StatusAgendamento;
-  origem?: Agendamento['origem'];
-  observacoes?: string | null;
-  createdAt: string;
-  updatedAt: string;
-}
 
 export interface CreateAgendamentoRequest {
   clienteId: string;
@@ -51,60 +32,28 @@ export class AgendamentoService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}/agendamentos`;
 
-  private mapAgendamento(item: BackendAgendamento): Agendamento {
-    return {
-      id: item.id,
-      clienteId: item.clienteId,
-      clienteNome: item.clienteNome,
-      lojaId: item.lojaId,
-      nomeLoja: item.nomeLoja,
-      servicoId: item.servicoId,
-      servicoNome: item.servicoNome,
-      nomeServico: item.nomeServico ?? item.servicoNome,
-      valor: item.valor,
-      data: item.inicio,
-      dataHora: item.inicio,
-      inicio: item.inicio,
-      fim: item.fim,
-      status: item.status,
-      origem: item.origem,
-      observacoes: item.observacoes,
-      createdAt: item.createdAt,
-      updatedAt: item.updatedAt,
-    };
-  }
-
+  // Cliente criar agendamento (público, sem autenticação)
   criarPublico(dados: CreateAgendamentoPublicoRequest): Observable<Agendamento> {
-    return this.http.post<BackendAgendamento>(`${this.apiUrl}/publicos`, dados)
+    return this.http.post<Agendamento>(`${this.apiUrl}/publicos`, dados)
       .pipe(
-        map((response) => this.mapAgendamento(response)),
         catchError(err => {
-          console.error('Erro ao criar agendamento publico:', err);
+          console.error('Erro ao criar agendamento público:', err);
           return throwError(() => err);
         })
       );
   }
 
-  listar(params?: {
-    page?: number;
-    limit?: number;
-    status?: StatusAgendamento;
-    data?: string;
-    clienteId?: string;
-    servicoId?: string;
-  }): Observable<Agendamento[]> {
+  // Profissional: listar seus agendamentos (requer autenticação)
+  listar(params?: { status?: StatusAgendamento; data?: string; clienteId?: string; servicoId?: string }): Observable<Agendamento[]> {
     let httpParams = new HttpParams();
     if (params) {
-      if (params.page) httpParams = httpParams.set('page', params.page);
-      if (params.limit) httpParams = httpParams.set('limit', params.limit);
       if (params.status) httpParams = httpParams.set('status', params.status);
       if (params.data) httpParams = httpParams.set('data', params.data);
       if (params.clienteId) httpParams = httpParams.set('clienteId', params.clienteId);
       if (params.servicoId) httpParams = httpParams.set('servicoId', params.servicoId);
     }
-    return this.http.get<BackendAgendamento[]>(this.apiUrl, { params: httpParams })
+    return this.http.get<Agendamento[]>(this.apiUrl, { params: httpParams })
       .pipe(
-        map((response) => response.map((item) => this.mapAgendamento(item))),
         catchError(err => {
           console.error('Erro ao listar agendamentos:', err);
           return throwError(() => err);
@@ -112,10 +61,10 @@ export class AgendamentoService {
       );
   }
 
+  // Profissional: criar agendamento (requer autenticação)
   criar(dados: CreateAgendamentoRequest): Observable<Agendamento> {
-    return this.http.post<BackendAgendamento>(this.apiUrl, dados)
+    return this.http.post<Agendamento>(this.apiUrl, dados)
       .pipe(
-        map((response) => this.mapAgendamento(response)),
         catchError(err => {
           console.error('Erro ao criar agendamento:', err);
           return throwError(() => err);
@@ -123,10 +72,10 @@ export class AgendamentoService {
       );
   }
 
+  // Profissional: atualizar agendamento (requer autenticação)
   atualizar(id: string, dados: Partial<CreateAgendamentoRequest>): Observable<Agendamento> {
-    return this.http.put<BackendAgendamento>(`${this.apiUrl}/${id}`, dados)
+    return this.http.put<Agendamento>(`${this.apiUrl}/${id}`, dados)
       .pipe(
-        map((response) => this.mapAgendamento(response)),
         catchError(err => {
           console.error('Erro ao atualizar agendamento:', err);
           return throwError(() => err);
@@ -134,6 +83,7 @@ export class AgendamentoService {
       );
   }
 
+  // Profissional: deletar agendamento (requer autenticação)
   deletar(id: string): Observable<{ success: boolean }> {
     return this.http.delete<{ success: boolean }>(`${this.apiUrl}/${id}`)
       .pipe(
@@ -144,28 +94,17 @@ export class AgendamentoService {
       );
   }
 
+  // Atualizar status
   atualizarStatus(id: string, novoStatus: StatusAgendamento): Observable<Agendamento> {
     return this.atualizar(id, { status: novoStatus });
   }
 
+  // Métodos compatíveis com código legado
   getMeusAgendamentos(): Observable<Agendamento[]> {
-    return this.http.get<BackendAgendamento[]>(`${this.apiUrl}/meus`).pipe(
-      map((response) => response.map((item) => this.mapAgendamento(item))),
-      catchError(err => {
-        console.error('Erro ao listar meus agendamentos:', err);
-        return throwError(() => err);
-      }),
-    );
+    return this.http.get<Agendamento[]>(`${this.apiUrl}/meus`);
   }
 
-  listarPorLoja(lojaId: string | number): Observable<Agendamento[]> {
-    const params = new HttpParams().set('lojaId', lojaId);
-    return this.http.get<BackendAgendamento[]>(this.apiUrl, { params }).pipe(
-      map((response) => response.map((item) => this.mapAgendamento(item))),
-    );
-  }
-
-  cancelar(id: string | number): Observable<any> {
-    return this.atualizarStatus(id.toString(), 'CANCELADO');
+  cancelar(id: string): Observable<Agendamento> {
+    return this.atualizarStatus(id, 'CANCELADO');
   }
 }

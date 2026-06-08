@@ -1,8 +1,8 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 
 export const sanitizeInterceptor: HttpInterceptorFn = (req, next) => {
-  // Para POST/PUT, validar e sanitizar body básico
-  if ((req.method === 'POST' || req.method === 'PUT') && req.body && !isFilePayload(req.body)) {
+  // Para POST/PUT, sanitizar body básico — mas nunca tocar em FormData (upload de arquivos)
+  if ((req.method === 'POST' || req.method === 'PUT') && req.body && !(req.body instanceof FormData)) {
     try {
       const sanitizedBody = sanitizeRequestBody(req.body);
       req = req.clone({ body: sanitizedBody });
@@ -13,14 +13,6 @@ export const sanitizeInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req);
 };
-
-function isFilePayload(body: unknown): boolean {
-  return (
-    (typeof FormData !== 'undefined' && body instanceof FormData) ||
-    (typeof File !== 'undefined' && body instanceof File) ||
-    (typeof Blob !== 'undefined' && body instanceof Blob)
-  );
-}
 
 function sanitizeRequestBody(obj: any): any {
   // Se for string, remover caracteres perigosos

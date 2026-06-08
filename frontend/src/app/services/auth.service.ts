@@ -42,29 +42,12 @@ export class AuthService {
       );
   }
 
-  loginWithGoogle(credential: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/google`, { credential })
-      .pipe(
-        tap(response => {
-          if (response.token) {
-            localStorage.setItem(this.TOKEN_KEY, response.token);
-            const role = response.user?.role || 'CLIENTE';
-            localStorage.setItem(this.ROLE_KEY, role);
-          }
-        }),
-        catchError(err => {
-          console.error('Google login error:', err);
-          return throwError(() => err);
-        })
-      );
-  }
-
   register(nome: string, email: string, password: string, role: 'CLIENTE' | 'PROFISSIONAL'): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/register`, { 
-      nome, 
-      email, 
-      password, 
-      role 
+    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/register`, {
+      nome,
+      email,
+      password,
+      role
     })
       .pipe(
         tap(response => {
@@ -91,14 +74,6 @@ export class AuthService {
 
   updateSenha(senhaAtual: string, novaSenha: string): Observable<{ message: string }> {
     return this.http.put<{ message: string }>(`${this.apiUrl}/auth/senha`, { senhaAtual, novaSenha });
-  }
-
-  solicitarRecuperacaoSenha(email: string): Observable<{ message: string; resetToken?: string }> {
-    return this.http.post<{ message: string; resetToken?: string }>(`${this.apiUrl}/auth/recuperar-senha`, { email });
-  }
-
-  redefinirSenha(token: string, novaSenha: string): Observable<{ message: string }> {
-    return this.http.post<{ message: string }>(`${this.apiUrl}/auth/nova-senha`, { token, novaSenha });
   }
 
   uploadAvatar(file: File): Observable<{ imagemUrl: string }> {

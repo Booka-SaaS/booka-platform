@@ -29,7 +29,7 @@ export const routes: Routes = [
   { path: 'cadastro', component: CadastroComponent },
   { path: 'recuperar-senha', component: RecuperarSenhaComponent },
   { path: 'nova-senha', component: NovaSenhaComponent },
-  { path: 'agendar/:id', component: AgendarComponent },
+  { path: 'agendar/:idLoja', component: AgendarComponent },
 
   // Rotas do painel profissional
   { path: 'dashboard', component: DashboardComponent, canActivate: [roleProfissionalGuard] },
@@ -45,5 +45,4 @@ export const routes: Routes = [
 
   // Rotas do cliente
   { path: 'meus-agendamentos', component: MeusAgendamentosComponent, canActivate: [roleClienteGuard] },
-  { path: '**', redirectTo: '' },
 ];

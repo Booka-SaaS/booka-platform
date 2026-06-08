@@ -315,6 +315,23 @@ Caso o ambiente local nao tenha `node` e `npm` no PATH, os builds devem ser exec
 
 O monorepo esta organizado com frontend, backend, database, documentacao LaTeX e apresentacao local. O GitHub Projects deve concentrar o Kanban operacional. A apresentacao em `docs/apresentacao-booka/` nao e integrada ao frontend, nao possui rota Angular/Ionic e nao deve ir para a publicacao online.
 
+## Sincronizacao dos repositorios de origem
+
+Atualizacao realizada na branch `chore/update-booka-repositories`.
+
+Repositorios verificados:
+
+- Monorepo: `https://github.com/Booka-SaaS/booka-platform` (`main`, commit `f73d32a`)
+- Frontend: `https://github.com/TrueTrailBlazer/booka-frontend` (`main`, commit `6cec649`)
+- Backend: `https://github.com/RubensGJ/BookaBackendV2` (`master`, commit `c11b476`; o remoto nao expoe branch `main` nesta copia)
+- Mobile: `https://github.com/ThiagoAkatsuka/booka-app` (`main`, commit `0f623a9`)
+
+Decisoes de merge:
+
+- O frontend foi sincronizado com a origem e manteve as configuracoes do monorepo para Vercel e URL de API via `BOOKA_API_URL`.
+- O backend manteve as melhorias locais de CORS, health check, Prisma/Supabase e variaveis opcionais; foi adicionado `backend/README.md`.
+- O mobile ja estava presente em `mobile/`; foram preservadas as configuracoes mobile especificas do monorepo, pois o README remoto descreve o frontend web.
+
 ## Licenca
 
 Licenca nao identificada no monorepo. Definicao proposta: adicionar uma licenca antes de distribuicao publica ou uso comercial.
