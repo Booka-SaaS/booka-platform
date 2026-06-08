@@ -1,0 +1,239 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{indentfirst}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{longtable}
+\usepackage{hyperref}
+
+\geometry{
+    a4paper,
+    left=3cm,
+    right=2cm,
+    top=3cm,
+    bottom=2cm
+}
+
+\setstretch{1.5}
+\setlength{\parindent}{1.25cm}
+
+\definecolor{bookaBlue}{RGB}{25, 80, 150}
+
+\titleformat{\section}
+{\normalfont\bfseries\Large\color{bookaBlue}}
+{\thesection}
+{1em}
+{}
+
+\titleformat{\subsection}
+{\normalfont\bfseries\large\color{bookaBlue}}
+{\thesubsection}
+{1em}
+{}
+
+\begin{document}
+
+\begin{titlepage}
+    \begin{center}
+        \vspace*{2cm}
+
+        {\Large \textbf{Centro Universitário Insted}}\\[2cm]
+
+        {\Large \textbf{EC2 — Relação do Projeto Booka com o Desafio}}\\[0.5cm]
+        {\large \textbf{``O Dia do Caos'' na Squad}}\\[3cm]
+
+        \textbf{Projeto:} Booka\\
+        \textbf{Tema:} Simulação de Crise em Produção\\
+        \textbf{Curso:} Análise e Desenvolvimento de Sistemas\\[3cm]
+
+        \vfill
+
+        Campo Grande -- MS\\
+        2026
+    \end{center}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\section{Introdução}
+
+O presente documento tem como objetivo apresentar a relação entre o projeto \textbf{Booka} e o exercício \textbf{``O Dia do Caos'' na Squad}, uma simulação de crise em ambiente de produção.
+
+A proposta da atividade é colocar a equipe em uma situação de pressão semelhante ao contexto real de desenvolvimento de software, exigindo organização, comunicação, uso de ferramentas, Gitflow, Pair Programming, resolução de Merge Conflict, Code Review, validação técnica e documentação Postmortem.
+
+\section{Contextualização do Projeto Booka}
+
+O \textbf{Booka} é um sistema SaaS de agendamento multifuncional inteligente, voltado para profissionais, prestadores de serviço e pequenas empresas que precisam organizar clientes, serviços, horários, disponibilidade, bloqueios de agenda e agendamentos em um único ambiente.
+
+O projeto possui frontend, backend, banco de dados, autenticação, regras de negócio, deploy e documentação. Por isso, é adequado para simular uma crise em produção.
+
+\section{Cenário Adaptado da Crise}
+
+No cenário adaptado, é sexta-feira, 16h30. A equipe Booka acabou de realizar o deploy da nova versão do sistema em produção. Cinco minutos depois, surgem alertas críticos: a rota de agendamento começa a falhar para parte dos usuários e o tempo de resposta das consultas de disponibilidade no banco de dados aumenta significativamente.
+
+Os stakeholders cobram uma resposta imediata, pois prestadores de serviço estão perdendo possíveis agendamentos.
+
+\section{Papéis da Equipe}
+
+\begin{longtable}{|p{4cm}|p{10cm}|}
+\hline
+\textbf{Papel} & \textbf{Responsabilidade} \\ \hline
+Product Owner & Validar critérios de aceite, priorizar o backlog de crise e dar o aceite final. \\ \hline
+Scrum Master & Garantir o fluxo do Kanban, remover impedimentos e mediar conflitos técnicos. \\ \hline
+Desenvolvedores & Implementar soluções, realizar testes, abrir Pull Requests e resolver conflitos. \\ \hline
+\end{longtable}
+
+\section{Backlog de Emergência}
+
+O backlog de emergência foi dividido em três subtarefas principais:
+
+\begin{enumerate}
+    \item Isolar o erro no fluxo de agendamento, identificando a linha de código ou regra de negócio que causou a falha.
+    \item Otimizar a consulta do banco de dados responsável pelo gargalo na disponibilidade.
+    \item Implementar uma documentação rápida, em formato de Postmortem, explicando o ocorrido.
+\end{enumerate}
+
+\section{Kanban da Crise}
+
+O Kanban foi estruturado com as seguintes colunas:
+
+\begin{itemize}
+    \item Backlog;
+    \item A Fazer;
+    \item Em Desenvolvimento;
+    \item Em Revisão;
+    \item Testes;
+    \item Concluído;
+    \item Bloqueado.
+\end{itemize}
+
+Os cards principais foram: criar branch de hotfix, isolar erro no agendamento, otimizar consulta de disponibilidade, aplicar Pair Programming, simular Merge Conflict, revisar segurança, abrir Pull Request, validar fluxo completo, criar Postmortem e realizar mini-retrospectiva.
+
+\section{Gitflow sob Pressão}
+
+A equipe não realizou commits diretamente na branch principal. Para a correção, foi criada a branch:
+
+\begin{verbatim}
+hotfix/broken-checkout
+\end{verbatim}
+
+Comandos utilizados:
+
+\begin{verbatim}
+git checkout main
+git pull origin main
+git checkout -b hotfix/broken-checkout
+git push -u origin hotfix/broken-checkout
+\end{verbatim}
+
+\section{Pair Programming}
+
+A correção principal foi realizada utilizando Pair Programming.
+
+O piloto ficou responsável por codificar a solução no fluxo de agendamento e na consulta de disponibilidade. O navegador acompanhou a implementação, validou a lógica técnica, verificou a segurança e garantiu que nenhuma credencial sensível fosse exposta.
+
+\section{Simulação de Merge Conflict}
+
+Para simular a vida real, dois desenvolvedores alteraram propositalmente o mesmo arquivo de configuração em branches diferentes. O conflito foi resolvido de forma colaborativa, removendo marcações de conflito e mantendo apenas as alterações corretas.
+
+Durante a resolução, a equipe garantiu que nenhuma chave de API, senha, token ou credencial sensível fosse exposta no histórico do repositório.
+
+\section{CI/CD e Code Review}
+
+Antes da integração da branch de hotfix, a equipe realizou uma esteira automatizada simulada com:
+
+\begin{itemize}
+    \item build do backend;
+    \item build do frontend;
+    \item testes manuais do fluxo principal;
+    \item revisão cruzada por outro integrante;
+    \item verificação de Clean Code;
+    \item análise de princípios SOLID;
+    \item validação final do Product Owner.
+\end{itemize}
+
+\section{Postmortem}
+
+\subsection*{Resumo do Incidente}
+
+Após o deploy da nova versão do Booka, parte dos usuários passou a enfrentar falhas ao tentar criar agendamentos. Além disso, a consulta de disponibilidade apresentou lentidão significativa.
+
+\subsection*{Impacto}
+
+O problema afetou clientes que tentavam confirmar horários com prestadores de serviço, causando risco de perda de agendamentos.
+
+\subsection*{Causa Raiz}
+
+A falha foi causada por uma alteração recente na validação de disponibilidade e por uma consulta pouco otimizada no banco de dados.
+
+\subsection*{Correção Aplicada}
+
+A equipe criou a branch \texttt{hotfix/broken-checkout}, corrigiu a rota de agendamento, revisou a consulta de disponibilidade, resolveu o Merge Conflict e validou a correção por Pull Request.
+
+\subsection*{Ações Preventivas}
+
+\begin{itemize}
+    \item Criar testes automatizados para o fluxo de agendamento.
+    \item Revisar consultas críticas antes de novos deploys.
+    \item Manter variáveis sensíveis fora do repositório.
+    \item Reforçar o uso de Pull Requests.
+    \item Criar checklist de deploy.
+    \item Melhorar o monitoramento das rotas principais.
+\end{itemize}
+
+\section{Mini-retrospectiva}
+
+Ao final da dinâmica, a equipe realizou uma mini-retrospectiva de cinco minutos.
+
+\subsection*{O que funcionou bem}
+
+\begin{itemize}
+    \item A equipe conseguiu organizar as tarefas no Kanban.
+    \item O Gitflow foi respeitado.
+    \item O Pair Programming ajudou na revisão da lógica.
+    \item O Pull Request permitiu revisão cruzada antes do merge.
+\end{itemize}
+
+\subsection*{Dificuldades encontradas}
+
+\begin{itemize}
+    \item A identificação da causa raiz exigiu análise conjunta entre backend e banco de dados.
+    \item O Merge Conflict precisou ser resolvido com atenção.
+    \item Foi necessário revisar os arquivos para evitar exposição de credenciais.
+\end{itemize}
+
+\subsection*{Melhorias para próximas sprints}
+
+\begin{itemize}
+    \item Criar testes automatizados.
+    \item Melhorar a documentação de deploy.
+    \item Criar checklist antes de publicar em produção.
+    \item Melhorar monitoramento de rotas críticas.
+\end{itemize}
+
+\section{Critérios de Avaliação}
+
+\begin{longtable}{|p{4cm}|p{8cm}|p{2cm}|}
+\hline
+\textbf{Critério} & \textbf{Aplicação no Booka} & \textbf{Peso} \\ \hline
+Uso de Ferramentas & Kanban atualizado e Gitflow respeitado. & 30\% \\ \hline
+Práticas Colaborativas & Pair Programming, revisão cruzada e colaboração entre integrantes. & 30\% \\ \hline
+Qualidade Técnica & Merge Conflict resolvido corretamente e boas práticas de segurança seguidas. & 20\% \\ \hline
+Comunicação e Rituais & Mini-retrospectiva realizada ao final da atividade. & 20\% \\ \hline
+\end{longtable}
+
+\section{Conclusão}
+
+O projeto \textbf{Booka} se relaciona diretamente com o desafio \textbf{``O Dia do Caos'' na Squad}, pois envolve deploy, banco de dados, API, frontend, backend, autenticação, agendamentos, Gitflow, Kanban, CI/CD e colaboração em equipe.
+
+A simulação permitiu representar uma crise realista em produção, exigindo que a equipe organizasse o trabalho, priorizasse tarefas, corrigisse falhas, resolvesse conflitos e documentasse o incidente.
+
+\end{document}
