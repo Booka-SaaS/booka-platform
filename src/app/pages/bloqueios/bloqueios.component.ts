@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { TopbarComponent } from '../../components/topbar/topbar.component';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { BloqueioService, BloqueioAgenda, CreateBloqueioRequest } from '../../services/bloqueio.service';
 import { ModalService } from '../../services/modal.service';
 import { ToastService } from '../../services/toast.service';
@@ -32,9 +32,15 @@ export class BloqueiosComponent implements OnInit {
   private bloqueioService = inject(BloqueioService);
   private modalService = inject(ModalService);
   private toastService = inject(ToastService);
+  private route = inject(ActivatedRoute);
 
   ngOnInit() {
     this.carregarBloqueios();
+    this.route.queryParamMap.subscribe((params) => {
+      const preset = params.get('preset');
+      if (preset === 'almoco') this.aplicarPreset('almoco');
+      else if (preset === 'ferias') this.aplicarPreset('ferias');
+    });
   }
 
   carregarBloqueios() {
@@ -66,7 +72,11 @@ export class BloqueiosComponent implements OnInit {
       return;
     }
 
-    const payload: CreateBloqueioRequest = { inicio, fim, motivo: this.form.motivo || null };
+    const payload: CreateBloqueioRequest = {
+      inicio,
+      fim,
+      motivo: this.form.motivo || null,
+    };
     this.isSaving = true;
 
     this.bloqueioService.criar(payload).subscribe({

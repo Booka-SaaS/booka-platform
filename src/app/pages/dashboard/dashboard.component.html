@@ -186,7 +186,7 @@
           <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-200/60">
             <h2 class="text-sm font-black text-slate-800 uppercase tracking-widest mb-4">Ações Rápidas</h2>
             <div class="flex flex-col gap-3">
-              <a routerLink="/bloqueios" class="bg-white border border-slate-200 rounded-2xl p-4 flex items-center gap-4 transition-all hover:border-orange-300 hover:shadow-md hover:-translate-y-1 group cursor-pointer">
+              <a routerLink="/bloqueios" [queryParams]="{preset: 'almoco'}" class="bg-white border border-slate-200 rounded-2xl p-4 flex items-center gap-4 transition-all hover:border-orange-300 hover:shadow-md hover:-translate-y-1 group cursor-pointer">
                 <div class="w-10 h-10 rounded-xl bg-orange-50 text-orange-500 flex items-center justify-center group-hover:bg-orange-500 group-hover:text-white transition-colors shrink-0">
                   <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">restaurant</span>
                 </div>
@@ -195,8 +195,8 @@
                   <span class="text-[10px] font-medium text-slate-500">Pausar horários</span>
                 </div>
               </a>
-              
-              <a routerLink="/bloqueios" class="bg-white border border-slate-200 rounded-2xl p-4 flex items-center gap-4 transition-all hover:border-indigo-300 hover:shadow-md hover:-translate-y-1 group cursor-pointer">
+
+              <a routerLink="/bloqueios" [queryParams]="{preset: 'ferias'}" class="bg-white border border-slate-200 rounded-2xl p-4 flex items-center gap-4 transition-all hover:border-indigo-300 hover:shadow-md hover:-translate-y-1 group cursor-pointer">
                 <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-500 flex items-center justify-center group-hover:bg-indigo-500 group-hover:text-white transition-colors shrink-0">
                   <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">beach_access</span>
                 </div>

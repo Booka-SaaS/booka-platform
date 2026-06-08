@@ -76,6 +76,14 @@ export class AuthService {
     return this.http.put<{ message: string }>(`${this.apiUrl}/auth/senha`, { senhaAtual, novaSenha });
   }
 
+  recuperarSenha(email: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/auth/recuperar-senha`, { email });
+  }
+
+  novaSenha(token: string, novaSenha: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/auth/nova-senha`, { token, novaSenha });
+  }
+
   uploadAvatar(file: File): Observable<{ imagemUrl: string }> {
     const form = new FormData();
     form.append('avatar', file);
