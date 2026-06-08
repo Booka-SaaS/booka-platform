@@ -11,6 +11,15 @@ type RegisterInput = {
   email: string;
   password: string;
   role: UserRole;
+  endereco?: {
+    cep: string;
+    logradouro: string;
+    numero: string;
+    bairro: string;
+    complemento?: string;
+    cidade: string;
+    estado: string;
+  };
 };
 
 function normalizeEmail(email: string) {
@@ -98,9 +107,14 @@ export async function register(input: RegisterInput) {
             categoriaPrincipal: 'Geral',
             modalidadePrincipal: 'PRESENCIAL',
             tipoVendedor: 'AUTONOMO',
+            cidade: input.endereco?.cidade,
             publicado: false,
           },
         });
+
+        const enderecoCompleto = input.endereco
+          ? `${input.endereco.logradouro}, ${input.endereco.numero} - ${input.endereco.bairro}, ${input.endereco.cidade}/${input.endereco.estado.toUpperCase()}`
+          : undefined;
 
         await transaction.loja.create({
           data: {
@@ -108,6 +122,14 @@ export async function register(input: RegisterInput) {
             perfilProfissionalId: perfil.id,
             nome: `${input.nome.trim()} Studio`,
             slug: `${slugify(input.nome)}-${createdUser.id.slice(0, 8)}`,
+            endereco: enderecoCompleto,
+            cep: input.endereco?.cep,
+            logradouro: input.endereco?.logradouro,
+            numero: input.endereco?.numero,
+            bairro: input.endereco?.bairro,
+            complemento: input.endereco?.complemento,
+            cidade: input.endereco?.cidade,
+            estado: input.endereco?.estado.toUpperCase(),
             onboardingConcluido: false,
           },
         });

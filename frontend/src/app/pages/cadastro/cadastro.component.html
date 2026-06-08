@@ -126,6 +126,86 @@
           </div>
         </div>
 
+        <div *ngIf="role === 'PROFISSIONAL'" class="space-y-4 rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
+          <div>
+            <p class="text-sm font-bold text-slate-900">Endereco do estabelecimento</p>
+            <p class="mt-1 text-xs text-slate-500">Digite o CEP para preencher automaticamente rua, bairro, cidade e estado.</p>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-slate-900 mb-1.5" for="cep">CEP</label>
+            <div class="relative">
+              <input [value]="cep" (input)="onCepInput($any($event.target).value)"
+                class="block w-full rounded-xl border bg-white py-3 px-4 pr-12 text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 sm:text-sm transition-all outline-none"
+                [ngClass]="cepNaoEncontrado ? 'border-red-400' : 'border-slate-200'"
+                id="cep" name="cep" placeholder="00000-000" type="text" maxlength="9" />
+
+              <svg *ngIf="isBuscandoCep" class="absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 animate-spin text-indigo-500"
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                </path>
+              </svg>
+              <span *ngIf="cepPreenchido && !isBuscandoCep"
+                class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-emerald-500">check_circle</span>
+            </div>
+            <p *ngIf="cepNaoEncontrado" class="mt-1.5 text-xs font-medium text-red-500">CEP nao encontrado. Verifique e tente novamente.</p>
+          </div>
+
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div class="sm:col-span-2">
+              <label class="block text-sm font-semibold text-slate-900 mb-1.5" for="logradouro">Logradouro</label>
+              <input [(ngModel)]="logradouro"
+                class="block w-full rounded-xl border border-slate-200 bg-white py-3 px-4 text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 sm:text-sm transition-all outline-none"
+                id="logradouro" name="logradouro" placeholder="Rua, Av., Travessa..." type="text" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-slate-900 mb-1.5" for="numero">Numero</label>
+              <input [(ngModel)]="numero"
+                class="block w-full rounded-xl border border-slate-200 bg-white py-3 px-4 text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 sm:text-sm transition-all outline-none"
+                id="numero" name="numero" placeholder="123" type="text" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label class="block text-sm font-semibold text-slate-900 mb-1.5" for="bairro">Bairro</label>
+              <input [(ngModel)]="bairro"
+                class="block w-full rounded-xl border border-slate-200 bg-white py-3 px-4 text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 sm:text-sm transition-all outline-none"
+                id="bairro" name="bairro" placeholder="Centro" type="text" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-slate-900 mb-1.5" for="complemento">Complemento</label>
+              <input [(ngModel)]="complemento"
+                class="block w-full rounded-xl border border-slate-200 bg-white py-3 px-4 text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 sm:text-sm transition-all outline-none"
+                id="complemento" name="complemento" placeholder="Sala, apto, ponto de referencia" type="text" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div class="sm:col-span-2">
+              <label class="block text-sm font-semibold text-slate-900 mb-1.5" for="cidade">Cidade</label>
+              <input [(ngModel)]="cidade"
+                class="block w-full rounded-xl border border-slate-200 bg-white py-3 px-4 text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 sm:text-sm transition-all outline-none"
+                id="cidade" name="cidade" placeholder="Sao Paulo" type="text" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-slate-900 mb-1.5" for="estado">Estado</label>
+              <input [(ngModel)]="estado"
+                class="block w-full rounded-xl border border-slate-200 bg-white py-3 px-4 uppercase text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 sm:text-sm transition-all outline-none"
+                id="estado" name="estado" placeholder="SP" type="text" maxlength="2" />
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="errorMessage" class="rounded-xl border border-red-200 bg-red-50 p-3">
+          <p class="text-sm font-medium text-red-600">{{ errorMessage }}</p>
+        </div>
+
         <div class="flex items-start pt-2">
           <div class="flex h-5 items-center">
             <input

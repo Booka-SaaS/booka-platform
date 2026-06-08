@@ -15,6 +15,16 @@ export interface AuthResponse {
   };
 }
 
+export interface RegisterAddressPayload {
+  cep: string;
+  logradouro: string;
+  numero: string;
+  bairro: string;
+  complemento?: string;
+  cidade: string;
+  estado: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -42,12 +52,19 @@ export class AuthService {
       );
   }
 
-  register(nome: string, email: string, password: string, role: 'CLIENTE' | 'PROFISSIONAL'): Observable<AuthResponse> {
+  register(
+    nome: string,
+    email: string,
+    password: string,
+    role: 'CLIENTE' | 'PROFISSIONAL',
+    endereco?: RegisterAddressPayload
+  ): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/auth/register`, {
       nome,
       email,
       password,
-      role
+      role,
+      endereco
     })
       .pipe(
         tap(response => {
