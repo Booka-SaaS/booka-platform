@@ -103,7 +103,7 @@ Teste as telas de login e cadastro (/login e /cadastro)
 
 ## Integração com backend
 
-O frontend está preparado para consumir uma API RESTful.
+O frontend consome a API pelo gateway Express do backend.
 
 A URL base pode ser configurada em:
 
@@ -111,7 +111,27 @@ src/environments/environment.development.ts
 
 Endpoint padrão:
 
-http://localhost:3000/api/
+http://localhost:3000/api
+
+Rotas de notificações:
+
+- `/notificacoes` lista notificações reais do `notification-service`.
+- O menu superior mostra o contador de notificações não lidas.
+- A ação "marcar como lida" persiste via `PATCH /api/notifications/:id/read`.
+
+## Segurança
+
+- Requests autenticados recebem JWT via interceptor HTTP.
+- Payloads POST/PUT/PATCH são sanitizados com DOMPurify.
+- Uploads em `FormData` não são alterados pelo interceptor.
+
+## Testes
+
+```bash
+npm run build
+npm run test:ci
+npm run cypress:run
+```
 
 ## Considerações
 

@@ -1,8 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, Injector, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ModalService } from '../../services/modal.service';
+import { NotificacaoService } from '../../services/notificacao.service';
 
 @Component({
   selector: 'app-navbar',
@@ -66,12 +67,12 @@ import { ModalService } from '../../services/modal.service';
                   </a>
                 </li>
                 <li>
-                  <a class="justify-between">
+                  <a [routerLink]="['/notificacoes']" class="justify-between">
                     <div class="flex items-center gap-2">
                       <span class="material-symbols-outlined text-lg">notifications</span>
                       Notificações
                     </div>
-                    <span class="badge badge-error badge-sm text-white">0</span>
+                    <span class="badge badge-error badge-sm text-white">{{ unreadCount }}</span>
                   </a>
                 </li>
                 <div class="divider my-0"></div>
@@ -88,10 +89,31 @@ import { ModalService } from '../../services/modal.service';
     </div>
   `
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
   private router = inject(Router);
   private authService = inject(AuthService);
   private modalService = inject(ModalService);
+  private injector = inject(Injector);
+
+  unreadCount = 0;
+
+  ngOnInit() {
+    if (this.isLoggedIn && this.isProfissional) {
+      try {
+        const notificacaoService = this.injector.get(NotificacaoService);
+        notificacaoService.contarNaoLidas().subscribe({
+          next: response => {
+            this.unreadCount = response.unread;
+          },
+          error: () => {
+            this.unreadCount = 0;
+          },
+        });
+      } catch {
+        this.unreadCount = 0;
+      }
+    }
+  }
 
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
