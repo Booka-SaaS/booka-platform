@@ -2,6 +2,7 @@ import { Prisma, StatusAgendamento } from '@prisma/client';
 import { prisma } from '../../lib/db';
 import { AppError } from '../../lib/errors';
 import { enviarEmailSolicitacao, enviarEmailConfirmacao } from '../../lib/email/email.service';
+import { publishBookingCreated } from '../../lib/events/event-bus';
 
 type ListAgendamentosFilters = {
   data?: string;
@@ -410,6 +411,18 @@ export async function createPublicAgendamento(input: CreateAgendamentoPublicoInp
       inicio,
     });
   }
+
+  publishBookingCreated({
+    type: 'BOOKING_CREATED',
+    eventoId: `booking.created.${agendamento.id}`,
+    agendamentoId: agendamento.id,
+    profissionalUserId: loja.usuarioId,
+    lojaId: loja.id,
+    clienteNome: cliente.nome,
+    servicoNome: servico.nome,
+    inicio: inicio.toISOString(),
+    createdAt: new Date().toISOString(),
+  });
 
   return mapAgendamento(agendamento);
 }

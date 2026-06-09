@@ -25,10 +25,12 @@ Escopo coberto hoje:
 - Node.js
 - TypeScript
 - Express
+- NestJS
 - Prisma
 - PostgreSQL
 - Zod
 - Swagger UI
+- RabbitMQ
 
 ## Requisitos
 
@@ -38,11 +40,28 @@ Escopo coberto hoje:
 
 ## Portas e servicos
 
-- API: `http://localhost:3001`
+- API Gateway: `http://localhost:3000`
+- Core API: `http://localhost:3001`
+- Notification Service: `http://localhost:3002`
 - Swagger: `http://localhost:3001/docs`
 - Healthcheck: `http://localhost:3001/health`
+- Gateway healthcheck: `http://localhost:3000/health`
+- RabbitMQ: `127.0.0.1:5672`
+- RabbitMQ Management: `http://localhost:15672`
 - PostgreSQL: `127.0.0.1:5434`
 - Container do banco: `booka-v2-postgres`
+
+## MVP academico de arquitetura
+
+Este repositorio agora tambem contem:
+
+- `services/api-gateway`: gateway Express em `3000`.
+- `services/notification-service`: microservico NestJS em `3002`.
+- RabbitMQ para evento `booking.created`.
+- SOAP em `/soap/notifications`.
+- Docker Compose com Postgres, RabbitMQ, core API, gateway e notification-service.
+
+Documento de evidencia: [docs/ARQUITETURA_MVP_ACADEMICO.md](./docs/ARQUITETURA_MVP_ACADEMICO.md).
 
 ## Variaveis de ambiente
 
@@ -133,8 +152,15 @@ npm run seed
 ## Scripts
 
 - `npm run dev`: sobe a API com recarga automatica usando `tsx watch`
+- `npm run dev:core`: sobe o core API Express
+- `npm run dev:gateway`: sobe o API Gateway
+- `npm run dev:notifications`: sobe o Notification Service NestJS
 - `npm run build`: compila TypeScript para `dist/`
 - `npm run start`: executa a versao compilada
+- `npm run start:gateway`: executa o gateway compilado
+- `npm run start:notifications`: executa o notification-service compilado
+- `npm run test`: executa testes unitarios
+- `npm run test:integration`: executa testes de integracao do MVP
 - `npm run prisma:generate`: gera o Prisma Client a partir do `schema.prisma`
 - `npm run prisma:migrate`: cria/aplica migrations em desenvolvimento
 - `npm run prisma:deploy`: aplica migrations ja existentes

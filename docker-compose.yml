@@ -11,6 +11,82 @@ services:
       - "5434:5432"
     volumes:
       - booka_v2_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d booka_v2"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: booka-v2-rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  core-api:
+    build: .
+    container_name: booka-v2-core-api
+    restart: unless-stopped
+    command: sh -c "npm run prisma:deploy && npm run start"
+    environment:
+      PORT: 3001
+      CLIENT_ORIGIN: http://localhost:4200
+      GATEWAY_ORIGIN: http://localhost:3000
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/booka_v2?schema=public
+      DIRECT_URL: postgresql://postgres:postgres@postgres:5432/booka_v2?schema=public
+      JWT_SECRET: booka-v2-local-secret-change-me
+      JWT_TTL_SECONDS: 604800
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+    ports:
+      - "3001:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  api-gateway:
+    build: .
+    container_name: booka-v2-api-gateway
+    restart: unless-stopped
+    command: npm run start:gateway
+    environment:
+      GATEWAY_PORT: 3000
+      CLIENT_ORIGIN: http://localhost:4200
+      CORE_API_URL: http://core-api:3001
+      NOTIFICATION_SERVICE_URL: http://notification-service:3002
+    ports:
+      - "3000:3000"
+    depends_on:
+      - core-api
+      - notification-service
+
+  notification-service:
+    build: .
+    container_name: booka-v2-notification-service
+    restart: unless-stopped
+    command: sh -c "npm run prisma:deploy && npm run start:notifications"
+    environment:
+      NOTIFICATION_SERVICE_PORT: 3002
+      CLIENT_ORIGIN: http://localhost:4200
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/booka_v2?schema=public
+      DIRECT_URL: postgresql://postgres:postgres@postgres:5432/booka_v2?schema=public
+      JWT_SECRET: booka-v2-local-secret-change-me
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+    ports:
+      - "3002:3002"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
 
 volumes:
   booka_v2_postgres_data:

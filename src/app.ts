@@ -1,6 +1,8 @@
 import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
+import helmet from 'helmet';
 import path from 'path';
+import rateLimit from 'express-rate-limit';
 import swaggerUi from 'swagger-ui-express';
 import { ZodError } from 'zod';
 import { env } from './config/env';
@@ -21,9 +23,18 @@ import { buildUploadRouter } from './modules/upload/upload.controller';
 export function buildApp() {
   const app = express();
 
+  app.use(helmet());
   app.use(
     cors({
-      origin: env.CLIENT_ORIGIN,
+      origin: [env.CLIENT_ORIGIN, env.GATEWAY_ORIGIN],
+    }),
+  );
+  app.use(
+    rateLimit({
+      windowMs: 15 * 60 * 1000,
+      limit: 300,
+      standardHeaders: 'draft-8',
+      legacyHeaders: false,
     }),
   );
   app.use(express.json());

@@ -1,0 +1,9 @@
+process.env.PORT ??= '3001';
+process.env.CLIENT_ORIGIN ??= 'http://localhost:4200';
+process.env.GATEWAY_ORIGIN ??= 'http://localhost:3000';
+process.env.DATABASE_URL ??= 'postgresql://postgres:postgres@127.0.0.1:5434/booka_v2?schema=public';
+process.env.DIRECT_URL ??= process.env.DATABASE_URL;
+process.env.JWT_SECRET ??= 'booka-v2-local-secret-change-me';
+process.env.JWT_TTL_SECONDS ??= '604800';
+process.env.RABBITMQ_URL ??= 'amqp://guest:guest@127.0.0.1:5672';
+process.env.NOTIFICATION_SERVICE_PORT ??= '3002';
