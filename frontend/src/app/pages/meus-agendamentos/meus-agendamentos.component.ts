@@ -4,7 +4,7 @@ import { RouterModule, Router } from '@angular/router';
 import { AgendamentoService } from '../../services/agendamento.service';
 import { AuthService } from '../../services/auth.service';
 import { ModalService } from '../../services/modal.service';
-import { Agendamento } from '../../models';
+import { AgendamentoMeu } from '../../models';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 
 @Component({
@@ -19,7 +19,7 @@ export class MeusAgendamentosComponent implements OnInit {
     private modalService = inject(ModalService);
     private router = inject(Router);
 
-    agendamentos: Agendamento[] = [];
+    agendamentos: AgendamentoMeu[] = [];
     loading = true;
     error = false;
     cancelandoId: string | null = null;

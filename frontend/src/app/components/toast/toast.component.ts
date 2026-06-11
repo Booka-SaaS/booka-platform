@@ -16,7 +16,7 @@ import { ToastService, Toast } from '../../services/toast.service';
                'bg-blue-500 text-white': toast.type === 'info',
                'bg-amber-500 text-white': toast.type === 'warning'
              }">
-
+             
           <div class="flex items-start gap-3">
             <span class="material-symbols-outlined shrink-0 text-white" style="font-variation-settings: 'FILL' 1;">
               {{ getIcon(toast.type) }}
@@ -26,7 +26,7 @@ import { ToastService, Toast } from '../../services/toast.service';
               <span class="material-symbols-outlined text-[18px]">close</span>
             </button>
           </div>
-
+          
         </div>
       }
     </div>

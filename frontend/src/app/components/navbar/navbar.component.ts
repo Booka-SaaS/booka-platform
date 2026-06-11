@@ -1,8 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, Injector, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ModalService } from '../../services/modal.service';
+import { NotificacaoService } from '../../services/notificacao.service';
 
 @Component({
   selector: 'app-navbar',
@@ -21,32 +22,32 @@ import { ModalService } from '../../services/modal.service';
             <span class="font-black tracking-tighter">Booka</span>
         </a>
       </div>
-
+      
       <div class="navbar-center hidden lg:flex">
         <div class="flex items-center gap-2 text-slate-500 font-medium text-sm">
           <a [routerLink]="['/explorar']" routerLinkActive="text-primary bg-primary/10 font-semibold" class="px-4 py-2 rounded-lg hover:text-primary transition-colors">Explorar</a>
-
+          
           <ng-container *ngIf="isLoggedIn && isProfissional">
             <a [routerLink]="['/dashboard']" routerLinkActive="text-primary bg-primary/10 font-semibold" class="px-4 py-2 rounded-lg hover:text-primary transition-colors">Meu Painel</a>
             <a [routerLink]="['/agenda']" routerLinkActive="text-primary bg-primary/10 font-semibold" class="px-4 py-2 rounded-lg hover:text-primary transition-colors">Minha Agenda</a>
           </ng-container>
-
+          
           <ng-container *ngIf="isLoggedIn && !isProfissional">
              <a [routerLink]="['/meus-agendamentos']" routerLinkActive="text-primary bg-primary/10 font-semibold" class="px-4 py-2 rounded-lg hover:text-primary transition-colors">Minhas Reservas</a>
           </ng-container>
-
+          
           <ng-container *ngIf="!isLoggedIn">
              <a [routerLink]="['/cadastro']" class="px-4 py-2 rounded-lg hover:text-primary transition-colors">Cadastre seu Negócio</a>
           </ng-container>
         </div>
       </div>
-
+      
       <div class="navbar-end gap-2">
         <ng-container *ngIf="!isLoggedIn">
             <a [routerLink]="['/login']" class="btn btn-ghost">Entrar</a>
             <a [routerLink]="['/cadastro']" class="btn btn-primary rounded-full px-6">Cadastrar</a>
         </ng-container>
-
+        
         <ng-container *ngIf="isLoggedIn">
             <div class="dropdown dropdown-end">
               <div tabindex="0" role="button" class="btn btn-ghost rounded-full flex gap-2 border border-base-300">
@@ -66,12 +67,12 @@ import { ModalService } from '../../services/modal.service';
                   </a>
                 </li>
                 <li>
-                  <a class="justify-between">
+                  <a [routerLink]="['/notificacoes']" class="justify-between">
                     <div class="flex items-center gap-2">
                       <span class="material-symbols-outlined text-lg">notifications</span>
                       Notificações
                     </div>
-                    <span class="badge badge-error badge-sm text-white">0</span>
+                    <span class="badge badge-error badge-sm text-white">{{ unreadCount }}</span>
                   </a>
                 </li>
                 <div class="divider my-0"></div>
@@ -88,10 +89,31 @@ import { ModalService } from '../../services/modal.service';
     </div>
   `
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
   private router = inject(Router);
   private authService = inject(AuthService);
   private modalService = inject(ModalService);
+  private injector = inject(Injector);
+
+  unreadCount = 0;
+
+  ngOnInit() {
+    if (this.isLoggedIn && this.isProfissional) {
+      try {
+        const notificacaoService = this.injector.get(NotificacaoService);
+        notificacaoService.contarNaoLidas().subscribe({
+          next: response => {
+            this.unreadCount = response.unread;
+          },
+          error: () => {
+            this.unreadCount = 0;
+          },
+        });
+      } catch {
+        this.unreadCount = 0;
+      }
+    }
+  }
 
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
@@ -103,8 +125,8 @@ export class NavbarComponent {
 
   logout() {
     this.modalService.confirm(
-      'Sair da Conta',
-      'Tem certeza que deseja sair?',
+      'Sair da Conta', 
+      'Tem certeza que deseja sair?', 
       () => {
         this.authService.logout();
         this.router.navigate(['/']);

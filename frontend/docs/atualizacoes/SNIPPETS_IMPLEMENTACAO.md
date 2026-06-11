@@ -32,11 +32,11 @@ describe('AuthService', () => {
 
   describe('login', () => {
     it('should send POST request with credentials', () => {
-      const mockResponse = {
+      const mockResponse = { 
         token: 'test-jwt-token',
         usuario: { id: 1, email: 'test@test.com', role: 'CLIENTE' }
       };
-
+      
       service.login('test@test.com', 'password123').subscribe(response => {
         expect(response.token).toBe('test-jwt-token');
       });
@@ -48,7 +48,7 @@ describe('AuthService', () => {
     });
 
     it('should store token in localStorage on successful login', () => {
-      const mockResponse = {
+      const mockResponse = { 
         token: 'test-jwt-token',
         usuario: { role: 'CLIENTE' }
       };
@@ -77,7 +77,7 @@ describe('AuthService', () => {
 
   describe('register', () => {
     it('should send POST request with user data', () => {
-      const mockResponse = {
+      const mockResponse = { 
         token: 'new-jwt-token',
         usuario: { id: 2, email: 'newuser@test.com', role: 'CLIENTE' }
       };
@@ -91,7 +91,7 @@ describe('AuthService', () => {
     });
 
     it('should store token after successful registration', () => {
-      const mockResponse = {
+      const mockResponse = { 
         token: 'new-jwt-token',
         usuario: { role: 'PROFISSIONAL' }
       };
@@ -139,9 +139,9 @@ describe('AuthService', () => {
       const originalWindow = global.window;
       // @ts-ignore
       delete global.window;
-
+      
       expect(service.isLoggedIn()).toBe(false);
-
+      
       global.window = originalWindow;
     });
   });
@@ -149,7 +149,7 @@ describe('AuthService', () => {
   describe('loginTeste', () => {
     it('should set test token and role', () => {
       service.loginTeste('PROFISSIONAL');
-
+      
       expect(localStorage.getItem('token')).toBe('fake-jwt-token-para-teste');
       expect(localStorage.getItem('role')).toBe('PROFISSIONAL');
     });
@@ -185,7 +185,7 @@ describe('authGuard', () => {
   it('should return true when user is logged in', () => {
     mockAuthService.isLoggedIn.and.returnValue(true);
 
-    const result = TestBed.runInInjectionContext(() =>
+    const result = TestBed.runInInjectionContext(() => 
       authGuard({} as any, {} as any)
     );
 
@@ -196,7 +196,7 @@ describe('authGuard', () => {
   it('should navigate to login and return false when user is not logged in', () => {
     mockAuthService.isLoggedIn.and.returnValue(false);
 
-    const result = TestBed.runInInjectionContext(() =>
+    const result = TestBed.runInInjectionContext(() => 
       authGuard({} as any, {} as any)
     );
 
@@ -273,10 +273,10 @@ describe('authInterceptor', () => {
   <meta charset="utf-8">
   <title>Booka - Agendamentos</title>
   <base href="/">
-
+  
   <!-- Content Security Policy -->
-  <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self';
+  <meta http-equiv="Content-Security-Policy" 
+    content="default-src 'self'; 
       script-src 'self' 'unsafe-inline' 'unsafe-eval' https://fonts.googleapis.com https://cdn.jsdelivr.net;
       style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
       img-src 'self' data: https: blob:;
@@ -287,16 +287,16 @@ describe('authInterceptor', () => {
       object-src 'none';
       base-uri 'self';
       form-action 'self';">
-
+  
   <!-- X-UA-Compatible -->
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
+  
   <!-- Viewport -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  
   <!-- Disable IE -->
   <meta http-equiv="ie=edge">
-
+  
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body class="m-0">
@@ -336,12 +336,12 @@ function sanitizeObject(obj: any): any {
   if (typeof obj === 'string') {
     return DOMPurify.sanitize(obj);
   }
-
+  
   if (typeof obj === 'object' && obj !== null) {
     if (Array.isArray(obj)) {
       return obj.map(item => sanitizeObject(item));
     }
-
+    
     return Object.keys(obj).reduce((acc, key) => {
       acc[key] = sanitizeObject(obj[key]);
       return acc;
@@ -366,7 +366,7 @@ export class CustomValidators {
   static email(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (!control.value) return null;
-
+      
       const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
       return emailRegex.test(control.value) ? null : { invalidEmail: true };
     };

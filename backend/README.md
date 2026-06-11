@@ -1,6 +1,6 @@
 # Booka Backend V2
 
-Backend do Booka dentro do monorepo `booka-platform`. Este projeto cobre o painel do profissional e as rotas publicas do marketplace, com contrato em `camelCase`, autenticacao JWT e PostgreSQL via Prisma.
+Backend novo do Booka, reconstruido a partir do frontend atual. Este projeto cobre o painel do profissional e as rotas publicas do marketplace, com contrato em `camelCase`, autentificacao JWT e PostgreSQL via Prisma.
 
 ## Objetivo
 
@@ -25,10 +25,12 @@ Escopo coberto hoje:
 - Node.js
 - TypeScript
 - Express
+- NestJS
 - Prisma
 - PostgreSQL
 - Zod
 - Swagger UI
+- RabbitMQ
 
 ## Requisitos
 
@@ -38,11 +40,28 @@ Escopo coberto hoje:
 
 ## Portas e servicos
 
-- API: `http://localhost:3001`
+- API Gateway: `http://localhost:3000`
+- Core API: `http://localhost:3001`
+- Notification Service: `http://localhost:3002`
 - Swagger: `http://localhost:3001/docs`
 - Healthcheck: `http://localhost:3001/health`
+- Gateway healthcheck: `http://localhost:3000/health`
+- RabbitMQ: `127.0.0.1:5672`
+- RabbitMQ Management: `http://localhost:15672`
 - PostgreSQL: `127.0.0.1:5434`
 - Container do banco: `booka-v2-postgres`
+
+## MVP academico de arquitetura
+
+Este repositorio agora tambem contem:
+
+- `services/api-gateway`: gateway Express em `3000`.
+- `services/notification-service`: microservico NestJS em `3002`.
+- RabbitMQ para evento `booking.created`.
+- SOAP em `/soap/notifications`.
+- Docker Compose com Postgres, RabbitMQ, core API, gateway e notification-service.
+
+Documento de evidencia: [docs/ARQUITETURA_MVP_ACADEMICO.md](./docs/ARQUITETURA_MVP_ACADEMICO.md).
 
 ## Variaveis de ambiente
 
@@ -56,8 +75,7 @@ Valores padrao:
 
 ```env
 PORT=3001
-FRONTEND_URL=http://localhost:4200
-CLIENT_ORIGINS=http://localhost:4200,http://localhost:5173,http://localhost:3000
+CLIENT_ORIGIN=http://localhost:4200
 DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5434/booka_v2?schema=public
 DIRECT_URL=postgresql://postgres:postgres@127.0.0.1:5434/booka_v2?schema=public
 JWT_SECRET=booka-v2-local-secret-change-me
@@ -67,7 +85,7 @@ JWT_TTL_SECONDS=604800
 Observacoes:
 
 - `JWT_SECRET` precisa ter pelo menos 16 caracteres.
-- `FRONTEND_URL` e `CLIENT_ORIGINS` controlam as origens aceitas por CORS.
+- `CLIENT_ORIGIN` precisa bater com a origem do frontend local.
 - `DATABASE_URL` e usada pela API em runtime.
 - `DIRECT_URL` e usada pelo Prisma para migrations e comandos administrativos.
 - `JWT_TTL_SECONDS=604800` equivale a 7 dias.
@@ -84,7 +102,7 @@ Observacoes:
 8. Suba a API.
 
 ```bash
-cd backend
+cd C:\Users\estagiocotin1\Downloads\Workspace\BookaBackendV2
 copy .env.example .env
 docker compose up -d
 npm install
@@ -134,8 +152,15 @@ npm run seed
 ## Scripts
 
 - `npm run dev`: sobe a API com recarga automatica usando `tsx watch`
+- `npm run dev:core`: sobe o core API Express
+- `npm run dev:gateway`: sobe o API Gateway
+- `npm run dev:notifications`: sobe o Notification Service NestJS
 - `npm run build`: compila TypeScript para `dist/`
 - `npm run start`: executa a versao compilada
+- `npm run start:gateway`: executa o gateway compilado
+- `npm run start:notifications`: executa o notification-service compilado
+- `npm run test`: executa testes unitarios
+- `npm run test:integration`: executa testes de integracao do MVP
 - `npm run prisma:generate`: gera o Prisma Client a partir do `schema.prisma`
 - `npm run prisma:migrate`: cria/aplica migrations em desenvolvimento
 - `npm run prisma:deploy`: aplica migrations ja existentes

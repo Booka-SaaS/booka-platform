@@ -40,7 +40,7 @@ export class AgendarComponent implements OnInit {
   dataAtual: Date = new Date();
   diaSelecionado: number | null = null;
   horariosDisponiveis: string[] = [];
-
+  
   private profissionalService = inject(ProfissionalService);
   private agendamentoService = inject(AgendamentoService);
   private authService = inject(AuthService);
@@ -96,7 +96,7 @@ export class AgendarComponent implements OnInit {
   gerarCalendario(data: Date) {
     const ano = data.getFullYear();
     const mes = data.getMonth();
-
+    
     const nomesMeses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
     this.mesAtualNome = `${nomesMeses[mes]} ${ano}`;
 
@@ -197,7 +197,7 @@ export class AgendarComponent implements OnInit {
     // Cria o Date com hora local e converte para ISO com offset correto
     const dataHoraLocal = new Date(`${ano}-${mes}-${dia}T${this.horarioSelecionado}:00`);
     const inicioIso = dataHoraLocal.toISOString();
-
+    
     const dados: CreateAgendamentoPublicoRequest = {
       lojaId: this.lojaId!,
       servicoId: this.servicoSelecionado.id,

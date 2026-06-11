@@ -237,19 +237,19 @@ npm install dompurify @types/dompurify
 
 ## ❓ FAQ
 
-**P: Por quanto tempo isso levará?**
+**P: Por quanto tempo isso levará?**  
 R: 8 semanas com 2-3 devs. Se apenas 1 dev, 4-5 meses.
 
-**P: Preciso parar o desenvolvimento de features?**
+**P: Preciso parar o desenvolvimento de features?**  
 R: Sim, por 4-6 semanas para refatoração + testes.
 
-**P: Qual é o custo de não fazer isso?**
+**P: Qual é o custo de não fazer isso?**  
 R: Débito técnico acumula: bugs aumentam, deploy fica impossível, segurança fica frágil.
 
-**P: Posso fazer tudo em paralelo?**
+**P: Posso fazer tudo em paralelo?**  
 R: Parcialmente. Backend/Frontend podem trabalhar em paralelo. Infra/DevOps depois.
 
-**P: E se eu só fizer os testes?**
+**P: E se eu só fizer os testes?**  
 R: Mínimo 60 pontos. Mas o projeto continua vulnerável e sem microsserviços.
 
 ---
@@ -264,10 +264,10 @@ R: Mínimo 60 pontos. Mas o projeto continua vulnerável e sem microsserviços.
 
 ---
 
-**Documento:** Sumário Executivo v1.0
-**Gerado:** 18 de Maio de 2026
-**Autor:** Análise Automatizada
-**Tempo de leitura:** 10 minutos
+**Documento:** Sumário Executivo v1.0  
+**Gerado:** 18 de Maio de 2026  
+**Autor:** Análise Automatizada  
+**Tempo de leitura:** 10 minutos  
 **Ação recomendada:** Implementar Fase 1 imediatamente
 
 ---
@@ -276,7 +276,7 @@ R: Mínimo 60 pontos. Mas o projeto continua vulnerável e sem microsserviços.
 
 Dúvidas sobre implementação? Verifique:
 - ❓ Testes → `SNIPPETS_IMPLEMENTACAO.md` seção 1
-- ❓ Segurança → `SNIPPETS_IMPLEMENTACAO.md` seção 2
+- ❓ Segurança → `SNIPPETS_IMPLEMENTACAO.md` seção 2  
 - ❓ Arquitetura → `ROADMAP_TECNICO.md` seção 2
 - ❓ Timeline → `ANALISE_REQUISITOS.md` seção "Plano de Ação"
 

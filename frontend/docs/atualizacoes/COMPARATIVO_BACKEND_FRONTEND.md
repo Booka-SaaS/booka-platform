@@ -142,7 +142,7 @@ Objetivo (Semana 6):
 
 ### Cadastro de Profissional
 ```
-Frontend (Cadastro)
+Frontend (Cadastro) 
     ↓ POST /auth/register {email, password, nome, role: PROFISSIONAL}
 Backend (Auth Service)
     ↓ Cria usuário + PerfilProfissional
@@ -283,8 +283,8 @@ Se retornar lista de profissionais, o backend está OK!
 
 ---
 
-**Documento:** Comparativo Backend vs Frontend
-**Versão:** 1.0
-**Última atualização:** 18/05/2026
+**Documento:** Comparativo Backend vs Frontend  
+**Versão:** 1.0  
+**Última atualização:** 18/05/2026  
 **Status:** Pronto para ação
 

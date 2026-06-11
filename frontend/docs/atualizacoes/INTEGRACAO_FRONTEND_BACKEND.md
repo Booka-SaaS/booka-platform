@@ -1,9 +1,9 @@
 # 🔗 Integração Frontend-Backend - Booka
 
-**Estado:** ✅ PRONTO PARA TESTES
-**Data:** May 18, 2026
-**Frontend Framework:** Angular 19 (Standalone Components)
-**Backend:** Express + Prisma
+**Estado:** ✅ PRONTO PARA TESTES  
+**Data:** May 18, 2026  
+**Frontend Framework:** Angular 19 (Standalone Components)  
+**Backend:** Express + Prisma  
 **API Base URL:** `http://localhost:3001`
 
 ---
@@ -15,7 +15,7 @@
   - API URL: `http://localhost:3001`
   - HTTPS desabilitado em desenvolvimento
   - JWT config: 15min access, 7 dias refresh
-
+  
 ### ✅ Camada de Autenticação
 - [x] AuthService refatorado (`src/app/services/auth.service.ts`)
   - login(email: string, password: string) ✅
@@ -25,13 +25,13 @@
   - isProfessional() ✅
   - isClient() ✅
   - loginTeste(tipo: 'CLIENTE' | 'PROFISSIONAL') ✅ (para dev)
-
+  
 ### ✅ Camada de Serviços
 - [x] ProfissionalService (`src/app/services/profissional.service.ts`)
   - listar(params?: { page?, limit?, categoria?, cidade? }) ✅
   - obterPorSlug(slug: string) ✅
   - obterDisponibilidade(slug: string, data: string) ✅
-
+  
 - [x] AgendamentoService (`src/app/services/agendamento.service.ts`)
   - criarPublico(dados: CreateAgendamentoRequest) ✅
   - listar(params?) ✅ (profissional's bookings)
@@ -39,27 +39,27 @@
   - atualizar(id, dados) ✅
   - deletar(id) ✅
   - atualizarStatus(id, status) ✅
-
+  
 - [x] ServicoService (`src/app/services/servico.service.ts`)
   - listar(), criar(), atualizar(), deletar() ✅
-
+  
 - [x] ClienteService (`src/app/services/cliente.service.ts`)
   - listar(), criar(), atualizar(), deletar() ✅
-
+  
 - [x] LojaService (`src/app/services/loja.service.ts`)
   - obter(), criar(), atualizar() ✅
-
+  
 - [x] BloqueioService (`src/app/services/bloqueio.service.ts`)
   - listar(), criar(), deletar() ✅
 
 ### ✅ Camada de Segurança
 - [x] AuthInterceptor (`src/app/interceptors/auth.interceptor.ts`)
   - Adiciona `Authorization: Bearer {token}` em todas requisições autenticadas ✅
-
+  
 - [x] SanitizeInterceptor (`src/app/interceptors/sanitize.interceptor.ts`)
   - Remove XSS vectors (scripts, iframes, event handlers) ✅
   - Registrado em app.config.ts ✅
-
+  
 - [x] Role Guards (`src/app/guards/role.guard.ts`)
   - roleProfissionalGuard ✅
   - roleClienteGuard ✅
@@ -70,7 +70,7 @@
   - Error messages (não alerts) ✅
   - Loading state ✅
   - Test credentials support ✅
-
+  
 - [x] Cadastro Component (`src/app/pages/cadastro/`)
   - Real backend integration ✅
   - Form validation (email, password strength) ✅
@@ -82,7 +82,7 @@
   - ProfissionalService.listar() ✅
   - Filtros funcionais ✅
   - Loading + error states ✅
-
+  
 - [x] Agendar Component (`src/app/pages/agendar/`)
   - ProfissionalService.obterPorSlug() ✅
   - ProfissionalService.obterDisponibilidade() ✅
@@ -92,22 +92,22 @@
 ### ✅ Componentes Dashboard (Com Auth)
 - [x] Dashboard Component (`src/app/pages/dashboard/`)
   - Estrutura presente (layout com sidebar + topbar) ✅
-
+  
 - [x] Agenda Component (`src/app/pages/agenda/`)
   - AgendamentoService.listar() ✅
   - Loading state ✅
-
+  
 - [x] Servicos Component (`src/app/pages/servicos/`)
   - CRUD operations ✅
   - Modal form ✅
-
+  
 - [x] Clientes Component (`src/app/pages/clientes/`)
   - CRUD operations ✅
   - Modal form ✅
-
+  
 - [x] DadosLoja Component (`src/app/pages/dados-loja/`)
   - LojaService integration ✅
-
+  
 - [x] Bloqueios Component (`src/app/pages/bloqueios/`)
   - BloqueioService.listar(), criar(), deletar() ✅
   - Modal form ✅
@@ -119,7 +119,7 @@
   - CustomValidators.brazilianPhone() ✅
   - CustomValidators.cpf() ✅
   - CustomValidators.dateNotInPast() ✅
-
+  
 - [x] API Types (`src/app/utils/api-types.ts`)
   - ApiErrorResponse ✅
   - ApiSuccessResponse<T> ✅
@@ -358,6 +358,6 @@ canActivate: [roleProfissionalGuard]
 
 ---
 
-**Documentação gerada em:** May 18, 2026
-**Status:** 🟢 Pronto para Testes
+**Documentação gerada em:** May 18, 2026  
+**Status:** 🟢 Pronto para Testes  
 **Próximo:** Executar backend + testes de integração

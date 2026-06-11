@@ -12,7 +12,6 @@ const CAPAS_DIR = path.resolve(process.cwd(), 'uploads', 'capas');
 if (!fs.existsSync(AVATARS_DIR)) {
   fs.mkdirSync(AVATARS_DIR, { recursive: true });
 }
-
 if (!fs.existsSync(CAPAS_DIR)) {
   fs.mkdirSync(CAPAS_DIR, { recursive: true });
 }
@@ -36,7 +35,7 @@ function makeUpload(dir: string) {
       if (allowed.includes(file.mimetype)) {
         cb(null, true);
       } else {
-        cb(new AppError('Apenas imagens JPEG, PNG ou WEBP sao permitidas.', 400));
+        cb(new AppError('Apenas imagens JPEG, PNG ou WEBP são permitidas.', 400));
       }
     },
   });
@@ -92,7 +91,7 @@ export function buildUploadRouter() {
       });
 
       if (!loja) {
-        throw new AppError('Loja nao encontrada.', 404);
+        throw new AppError('Loja não encontrada.', 404);
       }
 
       if (loja.imagemUrl && loja.imagemUrl.startsWith('/uploads/capas/')) {

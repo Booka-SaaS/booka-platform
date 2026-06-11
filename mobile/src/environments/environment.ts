@@ -1,13 +1,4 @@
-const runtimeConfig = (globalThis as {
-  __BOOKA_CONFIG__?: { apiUrl?: string };
-  process?: { env?: Record<string, string | undefined> };
-}).__BOOKA_CONFIG__;
-
-const runtimeEnv = (globalThis as {
-  process?: { env?: Record<string, string | undefined> };
-}).process?.env;
-
 export const environment = {
   production: true,
-  apiUrl: runtimeConfig?.apiUrl || runtimeEnv?.['MOBILE_API_URL'] || runtimeEnv?.['BOOKA_API_URL'] || 'http://localhost:3001'
+  apiUrl: 'http://localhost:3001'
 };

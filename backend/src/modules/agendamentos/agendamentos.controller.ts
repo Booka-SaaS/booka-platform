@@ -47,7 +47,7 @@ export function buildAgendamentosRouter() {
       const req = request as AuthenticatedRequest;
       const { id } = agendamentoIdParamSchema.parse(request.params);
       const payload = updateAgendamentoSchema.parse(request.body);
-
+      
       if (req.auth!.role === 'CLIENTE') {
         if (payload.status !== 'CANCELADO') {
           throw new AppError('Clientes so podem cancelar agendamentos.', 403);

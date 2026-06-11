@@ -1,337 +1,168 @@
 # Booka
 
-## Descricao do projeto
+Monorepo oficial do Booka, consolidado a partir dos repositorios de frontend, backend e mobile usados pela equipe. O projeto e um SaaS de agendamento para profissionais e pequenos negocios, com cadastro/login, onboarding, loja publica, clientes, servicos, disponibilidade, bloqueios de agenda, agendamentos, uploads de avatar/capa e notificacoes.
 
-O Booka e um Sistema SaaS de Agendamento Multifuncional Inteligente desenvolvido como projeto academico do Centro Universitario Insted, no curso de Analise e Desenvolvimento de Sistemas.
+## Estrutura do monorepo
 
-A plataforma foi planejada para profissionais, prestadores de servicos e pequenas empresas que precisam organizar clientes, servicos, horarios, disponibilidade, bloqueios de agenda e agendamentos em um unico ambiente. O objetivo e reduzir conflitos de horarios, perda de informacoes, uso de planilhas, agendas fisicas e conversas soltas em aplicativos de mensagem.
-
-## Projeto de adequacao do trabalho remoto
-
-O Booka tambem funciona como proposta de adequacao ao trabalho remoto ou hibrido. A plataforma centraliza processos operacionais, organiza demandas, permite acompanhamento da equipe e diminui a dependencia de controles manuais.
-
-No contexto da equipe do projeto, o GitHub centraliza versionamento, Pull Requests, Issues e GitHub Projects. Isso permite acompanhar impedimentos, validar entregas incrementais, distribuir responsabilidades e manter a comunicacao tecnica registrada durante os 6 meses de execucao.
-
-## Duracao do projeto: 6 meses
-
-O projeto possui duracao planejada de 6 meses, com entregas incrementais. Cada etapa deve produzir um incremento verificavel, como requisitos refinados, modelo de dados, rotas de API, telas de frontend, integracoes, testes, deploy, documentacao LaTeX e apresentacao final.
-
-## Metodologia utilizada: Scrum
-
-O Booka utiliza Scrum como metodologia principal.
-
-- Sprints: ciclos curtos de desenvolvimento, preferencialmente quinzenais.
-- Backlog: lista priorizada de requisitos, melhorias, bugs, riscos e tarefas tecnicas.
-- Sprint Planning: reuniao para selecionar tarefas, estimar esforco e definir criterios de aceite.
-- Daily Scrum: alinhamento rapido sobre progresso, impedimentos e proximas acoes.
-- Sprint Review: apresentacao do incremento entregue ao final da sprint.
-- Sprint Retrospective: avaliacao do processo para melhorar a proxima sprint.
-- Entregas incrementais: cada sprint deve gerar uma evolucao funcional, tecnica ou documental.
-
-## Estrategia de gestao da equipe para os proximos 6 meses
-
-A equipe sera gerenciada com Scrum, GitHub Projects, Issues, Pull Requests, revisoes de codigo, reunioes semanais, documentacao continua e criterios de aceite. Os impedimentos devem ser registrados no Kanban e discutidos nas reunioes de acompanhamento.
-
-As prioridades devem considerar valor para o usuario, risco tecnico, dependencias externas, disponibilidade de credenciais, impacto no deploy e relevancia academica. Mudancas importantes devem passar por Pull Request e revisao antes de serem incorporadas.
-
-## Definicao das atividades que serao realizadas
-
-- Levantamento e refinamento de requisitos.
-- Planejamento da arquitetura.
-- Modelagem do banco de dados.
-- Desenvolvimento do backend.
-- Desenvolvimento do frontend.
-- Integracao frontend/backend.
-- Autenticacao e autorizacao.
-- Sistema de agendamento.
-- Dashboard.
-- Testes.
-- Deploy.
-- Documentacao LaTeX.
-- Apresentacao final.
-
-## Definicao dos responsaveis por cada atividade
-
-| Atividade | Responsavel |
-| --- | --- |
-| Product Owner / Scrum Master | Matheus Victor Moreira Yamanari |
-| Backlog, planejamento e validacao | Matheus Victor Moreira Yamanari |
-| Frontend Angular/Ionic | Luis Fernando Franco |
-| Frontend, telas e UI/UX | Thiago Almeida Akatsuka |
-| Backend/API REST | Giulliano Ribeiro da Silva |
-| Banco de dados, autenticacao e seguranca | Rubens Galina Junior |
-| Testes e validacao | Toda a equipe |
-| Documentacao e apresentacao | Toda a equipe, com organizacao do PO/SM |
-
-## Estrategia de lockdown
-
-No sexto mes, o projeto entra em lockdown. Novas funcionalidades ficam congeladas e somente alteracoes necessarias para estabilidade e entrega final devem ser aceitas.
-
-Durante o lockdown sao permitidos:
-
-- Correcoes criticas.
-- Ajustes de seguranca.
-- Testes finais.
-- Backup.
-- Validacao de deploy.
-- Revisao documental.
-- Ajustes pequenos aprovados por Pull Request.
-
-## Elaboracao de cronograma
-
-| Mes | Foco | Entregas esperadas |
+| Pasta | Origem | Conteudo |
 | --- | --- | --- |
-| 1 | Planejamento, requisitos e arquitetura | Escopo validado, backlog inicial e organizacao do projeto |
-| 2 | Banco de dados, autenticacao e backend | Modelagem, migrations, login, cadastro e rotas principais |
-| 3 | Frontend e integracao inicial | Telas principais, integracao parcial e ajustes de UI/UX |
-| 4 | Funcionalidades centrais | Agendamento, disponibilidade, dashboard e regras de negocio |
-| 5 | Testes, APIs e deploy | Integracoes externas, WhatsApp, testes, refatoracao e deploy |
-| 6 | Lockdown e entrega final | Correcoes criticas, documentacao, apresentacao e validacao final |
+| `frontend/` | `TrueTrailBlazer/booka-frontend` branch `dev` | Aplicacao Angular web, marketplace, painel, notificacoes e testes Cypress/Karma. |
+| `backend/` | `RubensGJ/BookaBackendV2` branch `master` | API Express/Prisma, API gateway, servico de notificacoes, RabbitMQ, testes Jest, Docker e migrations. |
+| `mobile/` | `ThiagoAkatsuka/booka-app` branch `main` | App Angular/Ionic/Capacitor com Android/iOS, telas mobile e testes Cypress. |
+| `docs/` | Monorepo | Documentacao de sincronizacao e materiais do projeto. |
+| `database/` | Monorepo | Scripts SQL legados de apoio. |
 
-## Empresa ficticia / estudo de caso
+## Tecnologias
 
-A empresa ficticia usada como estudo de caso esta localizada em Campo Grande/MS. Ela representa uma pequena empresa prestadora de servicos que precisa organizar agendamentos, disponibilidade, equipe e atendimento em um modelo de trabalho presencial, remoto ou hibrido.
+- Angular 19, Angular SSR, Tailwind CSS, DaisyUI, Cypress e Karma/Jasmine.
+- Node.js, Express, TypeScript, Prisma, PostgreSQL/Supabase, Swagger/OpenAPI.
+- API Gateway Express com proxy para core API e notification service.
+- Notification service com NestJS, RabbitMQ, Prisma e endpoints REST/SOAP.
+- Ionic/Capacitor para mobile Android/iOS.
+- Docker Compose para PostgreSQL, RabbitMQ e servicos backend.
 
-## Quantidade de funcionarios
+## Scripts raiz
 
-Definicao proposta: 25 funcionarios.
-
-| Area | Quantidade |
-| --- | ---: |
-| Administracao | 4 |
-| Atendimento | 5 |
-| Operacoes | 7 |
-| Tecnologia | 4 |
-| Comercial | 3 |
-| Gestao | 2 |
-| Total | 25 |
-
-## Porte da empresa
-
-Com 25 funcionarios, a empresa e classificada como empresa de pequeno porte no estudo de caso. A justificativa e a estrutura enxuta, a equipe reduzida e a necessidade de digitalizar processos sem complexidade corporativa excessiva.
-
-## Kanban no GitHub Projects
-
-O Kanban oficial do Booka deve ser mantido no GitHub Projects, nao em arquivos Markdown dentro de `docs/`. O README apresenta apenas um resumo para documentacao academica e tecnica.
-
-Project oficial: [Booka — Planejamento e Entrega Final](https://github.com/orgs/Booka-SaaS/projects/3)
-
-Colunas obrigatorias:
-
-- Backlog
-- A Fazer
-- Em Desenvolvimento
-- Em Revisao
-- Testes
-- Concluido
-- Bloqueado
-
-O controle operacional dos cards, responsaveis, revisoes e impedimentos deve ocorrer no GitHub Projects.
-
-## Como abrir a apresentacao local
-
-A apresentacao local fica em `docs/apresentacao-booka/` e nao faz parte do frontend publicado.
-
-Para abrir:
-
-1. Abra a pasta `docs/apresentacao-booka/` no VS Code.
-2. Use a extensao Live Server ou abra `index.html` diretamente no navegador.
-3. Navegue com os botoes `Anterior` e `Proximo` ou com as setas do teclado.
-
-Arquivos:
-
-```text
-docs/apresentacao-booka/
-|-- index.html
-|-- style.css
-|-- script.js
-`-- README.md
-```
-
-## Como acessar ou compilar a documentacao LaTeX
-
-A documentacao formal em LaTeX fica em `docs/documentacao-latex/`.
-
-Estrutura:
-
-```text
-docs/documentacao-latex/
-|-- main.tex
-|-- referencias.bib
-`-- imagens/
-```
-
-Para compilar localmente, use uma distribuicao LaTeX como TeX Live ou MiKTeX:
+O monorepo nao usa workspaces para evitar descaracterizar os repositorios de origem. Os scripts raiz delegam para cada projeto:
 
 ```bash
-cd docs/documentacao-latex
-pdflatex main.tex
-bibtex main
-pdflatex main.tex
-pdflatex main.tex
+npm run frontend:install
+npm run frontend:dev
+npm run frontend:build
+npm run frontend:test
+
+npm run backend:install
+npm run backend:dev
+npm run backend:gateway
+npm run backend:notifications
+npm run backend:build
+npm run backend:test
+npm run backend:prisma:generate
+npm run backend:prisma:deploy
+
+npm run mobile:install
+npm run mobile:dev
+npm run mobile:build
+npm run mobile:e2e
 ```
 
-## Tecnologias e conceitos utilizados
-
-- Angular/Ionic no frontend.
-- Node.js e API REST no backend.
-- TypeScript.
-- Prisma.
-- PostgreSQL/Supabase.
-- JWT para autenticacao.
-- Row Level Security quando aplicavel.
-- Google Auth.
-- GitHub para versionamento.
-- GitHub Projects para Kanban.
-- Scrum como metodologia.
-- Documentacao LaTeX.
-- Render e Vercel para deploy.
-
-## Arquitetura do projeto
-
-```text
-booka-platform/
-|-- frontend/   Aplicacao frontend Angular/Ionic
-|-- backend/    API Node.js/Express/TypeScript com Prisma
-|-- mobile/     App Angular/Ionic/Capacitor para Android e iOS
-|-- database/   Scripts SQL de schema, seed e consultas de apoio
-|-- docs/
-|   |-- documentacao-latex/
-|   `-- apresentacao-booka/
-|-- render.yaml
-`-- README.md
-```
-
-Fluxo esperado:
-
-```text
-Frontend -> Backend API REST -> PostgreSQL/Supabase
-Mobile -> Backend API REST -> PostgreSQL/Supabase
-```
-
-## Como executar localmente
-
-Backend:
+## Como rodar o backend
 
 ```bash
 cd backend
-npm install
-copy .env.example .env
-docker compose up -d
+npm ci
+cp .env.example .env
+docker compose up -d postgres rabbitmq
 npm run prisma:generate
 npm run prisma:migrate
 npm run seed
 npm run dev
 ```
 
-Frontend:
+Servicos adicionais do backend:
 
 ```bash
-cd frontend
-npm install
-npm start
+npm run dev:gateway
+npm run dev:notifications
 ```
 
-Mobile:
+Portas padrao:
 
-```bash
-cd mobile
-npm install
-npm start
-```
-
-URLs locais:
-
-- Frontend: `http://localhost:4200`
-- Mobile dev server: `http://localhost:4200`
-- Backend: `http://localhost:3001`
+- Core API: `http://localhost:3001`
+- API Gateway: `http://localhost:3000`
+- Notification service: `http://localhost:3002`
 - Swagger: `http://localhost:3001/docs`
-- Health: `http://localhost:3001/health`
-- Banco: `GET http://localhost:3001/test/db-status`
+- RabbitMQ Management: `http://localhost:15672`
 
-## Variaveis de ambiente
+## Banco e Prisma
 
-Backend (`backend/.env`):
+O backend usa PostgreSQL via Prisma. Para desenvolvimento local, o `backend/docker-compose.yml` publica o banco em `127.0.0.1:5434`.
 
-```env
-NODE_ENV=development
-PORT=3001
-DATABASE_URL=postgresql://USER:PASSWORD@HOST:5432/postgres?schema=public
-DIRECT_URL=postgresql://USER:PASSWORD@HOST:5432/postgres?schema=public
-JWT_SECRET=change-me-use-a-long-random-secret
-JWT_TTL_SECONDS=604800
-FRONTEND_URL=http://localhost:4200
-CLIENT_ORIGINS=http://localhost:4200,http://localhost:5173,http://localhost:3000
-SUPABASE_URL=https://PROJECT_REF.supabase.co
-SUPABASE_ANON_KEY=fake-anon-key
-SUPABASE_SERVICE_ROLE_KEY=fake-service-role-key
-GOOGLE_CLIENT_ID=fake-google-client-id.apps.googleusercontent.com
-SEED_PASSWORD=senha-de-teste
-SEED_PASSWORD_HASH=
-```
+Variaveis essenciais:
 
-Frontend (`frontend/.env`):
+- `DATABASE_URL`: conexao runtime da API e servico de notificacoes.
+- `DIRECT_URL`: conexao administrativa usada por migrations Prisma.
+- `JWT_SECRET`: segredo JWT com pelo menos 16 caracteres.
+- `RABBITMQ_URL`: broker usado no fluxo de eventos/notificacoes.
 
-```env
-BOOKA_API_URL=http://localhost:3001
-BOOKA_GOOGLE_CLIENT_ID=fake-google-client-id.apps.googleusercontent.com
-```
+Para Supabase, use a URL pooler em `DATABASE_URL` e a conexao direta em `DIRECT_URL`, sem commitar secrets reais.
 
-Mobile (`mobile/.env.example`):
-
-```env
-API_URL=http://localhost:3001
-```
-
-No app mobile, a URL da API tambem deve ser conferida em `mobile/src/environments/environment*.ts` antes de builds Android/iOS.
-
-Nunca exponha no frontend `DATABASE_URL`, `DIRECT_URL`, `JWT_SECRET`, `SUPABASE_SERVICE_ROLE_KEY`, tokens privados, senhas ou chaves reais.
-
-## Deploy
-
-- Frontend: Vercel, com root directory `frontend` e `BOOKA_API_URL` apontando para o backend.
-- Backend: Render, com root directory `backend`, build `npm ci && npm run prisma:generate && npm run prisma:deploy && npm run build` e start `npm start`.
-- Banco: Supabase/PostgreSQL, com migrations Prisma e variaveis `DATABASE_URL` e `DIRECT_URL`.
-- Mobile: preparar builds nativos via Capacitor. Para Google Play e App Store, revisar bundle id, assinatura, versionamento, icones, politicas de privacidade e URLs de producao.
-
-## Testes
-
-Scripts disponiveis:
+## Como rodar o frontend
 
 ```bash
 cd frontend
-npm test
-npm run cypress:run
+npm ci
+npm start
 ```
 
+O frontend de origem usa `src/environments/environment.development.ts` e `src/environments/environment.ts`. Em desenvolvimento aponta para a core API local; em producao aponta para o gateway em `/api`.
+
+Build:
+
 ```bash
-cd backend
 npm run build
 ```
 
-Caso o ambiente local nao tenha `node` e `npm` no PATH, os builds devem ser executados em uma maquina com Node.js instalado ou no pipeline de CI/CD.
+## Como rodar o mobile
 
-## Status atual do projeto
+```bash
+cd mobile
+npm ci
+npm start
+```
 
-O monorepo esta organizado com frontend, backend, database, documentacao LaTeX e apresentacao local. O GitHub Projects deve concentrar o Kanban operacional. A apresentacao em `docs/apresentacao-booka/` nao e integrada ao frontend, nao possui rota Angular/Ionic e nao deve ir para a publicacao online.
+Build web:
 
-## Sincronizacao dos repositorios de origem
+```bash
+npm run build
+```
 
-Atualizacao realizada na branch `chore/update-booka-repositories`.
+Capacitor:
 
-Repositorios verificados:
+```bash
+npx cap sync
+npx cap open android
+npx cap open ios
+```
 
-- Monorepo: `https://github.com/Booka-SaaS/booka-platform` (`main`, commit `f73d32a`)
-- Frontend: `https://github.com/TrueTrailBlazer/booka-frontend` (`main`, commit `6cec649`)
-- Backend: `https://github.com/RubensGJ/BookaBackendV2` (`master`, commit `c11b476`; o remoto nao expoe branch `main` nesta copia)
-- Mobile: `https://github.com/ThiagoAkatsuka/booka-app` (`main`, commit `0f623a9`)
+## Variaveis de ambiente
 
-Decisoes de merge:
+Arquivos de exemplo mantidos no monorepo:
 
-- O frontend foi sincronizado com a origem e manteve as configuracoes do monorepo para Vercel e URL de API via `BOOKA_API_URL`.
-- O backend manteve as melhorias locais de CORS, health check, Prisma/Supabase e variaveis opcionais; foi adicionado `backend/README.md`.
-- O mobile ja estava presente em `mobile/`; foram preservadas as configuracoes mobile especificas do monorepo, pois o README remoto descreve o frontend web.
+- `.env.example`: visao consolidada para desenvolvimento local.
+- `backend/.env.example`: variaveis reais consumidas pelo backend de origem.
+- `frontend/.env.example`: referencia documental; o frontend atual usa arquivos `environment`.
+- `mobile/.env.example`: referencia documental; o mobile atual usa arquivos `environment`.
 
-## Licenca
+Nao insira secrets reais nos exemplos.
 
-Licenca nao identificada no monorepo. Definicao proposta: adicionar uma licenca antes de distribuicao publica ou uso comercial.
+## Deploy
+
+- `vercel.json` na raiz aponta para `frontend/` e usa `frontend/dist/booka-frontend/browser`.
+- `render.yaml` aponta para `backend/` e esta alinhado ao core backend atualizado.
+- O backend atualizado tambem possui `backend/Dockerfile` e `backend/docker-compose.yml` para subir core API, gateway, notification service, PostgreSQL e RabbitMQ.
+- Para producao completa com notificacoes, provisione PostgreSQL, RabbitMQ e URLs entre core API, gateway e notification service.
+
+## Funcionalidades implementadas confirmadas
+
+- Autenticacao JWT, cadastro, login, recuperacao e redefinicao de senha.
+- Onboarding e dados de loja/profissional.
+- Integracao ViaCEP no cadastro/endereco.
+- Clientes, servicos, profissionais e dashboard.
+- Agendamentos publicos e privados, disponibilidade semanal e bloqueios de agenda.
+- Upload de avatar e capa da loja.
+- Marketplace/public booking flow.
+- Notificacoes via nova camada de gateway, notification service, RabbitMQ e endpoints REST/SOAP.
+- App mobile Angular/Ionic/Capacitor com Android/iOS e fluxos de painel/agendamento.
+
+## Repositorios usados na consolidacao
+
+- `https://github.com/ThiagoAkatsuka/booka-app`
+- `https://github.com/TrueTrailBlazer/booka-frontend`
+- `https://github.com/RubensGJ/BookaBackendV2`
+
+Detalhes de branches, commits e decisoes estao em `docs/SINCRONIZACAO_REPOSITORIOS.md`.
+
+## Status atual
+
+Estado sincronizado e validado em 11/06/2026 na branch `chore/atualizacao-completa-monorepo`. O frontend e o backend receberam commits novos dos repositorios de origem; o mobile foi conferido e permanece no mesmo commit ja consolidado anteriormente.

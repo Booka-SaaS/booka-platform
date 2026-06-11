@@ -89,6 +89,7 @@ function minutesToTime(value: number) {
 }
 
 function getDayStart(date: string) {
+  // Interpreta como hora local do servidor
   return new Date(`${date}T00:00:00`);
 }
 
@@ -97,6 +98,7 @@ function getDayEnd(date: string) {
 }
 
 function getSlotDate(date: string, time: string) {
+  // Interpreta como hora local do servidor, igual ao frontend
   return new Date(`${date}T${time}:00`);
 }
 
@@ -125,13 +127,13 @@ export async function listDisponibilidade(lojaId: string, date: string, servicoI
     };
   }
 
+  // Duração do slot: usa a duração do serviço se informado, senão usa o intervalo padrão
   let duracaoSlotMinutos = disponibilidade.intervaloMinutos;
   if (servicoId) {
     const servico = await prisma.servico.findFirst({
       where: { id: servicoId, lojaId, ativo: true },
       select: { duracaoMinutos: true },
     });
-
     if (servico) {
       duracaoSlotMinutos = servico.duracaoMinutos;
     }
@@ -144,6 +146,7 @@ export async function listDisponibilidade(lojaId: string, date: string, servicoI
         status: {
           in: ['PENDENTE', 'CONFIRMADO'],
         },
+        // Buscar todos agendamentos que se sobrepõem ao dia
         inicio: {
           lt: getDayEnd(date),
         },
@@ -177,6 +180,7 @@ export async function listDisponibilidade(lojaId: string, date: string, servicoI
   const inicioMinutos = parseTimeToMinutes(disponibilidade.horaInicio);
   const fimMinutos = parseTimeToMinutes(disponibilidade.horaFim);
 
+  // Iterar pelos slots usando o intervalo padrão da disponibilidade
   for (
     let currentMinutes = inicioMinutos;
     currentMinutes + duracaoSlotMinutos <= fimMinutos;
@@ -184,6 +188,7 @@ export async function listDisponibilidade(lojaId: string, date: string, servicoI
   ) {
     const horario = minutesToTime(currentMinutes);
     const slotStart = getSlotDate(date, horario);
+    // O slot ocupa duracaoSlotMinutos no tempo real
     const slotEnd = new Date(slotStart.getTime() + duracaoSlotMinutos * 60 * 1000);
 
     const conflictsWithAppointments = agendamentos.some(

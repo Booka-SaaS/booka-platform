@@ -8,7 +8,7 @@
       <app-topbar></app-topbar>
 
       <main class="flex-1 overflow-y-auto p-4 md:p-8 space-y-8 bg-surface/50">
-
+        
         <div class="mb-8 flex items-start gap-3">
           <a routerLink="/configuracoes" class="btn btn-circle btn-ghost btn-sm mt-1 text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 transition-colors" title="Voltar para Configurações">
             <span class="material-symbols-outlined text-[22px]">arrow_back</span>
@@ -60,7 +60,7 @@
 
         <!-- Grid Principal -->
         <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 items-stretch">
-
+          
           <!-- Formulário Novo Bloqueio -->
           <div class="lg:col-span-3 bg-white rounded-3xl border border-slate-200 shadow-sm flex flex-col overflow-hidden">
             <div class="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/30">
@@ -131,7 +131,7 @@
               <!-- Ações do Formulário -->
               <div class="pt-6 flex flex-col sm:flex-row gap-3 border-t border-slate-100 mt-auto justify-between items-center">
                 <button (click)="limparForm()" [disabled]="isSaving" class="btn btn-ghost font-bold text-slate-500 w-full sm:w-auto" type="button">Limpar</button>
-
+                
                 <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
                   <button (click)="salvarBloqueio()" [disabled]="isSaving" class="btn btn-primary text-white font-bold rounded-xl gap-2 shadow-md shadow-primary/20 w-full sm:w-auto" type="button">
                     @if (isSaving) {
@@ -171,7 +171,7 @@
                   @for (bloqueio of bloqueios; track bloqueio.id) {
                     <div class="flex items-center justify-between p-4 hover:bg-slate-50 rounded-2xl transition-colors group">
                       <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0" 
                              [ngClass]="bloqueio.motivo === 'Almoço' ? 'bg-orange-50 text-orange-500' : (bloqueio.motivo === 'Férias' ? 'bg-blue-50 text-blue-500' : 'bg-red-50 text-red-500')">
                           <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">
                             {{ bloqueio.motivo === 'Almoço' ? 'restaurant' : (bloqueio.motivo === 'Férias' ? 'beach_access' : 'block') }}

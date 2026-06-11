@@ -84,10 +84,10 @@ export class ModalNovoAgendamentoComponent implements OnChanges {
     }
 
     this.isSalvando = true;
-
+    
     // Converter a data e hora locais para UTC (formato ISO Zod)
     const dataLocal = new Date(`${this.form.data}T${this.form.hora}:00`);
-
+    
     const request = {
       clienteId: this.form.clienteId,
       servicoId: this.form.servicoId,

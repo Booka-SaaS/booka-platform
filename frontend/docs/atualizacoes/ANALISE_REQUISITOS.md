@@ -1,6 +1,6 @@
 # 📊 ANÁLISE DO PROJETO BOOKA CONTRA REQUISITOS
 
-**Data da Análise:** 18 de Maio de 2026
+**Data da Análise:** 18 de Maio de 2026  
 **Escopo:** Frontend Web + Backend + Frontend Mobile
 
 ---
@@ -85,14 +85,14 @@
 - **AuthService:** Existe
 - **AuthGuard:** Existe
 - **AuthInterceptor:** Existe
-- **Faltando:**
+- **Faltando:** 
   - RBAC (Role-Based Access Control) completo
   - Refresh token logic
   - Logout global
   - Validação de permissões por recurso
 
-**Arquivo Atual:** `src/app/services/auth.service.ts`
-**Guards:** `src/app/guards/auth.guard.ts`
+**Arquivo Atual:** `src/app/services/auth.service.ts`  
+**Guards:** `src/app/guards/auth.guard.ts`  
 **Interceptors:** `src/app/interceptors/auth.interceptor.ts`
 
 **Ações Necessárias:**
@@ -303,6 +303,6 @@ booka-project/
 
 ---
 
-**Versão:** 1.0
-**Autor:** Análise Automatizada
+**Versão:** 1.0  
+**Autor:** Análise Automatizada  
 **Próxima revisão:** Após implementação da Fase 1

@@ -110,7 +110,7 @@ export class PerfilComponent implements OnInit {
 
   salvarTudo() {
     let tentarSenha = !!(this.senha.senhaAtual || this.senha.novaSenha);
-
+    
     if (tentarSenha) {
       if (!this.senha.senhaAtual || !this.senha.novaSenha) {
         this.toastService.warning('Para alterar a senha, preencha a senha atual e a nova senha.');
@@ -127,11 +127,11 @@ export class PerfilComponent implements OnInit {
     }
 
     this.isSavingAll = true;
-
+    
     this.authService.updateMe({ nome: this.usuario.nome, email: this.usuario.email }).subscribe({
       next: (result) => {
         this.usuario.iniciais = this.gerarIniciais(result.nome);
-
+        
         if (tentarSenha) {
           this.authService.updateSenha(this.senha.senhaAtual, this.senha.novaSenha).subscribe({
             next: () => {

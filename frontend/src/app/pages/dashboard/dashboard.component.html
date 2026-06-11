@@ -1,16 +1,16 @@
 <div class="bg-slate-50 font-sans text-slate-900 antialiased h-screen flex flex-col overflow-hidden">
-
+  
   <app-navbar></app-navbar>
 
   <div class="flex-1 flex overflow-hidden pt-20">
     <app-sidebar></app-sidebar>
 
     <div class="flex-1 flex flex-col min-w-0">
-
+      
       <app-topbar></app-topbar>
 
       <main class="flex-1 overflow-y-auto p-4 md:p-8 space-y-8 bg-surface/50" data-purpose="dashboard-main-view">
-
+      
       <!-- Header -->
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
@@ -61,10 +61,10 @@
 
       <!-- Layout Grid Principal -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
+        
         <!-- Coluna Principal (Tabela e Próximo) -->
         <section class="lg:col-span-2 flex flex-col gap-6 h-full">
-
+          
           <!-- Próximo Agendamento Destaque -->
           @if (proximoAgendamento) {
             <div class="bg-gradient-to-r from-primary to-[#003694] rounded-3xl p-6 text-white shadow-lg shadow-primary/20 relative overflow-hidden flex flex-col sm:flex-row items-center gap-6 shrink-0">
@@ -81,7 +81,7 @@
                 </p>
                 <h2 class="text-xl font-black mb-1">{{ proximoAgendamento.clienteNome }}</h2>
                 <p class="text-white/80 font-medium text-xs flex items-center justify-center sm:justify-start gap-1.5">
-                  <span class="material-symbols-outlined text-[14px]">content_cut</span> {{ proximoAgendamento.servicoNome }} &bull;
+                  <span class="material-symbols-outlined text-[14px]">content_cut</span> {{ proximoAgendamento.servicoNome }} &bull; 
                   <span class="material-symbols-outlined text-[14px] ml-1">schedule</span> {{ proximoAgendamento.inicio | date:'HH:mm' }}
                 </p>
               </div>
@@ -102,7 +102,7 @@
               </div>
               <a routerLink="/agenda" class="btn btn-sm btn-ghost text-primary font-bold hover:bg-primary/10 rounded-lg">Ver tudo</a>
             </div>
-
+            
             <div class="overflow-x-auto flex-1">
               <table class="table w-full">
                 <!-- head -->
@@ -182,11 +182,11 @@
 
         <!-- Coluna Lateral Direita (Ações e Dicas) -->
         <section class="space-y-6" data-purpose="quick-actions-sidebar">
-
+          
           <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-200/60">
             <h2 class="text-sm font-black text-slate-800 uppercase tracking-widest mb-4">Ações Rápidas</h2>
             <div class="flex flex-col gap-3">
-              <a routerLink="/bloqueios" class="bg-white border border-slate-200 rounded-2xl p-4 flex items-center gap-4 transition-all hover:border-orange-300 hover:shadow-md hover:-translate-y-1 group cursor-pointer">
+              <a routerLink="/bloqueios" [queryParams]="{preset: 'almoco'}" class="bg-white border border-slate-200 rounded-2xl p-4 flex items-center gap-4 transition-all hover:border-orange-300 hover:shadow-md hover:-translate-y-1 group cursor-pointer">
                 <div class="w-10 h-10 rounded-xl bg-orange-50 text-orange-500 flex items-center justify-center group-hover:bg-orange-500 group-hover:text-white transition-colors shrink-0">
                   <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">restaurant</span>
                 </div>
@@ -196,7 +196,7 @@
                 </div>
               </a>
 
-              <a routerLink="/bloqueios" class="bg-white border border-slate-200 rounded-2xl p-4 flex items-center gap-4 transition-all hover:border-indigo-300 hover:shadow-md hover:-translate-y-1 group cursor-pointer">
+              <a routerLink="/bloqueios" [queryParams]="{preset: 'ferias'}" class="bg-white border border-slate-200 rounded-2xl p-4 flex items-center gap-4 transition-all hover:border-indigo-300 hover:shadow-md hover:-translate-y-1 group cursor-pointer">
                 <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-500 flex items-center justify-center group-hover:bg-indigo-500 group-hover:text-white transition-colors shrink-0">
                   <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">beach_access</span>
                 </div>
@@ -205,7 +205,7 @@
                   <span class="text-[10px] font-medium text-slate-500">Férias ou folgas</span>
                 </div>
               </a>
-
+              
               <a routerLink="/servicos" class="bg-white border border-slate-200 rounded-2xl p-4 flex items-center gap-4 transition-all hover:border-emerald-300 hover:shadow-md hover:-translate-y-1 group cursor-pointer">
                 <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center group-hover:bg-emerald-500 group-hover:text-white transition-colors shrink-0">
                   <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">price_change</span>
@@ -217,11 +217,11 @@
               </a>
             </div>
           </div>
-
+          
           <div class="bg-gradient-to-br from-slate-900 to-slate-800 p-6 rounded-3xl shadow-xl text-white relative overflow-hidden group hover:shadow-2xl transition-all">
             <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/5 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
             <div class="absolute -left-10 -top-10 w-24 h-24 bg-primary/20 rounded-full blur-xl"></div>
-
+            
             <div class="relative z-10">
               <span class="material-symbols-outlined text-3xl text-yellow-400 mb-2" style="font-variation-settings: 'FILL' 1;">tips_and_updates</span>
               <h3 class="text-lg font-black mb-1">Dica do Dia</h3>
@@ -232,14 +232,14 @@
             </div>
           </div>
         </section>
-
+        
       </div>
     </main>
     </div>
   </div>
 
-  <app-modal-novo-agendamento
-    [showModal]="showModalAgendamento"
+  <app-modal-novo-agendamento 
+    [showModal]="showModalAgendamento" 
     (close)="showModalAgendamento = false"
     (agendamentoCriado)="onAgendamentoCriado()">
   </app-modal-novo-agendamento>

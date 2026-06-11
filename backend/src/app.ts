@@ -1,11 +1,12 @@
 import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
+import helmet from 'helmet';
 import path from 'path';
+import rateLimit from 'express-rate-limit';
 import swaggerUi from 'swagger-ui-express';
 import { ZodError } from 'zod';
 import { env } from './config/env';
 import { openApiDocument } from './docs/openapi';
-import { prisma } from './lib/db';
 import { AppError } from './lib/errors';
 import { buildAuthRouter } from './modules/auth/auth.controller';
 import { buildOnboardingRouter } from './modules/onboarding/onboarding.controller';
@@ -22,9 +23,18 @@ import { buildUploadRouter } from './modules/upload/upload.controller';
 export function buildApp() {
   const app = express();
 
+  app.use(helmet());
   app.use(
     cors({
-      origin: env.CLIENT_ORIGINS,
+      origin: [env.CLIENT_ORIGIN, env.GATEWAY_ORIGIN],
+    }),
+  );
+  app.use(
+    rateLimit({
+      windowMs: 15 * 60 * 1000,
+      limit: 300,
+      standardHeaders: 'draft-8',
+      legacyHeaders: false,
     }),
   );
   app.use(express.json());
@@ -32,49 +42,10 @@ export function buildApp() {
 
   app.get('/health', (_request, response) => {
     response.json({
+      name: 'Booka Backend V2',
       status: 'ok',
-      service: 'booka-api',
+      docs: '/docs',
     });
-  });
-
-  app.get('/test/db-status', async (_request, response) => {
-    try {
-      await prisma.$queryRaw`SELECT 1`;
-      response.json({
-        database: 'connected',
-        status: 'ok',
-      });
-    } catch (error) {
-      const diagnostic: Record<string, any> = {
-        database: 'disconnected',
-        status: 'error',
-        message: 'Nao foi possivel conectar ao banco de dados.',
-      };
-
-      if (env.NODE_ENV !== 'production') {
-        console.error('Falha ao testar conexao com o banco:', error);
-      }
-
-      // Add secure diagnostic info without exposing secrets
-      if (error instanceof Error && 'code' in error && typeof error.code === 'string') {
-        diagnostic.errorCode = error.code; // Prisma error code (e.g., P1000, P1001)
-      }
-      if (process.env.DATABASE_URL) {
-        try {
-          const url = new URL(process.env.DATABASE_URL);
-          diagnostic.dbHost = url.host.split(':')[0]; // Mask port and credentials
-        } catch (e) {
-          // Ignore URL parsing errors if DATABASE_URL is malformed
-        }
-      }
-
-      diagnostic.hasDatabaseUrl = !!process.env.DATABASE_URL;
-      diagnostic.hasDirectUrl = !!process.env.DIRECT_URL;
-
-      response.status(503).json({
-        ...diagnostic,
-      });
-    }
   });
 
   app.use('/docs', swaggerUi.serve, swaggerUi.setup(openApiDocument));
@@ -89,12 +60,6 @@ export function buildApp() {
   app.use('/bloqueios', buildBloqueiosRouter());
   app.use('/disponibilidade', buildDisponibilidadeRouter());
   app.use('/upload', buildUploadRouter());
-
-  app.use((_request, response) => {
-    response.status(404).json({
-      message: 'Rota nao encontrada.',
-    });
-  });
 
   app.use((error: Error, _request: Request, response: Response, next: NextFunction) => {
     if (response.headersSent) {

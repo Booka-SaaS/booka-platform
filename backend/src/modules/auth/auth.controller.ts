@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { requireAuth, AuthenticatedRequest } from '../../middleware/auth';
-import { getMe, login, loginWithGoogle, register, requestPasswordReset, resetPassword, updateMe, updateSenha } from './auth.service';
-import { googleLoginSchema, loginSchema, registerSchema, updateMeSchema, updateSenhaSchema } from './auth.schema';
+import { getMe, login, register, requestPasswordReset, resetPassword, updateMe, updateSenha } from './auth.service';
+import { loginSchema, registerSchema, updateMeSchema, updateSenhaSchema } from './auth.schema';
 import { requestPasswordResetSchema, resetPasswordSchema } from './password-reset.schema';
 
 export function buildAuthRouter() {
@@ -21,16 +21,6 @@ export function buildAuthRouter() {
     try {
       const input = loginSchema.parse(request.body);
       const result = await login(input.email, input.password);
-      response.json(result);
-    } catch (error) {
-      next(error);
-    }
-  });
-
-  router.post('/google', async (request, response, next) => {
-    try {
-      const input = googleLoginSchema.parse(request.body);
-      const result = await loginWithGoogle(input.credential);
       response.json(result);
     } catch (error) {
       next(error);

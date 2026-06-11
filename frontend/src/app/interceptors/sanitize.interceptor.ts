@@ -1,8 +1,10 @@
 import { HttpInterceptorFn } from '@angular/common/http';
+import DOMPurify from 'dompurify';
 
 export const sanitizeInterceptor: HttpInterceptorFn = (req, next) => {
-  // Para POST/PUT, sanitizar body básico — mas nunca tocar em FormData (upload de arquivos)
-  if ((req.method === 'POST' || req.method === 'PUT') && req.body && !(req.body instanceof FormData)) {
+  const methodRequiresSanitization = ['POST', 'PUT', 'PATCH'].includes(req.method);
+
+  if (methodRequiresSanitization && req.body && !(req.body instanceof FormData)) {
     try {
       const sanitizedBody = sanitizeRequestBody(req.body);
       req = req.clone({ body: sanitizedBody });
@@ -15,21 +17,17 @@ export const sanitizeInterceptor: HttpInterceptorFn = (req, next) => {
 };
 
 function sanitizeRequestBody(obj: any): any {
-  // Se for string, remover caracteres perigosos
   if (typeof obj === 'string') {
-    return obj
-      .replace(/<script[^>]*>.*?<\/script>/gi, '')
-      .replace(/<iframe[^>]*>.*?<\/iframe>/gi, '')
-      .replace(/javascript:/gi, '')
-      .replace(/on\w+\s*=/gi, '');
+    return DOMPurify.sanitize(obj, {
+      ALLOWED_TAGS: [],
+      ALLOWED_ATTR: [],
+    });
   }
 
-  // Se for array, processar cada item
   if (Array.isArray(obj)) {
     return obj.map(item => sanitizeRequestBody(item));
   }
 
-  // Se for objeto, processar cada propriedade
   if (typeof obj === 'object' && obj !== null) {
     return Object.keys(obj).reduce((acc, key) => {
       acc[key] = sanitizeRequestBody(obj[key]);
@@ -37,6 +35,5 @@ function sanitizeRequestBody(obj: any): any {
     }, {} as any);
   }
 
-  // Retornar como está se for primitivo ou null
   return obj;
 }

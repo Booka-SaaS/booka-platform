@@ -9,6 +9,8 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      - key: NODE_VERSION
+        value: 22.16.0
       - key: PORT
         value: 10000
       - key: DATABASE_URL
@@ -19,15 +21,21 @@ services:
         sync: false
       - key: JWT_TTL_SECONDS
         value: 604800
-      - key: FRONTEND_URL
+      - key: CLIENT_ORIGIN
         sync: false
-      - key: CLIENT_ORIGINS
+      - key: GATEWAY_ORIGIN
         sync: false
-      - key: SUPABASE_URL
+      - key: RESEND_API_KEY
         sync: false
-      - key: SUPABASE_ANON_KEY
+      - key: EMAIL_FROM
+        value: Booka <noreply@booka.app>
+      - key: RABBITMQ_URL
         sync: false
-      - key: SUPABASE_SERVICE_ROLE_KEY
+      - key: GATEWAY_PORT
+        value: 3000
+      - key: CORE_API_URL
         sync: false
-      - key: GOOGLE_CLIENT_ID
+      - key: NOTIFICATION_SERVICE_URL
         sync: false
+      - key: NOTIFICATION_SERVICE_PORT
+        value: 3002

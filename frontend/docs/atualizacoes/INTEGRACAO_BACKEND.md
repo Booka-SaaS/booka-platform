@@ -1,7 +1,7 @@
 # 🔄 ALINHAMENTO FRONTEND + BACKEND - ANÁLISE TÉCNICA
 
-**Data:** 18 de Maio de 2026
-**Frontend:** Angular 19 (seu projeto)
+**Data:** 18 de Maio de 2026  
+**Frontend:** Angular 19 (seu projeto)  
 **Backend:** Express + Prisma + PostgreSQL (repo: BookaBackendV2)
 
 ---
@@ -9,10 +9,10 @@
 ## 📊 STATUS DA INTEGRAÇÃO
 
 ### Backend Status
-✅ **Express Server** rodando na porta 3001
-✅ **Banco PostgreSQL** via Prisma
-✅ **JWT Authentication** implementado
-✅ **Swagger/OpenAPI** documentado
+✅ **Express Server** rodando na porta 3001  
+✅ **Banco PostgreSQL** via Prisma  
+✅ **JWT Authentication** implementado  
+✅ **Swagger/OpenAPI** documentado  
 ✅ **9 Módulos completos:**
 - auth (register, login, me)
 - onboarding
@@ -25,11 +25,11 @@
 - bloqueios (schedule blocks)
 
 ### Frontend Status
-⚠️ **Componentes visuais** 100% prontos
-⚠️ **Serviços Angular** existem mas incompletos
-❌ **Integração real** com backend - NÃO FEITA
-❌ **Testes** - NÃO FEITO
-❌ **Segurança** - PARCIAL
+⚠️ **Componentes visuais** 100% prontos  
+⚠️ **Serviços Angular** existem mas incompletos  
+❌ **Integração real** com backend - NÃO FEITA  
+❌ **Testes** - NÃO FEITO  
+❌ **Segurança** - PARCIAL  
 
 **Prioridade:** Integração é CRÍTICA antes de testes/segurança!
 
@@ -231,7 +231,7 @@ export const environment = {
   production: false,
   apiUrl: 'http://localhost:3001',  // ← MUDE PARA 3001
   apiVersion: 'v1',
-
+  
   // URLs de endpoints específicos (opcional)
   endpoints: {
     auth: '/auth',
@@ -243,12 +243,12 @@ export const environment = {
     bloqueios: '/bloqueios',
     dashboard: '/dashboard',
   },
-
+  
   jwt: {
     accessTokenExpiry: 15 * 60 * 1000,      // 15 minutos
     refreshTokenExpiry: 7 * 24 * 60 * 60 * 1000, // 7 dias
   },
-
+  
   security: {
     enableCSP: true,
     enableHTTPS: false,
@@ -277,7 +277,7 @@ O backend espera `password` (não `senha`). Atualize o serviço:
 export class AuthService {
   login(email: string, password: string) {  // ← era 'senha'
     return this.http.post<{ token: string, user?: any }>(
-      `${this.apiUrl}/auth/login`,
+      `${this.apiUrl}/auth/login`, 
       { email, password }  // ← agora 'password'
     ).pipe(
       tap(response => {
@@ -292,7 +292,7 @@ export class AuthService {
 
   register(nome: string, email: string, password: string, role: string) {  // ← senha → password
     return this.http.post<{ token: string, user?: any }>(
-      `${this.apiUrl}/auth/register`,
+      `${this.apiUrl}/auth/register`, 
       { nome, email, password, role }  // ← password aqui também
     ).pipe(
       tap(response => {
@@ -620,7 +620,7 @@ export class AgendarComponent implements OnInit {
 
   profissionalSlug: string = '';
   profissional: any = null;
-  agendamento = {
+  agendamento = { 
     nomeCliente: '',
     emailCliente: '',
     telefoneCliente: '',
@@ -802,8 +802,8 @@ GET /profissionais?page=1&limit=10&categoria=cabelo
 
 ## 🔗 RECURSOS
 
-**Backend Swagger:** http://localhost:3001/docs
-**Backend Health:** http://localhost:3001/health
+**Backend Swagger:** http://localhost:3001/docs  
+**Backend Health:** http://localhost:3001/health  
 **Backend Repo:** https://github.com/RubensGJ/BookaBackendV2.git
 
 ---
@@ -816,11 +816,11 @@ GET /profissionais?page=1&limit=10&categoria=cabelo
 4. ✅ Teste login de verdade
 5. ✅ Incremente com outros serviços
 
-**Tempo estimado:** 3-4 semanas para integração completa
+**Tempo estimado:** 3-4 semanas para integração completa  
 **Dependência:** Backend deve estar rodando localmente
 
 ---
 
-**Versão:** 1.0
-**Data:** 18/05/2026
+**Versão:** 1.0  
+**Data:** 18/05/2026  
 **Status:** Pronto para implementação

@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Agendamento, StatusAgendamento } from '../models';
+import { Agendamento, AgendamentoMeu, StatusAgendamento } from '../models';
 
 export interface CreateAgendamentoRequest {
   clienteId: string;
@@ -100,8 +100,8 @@ export class AgendamentoService {
   }
 
   // Métodos compatíveis com código legado
-  getMeusAgendamentos(): Observable<Agendamento[]> {
-    return this.http.get<Agendamento[]>(`${this.apiUrl}/meus`);
+  getMeusAgendamentos(): Observable<AgendamentoMeu[]> {
+    return this.http.get<AgendamentoMeu[]>(`${this.apiUrl}/meus`);
   }
 
   cancelar(id: string): Observable<Agendamento> {

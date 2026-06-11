@@ -33,7 +33,7 @@ describe('AuthService', () => {
       expect(localStorage.getItem('token')).toBe('fake-jwt-token');
       expect(localStorage.getItem('role')).toBe('CLIENTE');
     });
-
+    
     const req = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
     expect(req.request.method).toBe('POST');
     req.flush(mockResponse);
@@ -77,8 +77,8 @@ npm run test:coverage  # Gera relatório de cobertura
 
 **Arquivo:** `src/index.html` (add meta tag)
 ```html
-<meta http-equiv="Content-Security-Policy"
-  content="default-src 'self';
+<meta http-equiv="Content-Security-Policy" 
+  content="default-src 'self'; 
     script-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
     img-src 'self' data: https:;
@@ -161,7 +161,7 @@ export class AuthService {
   private storeTokens(response: TokenResponse) {
     localStorage.setItem(this.TOKEN_KEY, response.accessToken);
     localStorage.setItem(this.REFRESH_KEY, response.refreshToken);
-
+    
     // Calcular expiração (JWT has exp claim)
     const tokenDecoded = this.decodeToken(response.accessToken);
     if (tokenDecoded?.exp) {
@@ -374,8 +374,8 @@ class BookingService {
     this.channel.publish(
       'booking_events',
       '',
-      Buffer.from(JSON.stringify({
-        event: 'BOOKING_CREATED',
+      Buffer.from(JSON.stringify({ 
+        event: 'BOOKING_CREATED', 
         bookingId,
         timestamp: new Date()
       }))
@@ -526,24 +526,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
+      
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-
+      
       - name: Install dependencies
         working-directory: ./booka-frontend-1
         run: npm ci
-
+      
       - name: Lint
         working-directory: ./booka-frontend-1
         run: npm run lint
-
+      
       - name: Unit Tests
         working-directory: ./booka-frontend-1
         run: npm run test:coverage
-
+      
       - name: Build
         working-directory: ./booka-frontend-1
         run: npm run build
@@ -566,20 +566,20 @@ jobs:
           --health-retries 5
     steps:
       - uses: actions/checkout@v3
-
+      
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-
+      
       - name: Install dependencies (API Gateway)
         working-directory: ./booka-backend/api-gateway
         run: npm ci
-
+      
       - name: Unit Tests
         working-directory: ./booka-backend
         run: npm run test
-
+      
       - name: Build
         working-directory: ./booka-backend
         run: npm run build
@@ -590,7 +590,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v3
-
+      
       - name: Deploy to production
         run: |
           # Add deployment script here
@@ -688,5 +688,5 @@ grafana:
 
 ---
 
-**Documento versão:** 1.0
+**Documento versão:** 1.0  
 **Last updated:** 18/05/2026

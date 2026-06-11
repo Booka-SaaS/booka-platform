@@ -30,14 +30,14 @@ import { ModalService } from '../../services/modal.service';
         </div>
 
         <div class="modal-action mt-8 flex flex-col-reverse sm:flex-row gap-3">
-          <button
+          <button 
             *ngIf="modalService.state().type === 'confirm'"
             (click)="modalService.handleCancel()"
             class="btn btn-ghost font-bold rounded-2xl text-slate-500 w-full sm:w-auto">
             {{ modalService.state().cancelText }}
           </button>
-
-          <button
+          
+          <button 
             (click)="modalService.handleConfirm()"
             [ngClass]="modalService.state().type === 'alert' ? 'w-full btn-primary' : 'btn-primary w-full sm:w-auto'"
             class="btn rounded-2xl font-black shadow-md">
@@ -45,7 +45,7 @@ import { ModalService } from '../../services/modal.service';
           </button>
         </div>
       </div>
-
+      
       <form method="dialog" class="modal-backdrop bg-slate-900/40 backdrop-blur-sm">
         <button (click)="handleBackdropClick()" class="cursor-default">fechar</button>
       </form>

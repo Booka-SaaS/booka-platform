@@ -1,0 +1,24 @@
+{
+  "name": "booka",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Monorepo do Booka com frontend, backend e mobile consolidados dos repositorios de origem.",
+  "scripts": {
+    "frontend:install": "npm --prefix frontend ci",
+    "frontend:dev": "npm --prefix frontend start",
+    "frontend:build": "npm --prefix frontend run build",
+    "frontend:test": "npm --prefix frontend run test:ci",
+    "backend:install": "npm --prefix backend ci",
+    "backend:dev": "npm --prefix backend run dev",
+    "backend:gateway": "npm --prefix backend run dev:gateway",
+    "backend:notifications": "npm --prefix backend run dev:notifications",
+    "backend:build": "npm --prefix backend run build",
+    "backend:test": "npm --prefix backend test",
+    "backend:prisma:generate": "npm --prefix backend run prisma:generate",
+    "backend:prisma:deploy": "npm --prefix backend run prisma:deploy",
+    "mobile:install": "npm --prefix mobile ci",
+    "mobile:dev": "npm --prefix mobile start",
+    "mobile:build": "npm --prefix mobile run build",
+    "mobile:e2e": "npm --prefix mobile run e2e"
+  }
+}

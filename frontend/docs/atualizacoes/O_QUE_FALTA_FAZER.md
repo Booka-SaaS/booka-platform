@@ -231,6 +231,6 @@ R: Não! Faça fase por fase. Cada fase é "deployable".
 
 **Próximo passo:** Abra `INTEGRACAO_BACKEND.md` para instruções detalhadas!
 
-**Tempo de leitura:** 5 minutos
+**Tempo de leitura:** 5 minutos  
 **Tempo de implementação:** 1 hora (Fase 1, Task 1.1-1.2)
 

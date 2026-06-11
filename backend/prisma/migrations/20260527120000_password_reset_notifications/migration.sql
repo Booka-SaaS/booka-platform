@@ -1,7 +1,0 @@
--- Intentionally left as a no-op.
---
--- The password reset and notification tables are created by the previous
--- migration: 20260527000000_add_password_reset_and_notificacao.
--- This migration name existed in an older branch with duplicate SQL. Keeping
--- the directory avoids changing migration ordering while preventing duplicate
--- CREATE TYPE/TABLE statements on deploy.

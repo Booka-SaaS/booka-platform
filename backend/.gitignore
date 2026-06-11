@@ -1,13 +1,8 @@
 node_modules
 dist
 .env
-.env.local
-.env.development
-.env.production
-.vercel
 .turbo
 .idea
 .vscode
 coverage
 prisma/dev.db
-uploads

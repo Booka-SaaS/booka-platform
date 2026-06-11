@@ -1,5 +1,4 @@
 import bcrypt from 'bcryptjs';
-import { randomUUID } from 'crypto';
 import jwt from 'jsonwebtoken';
 import { Prisma, UserRole } from '@prisma/client';
 import { env } from '../../config/env';
@@ -11,15 +10,6 @@ type RegisterInput = {
   email: string;
   password: string;
   role: UserRole;
-  endereco?: {
-    cep: string;
-    logradouro: string;
-    numero: string;
-    bairro: string;
-    complemento?: string;
-    cidade: string;
-    estado: string;
-  };
 };
 
 function normalizeEmail(email: string) {
@@ -82,73 +72,52 @@ export async function register(input: RegisterInput) {
   });
 
   if (existingUser) {
-    throw new AppError('Este e-mail ja esta cadastrado. Entre na sua conta ou use outro e-mail.', 409);
+    throw new AppError('Ja existe um usuario com este email.', 409);
   }
 
   const passwordHash = await bcrypt.hash(input.password, 10);
 
-  try {
-    const user = await prisma.$transaction(async (transaction) => {
-      const createdUser = await transaction.usuario.create({
+  const user = await prisma.$transaction(async (transaction) => {
+    const createdUser = await transaction.usuario.create({
+      data: {
+        nome: input.nome.trim(),
+        email,
+        passwordHash,
+        role: input.role,
+      },
+    });
+
+    if (input.role === 'PROFISSIONAL') {
+      const perfil = await transaction.perfilProfissional.create({
         data: {
-          nome: input.nome.trim(),
-          email,
-          passwordHash,
-          role: input.role,
+          usuarioId: createdUser.id,
+          nomeExibicao: input.nome.trim(),
+          profissao: 'Profissional',
+          categoriaPrincipal: 'Geral',
+          modalidadePrincipal: 'PRESENCIAL',
+          tipoVendedor: 'AUTONOMO',
+          publicado: false,
         },
       });
 
-      if (input.role === 'PROFISSIONAL') {
-        const perfil = await transaction.perfilProfissional.create({
-          data: {
-            usuarioId: createdUser.id,
-            nomeExibicao: input.nome.trim(),
-            profissao: 'Profissional',
-            categoriaPrincipal: 'Geral',
-            modalidadePrincipal: 'PRESENCIAL',
-            tipoVendedor: 'AUTONOMO',
-            cidade: input.endereco?.cidade,
-            publicado: false,
-          },
-        });
-
-        const enderecoCompleto = input.endereco
-          ? `${input.endereco.logradouro}, ${input.endereco.numero} - ${input.endereco.bairro}, ${input.endereco.cidade}/${input.endereco.estado.toUpperCase()}`
-          : undefined;
-
-        await transaction.loja.create({
-          data: {
-            usuarioId: createdUser.id,
-            perfilProfissionalId: perfil.id,
-            nome: `${input.nome.trim()} Studio`,
-            slug: `${slugify(input.nome)}-${createdUser.id.slice(0, 8)}`,
-            endereco: enderecoCompleto,
-            cep: input.endereco?.cep,
-            logradouro: input.endereco?.logradouro,
-            numero: input.endereco?.numero,
-            bairro: input.endereco?.bairro,
-            complemento: input.endereco?.complemento,
-            cidade: input.endereco?.cidade,
-            estado: input.endereco?.estado.toUpperCase(),
-            onboardingConcluido: false,
-          },
-        });
-      }
-
-      return createdUser;
-    });
-
-    return {
-      token: buildToken(user),
-      user: mapAuthUser(user),
-    };
-  } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-      throw new AppError('Este e-mail ja esta cadastrado. Entre na sua conta ou use outro e-mail.', 409);
+      await transaction.loja.create({
+        data: {
+          usuarioId: createdUser.id,
+          perfilProfissionalId: perfil.id,
+          nome: `${input.nome.trim()} Studio`,
+          slug: `${slugify(input.nome)}-${createdUser.id.slice(0, 8)}`,
+          onboardingConcluido: false,
+        },
+      });
     }
 
-    throw error;
-  }
+    return createdUser;
+  });
+
+  return {
+    token: buildToken(user),
+    user: mapAuthUser(user),
+  };
 }
 
 export async function login(emailInput: string, password: string) {
@@ -166,55 +135,6 @@ export async function login(emailInput: string, password: string) {
   if (!passwordMatches) {
     throw new AppError('Credenciais invalidas.', 401);
   }
-
-  return {
-    token: buildToken(user),
-    user: mapAuthUser(user),
-  };
-}
-
-type GoogleTokenInfo = {
-  aud?: string;
-  email?: string;
-  email_verified?: 'true' | 'false' | boolean;
-  name?: string;
-};
-
-export async function loginWithGoogle(credential: string) {
-  if (!env.GOOGLE_CLIENT_ID) {
-    throw new AppError('Login com Google nao configurado.', 501);
-  }
-
-  const response = await fetch(
-    `https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(credential)}`,
-  );
-
-  if (!response.ok) {
-    throw new AppError('Credencial Google invalida.', 401);
-  }
-
-  const tokenInfo = (await response.json()) as GoogleTokenInfo;
-  const emailVerified = tokenInfo.email_verified === true || tokenInfo.email_verified === 'true';
-
-  if (!tokenInfo.email || !emailVerified || tokenInfo.aud !== env.GOOGLE_CLIENT_ID) {
-    throw new AppError('Credencial Google invalida.', 401);
-  }
-
-  const email = normalizeEmail(tokenInfo.email);
-  const nome = tokenInfo.name?.trim() || email.split('@')[0];
-
-  const user = await prisma.usuario.upsert({
-    where: { email },
-    update: {
-      nome,
-    },
-    create: {
-      nome,
-      email,
-      passwordHash: await bcrypt.hash(randomUUID(), 10),
-      role: 'CLIENTE',
-    },
-  });
 
   return {
     token: buildToken(user),
@@ -263,7 +183,7 @@ export async function requestPasswordReset(email: string) {
   });
 
   // Gerar token
-  const rawToken = randomUUID();
+  const rawToken = crypto.randomUUID();
   const tokenHash = await bcrypt.hash(rawToken, 10);
 
   await prisma.passwordResetToken.create({
@@ -274,11 +194,11 @@ export async function requestPasswordReset(email: string) {
     },
   });
 
-  // Em producao, o token deve ser enviado por email.
-  // Em desenvolvimento, ele volta na resposta para facilitar testes locais.
+  // Em produção, enviar email com o token.
+  // Por enquanto, retornamos o token para facilitar testes.
   return {
     message: 'Se o email estiver cadastrado, você receberá um link para redefinir sua senha.',
-    ...(env.NODE_ENV === 'production' ? {} : { resetToken: rawToken }),
+    resetToken: rawToken, // Remover em produção — apenas para testes
   };
 }
 
@@ -361,3 +281,4 @@ export async function resetPassword(rawToken: string, novaSenha: string) {
     message: 'Senha atualizada com sucesso.',
   };
 }
+

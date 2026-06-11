@@ -28,7 +28,7 @@ export class LoginComponent {
 
   onSubmit() {
     this.errorMessage = '';
-
+    
     if (!this.email || !this.password) {
       this.errorMessage = 'Por favor, preencha todos os campos!';
       return;
@@ -41,7 +41,7 @@ export class LoginComponent {
       next: (meResponse) => {
         this.isLoading = false;
         const role = meResponse.user.role;
-
+        
         if (role === 'PROFISSIONAL') {
           // Verificar se onboarding foi concluído
           if (meResponse.loja && !meResponse.loja.onboardingConcluido) {

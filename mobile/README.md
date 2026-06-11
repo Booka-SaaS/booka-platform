@@ -1,75 +1,118 @@
-# Booka Mobile
+# Booka — Marketplace de Agendamento de Serviços
 
-App mobile do Booka, mantido dentro do monorepo em `mobile/`.
+Este repositório contém o front-end web do Booka, uma plataforma no modelo marketplace (multi-tenant) desenvolvida para conectar profissionais independentes a clientes que desejam agendar serviços de forma simples, segura e eficiente.
 
-## Stack
+A aplicação foi construída com Angular e utiliza Tailwind CSS para oferecer uma interface moderna, responsiva e orientada à usabilidade.
 
-- Angular 19
-- Ionic Angular
-- Capacitor
+---
+
+## Visão Geral
+
+O sistema foi projetado com foco em experiência do usuário (UX) e resiliência, garantindo funcionamento consistente mesmo em cenários onde a API não está disponível.
+
+A aplicação permite que usuários encontrem serviços, visualizem perfis de profissionais e realizem agendamentos de forma dinâmica, enquanto profissionais podem gerenciar sua presença na plataforma.
+
+---
+
+## Funcionalidades
+
+### Vitrine dinâmica
+As rotas principais (`/` e `/explorar`) funcionam como um mecanismo de busca que permite aos usuários localizar serviços com base em categoria e localização.
+
+### Agendamento dinâmico
+A rota `/agendar/:id` apresenta uma interface de agendamento totalmente dinâmica, onde:
+- Os dados são carregados com base no profissional selecionado
+- O calendário é gerado automaticamente
+- Os serviços disponíveis são exibidos conforme o contexto
+
+### Controle de acesso (RBAC)
+O sistema possui controle de acesso baseado em papéis:
+- CLIENTE
+- PROFISSIONAL
+
+O roteamento direciona usuários conforme seu perfil:
+- Clientes acessam o fluxo de busca e agendamento
+- Profissionais são direcionados para o dashboard
+
+### Resiliência (Fallback UI)
+A aplicação utiliza interceptadores de erro (`catchError`) nos serviços Angular.  
+Caso a API esteja indisponível:
+- Dados simulados são utilizados automaticamente
+- A navegação continua funcional
+- A interface não é comprometida
+
+---
+
+## Tecnologias
+
+- Angular (Standalone Components)
+- Tailwind CSS
 - TypeScript
-- Cypress para testes e2e
+- HTML5
+- Material Symbols Outlined
+- Google Fonts (Inter)
 
-## Pre-requisitos
+---
 
-- Node.js 18 ou superior
-- npm
-- Android Studio para builds Android
-- Xcode e CocoaPods para builds iOS em macOS
+## Pré-requisitos
 
-## Instalacao
+- Node.js (versão 18 ou superior)
+- Angular CLI
 
+Instalação do Angular CLI:
 ```bash
-cd mobile
+npm install -g @angular/cli
+
+# Booka — Marketplace de Agendamento de Serviços
+
+Este repositório contém o front-end web do Booka, uma plataforma no modelo marketplace (multi-tenant) desenvolvida para conectar profissionais independentes a clientes que desejam agendar serviços de forma simples, segura e eficiente.
+
+A aplicação foi construída com Angular e utiliza Tailwind CSS para oferecer uma interface moderna, responsiva e orientada à usabilidade.
+
+## Instalação
+
+Clone o repositório:
+
+git clone <URL_DO_REPOSITORIO>
+cd booka-frontend
+
+Instale as dependências:
+
 npm install
-```
 
-## Execucao local
+## Execução
 
-```bash
-npm start
-```
+Inicie o servidor de desenvolvimento:
 
-Por padrao, a aplicacao usa `http://localhost:3001` como URL da API nos arquivos:
+ng serve
 
-```text
-src/environments/environment.ts
+Acesse no navegador:
+
+http://localhost:4200
+
+## Fluxo de navegação (sem backend)
+
+Mesmo sem o backend em execução, é possível testar a aplicação utilizando dados simulados.
+
+Acesse a home (/) e realize uma busca  
+Navegue até a página de exploração (/explorar)  
+Selecione um profissional  
+Acesse a tela de agendamento (/agendar/:id)  
+Escolha serviço, data e horário  
+Teste as telas de login e cadastro (/login e /cadastro)
+
+## Integração com backend
+
+O frontend está preparado para consumir uma API RESTful.
+
+A URL base pode ser configurada em:
+
 src/environments/environment.development.ts
-```
 
-## Variaveis de ambiente
+Endpoint padrão:
 
-Use `mobile/.env.example` como referencia quando a URL da API precisar ser documentada para o ambiente local ou de deploy.
+http://localhost:3000/api/
 
-```env
-API_URL=http://localhost:3001
-```
+## Considerações
 
-## Comandos uteis
-
-```bash
-npm run build
-npm run e2e
-npm run e2e:open
-npx cap sync
-```
-
-## Android
-
-```bash
-npm run build
-npx cap sync android
-npx cap open android
-```
-
-O build final deve ser gerado pelo Android Studio, ajustando assinatura, versionamento e variaveis de producao antes de publicar na Google Play.
-
-## iOS
-
-```bash
-npm run build
-npx cap sync ios
-npx cap open ios
-```
-
-O build iOS exige macOS com Xcode. Antes da publicacao na App Store, revisar bundle id, certificados, perfis de assinatura e URLs de producao.
+O projeto foi estruturado para suportar crescimento e escalabilidade em um ambiente multi-tenant, com foco em organização de código, separação de responsabilidades e manutenção de uma boa experiência de uso mesmo em cenários de falha.

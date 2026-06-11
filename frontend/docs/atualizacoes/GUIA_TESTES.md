@@ -1,7 +1,7 @@
 # 🧪 GUIA DE TESTES E PRÓXIMOS PASSOS
 
-**Data:** 18 de Maio de 2026
-**Etapa:** Preparado para Testes e Validação
+**Data:** 18 de Maio de 2026  
+**Etapa:** Preparado para Testes e Validação  
 **Time:** Frontend Integration Complete ✅
 
 ---
@@ -251,23 +251,23 @@ console.error('Erro ao criar agendamento público:', err);
 ## 🚨 8. Possíveis Issues e Soluções
 
 ### Issue: "Cannot find module '@angular/core'"
-**Causa:** Dependências não instaladas
+**Causa:** Dependências não instaladas  
 **Solução:** `npm install`
 
 ### Issue: "localhost:3001 connection refused"
-**Causa:** Backend não está rodando
+**Causa:** Backend não está rodando  
 **Solução:** Verificar se backend está em localhost:3001
 
 ### Issue: "401 Unauthorized em requisições"
-**Causa:** Token expirado ou inválido
+**Causa:** Token expirado ou inválido  
 **Solução:** Fazer logout + novo login
 
 ### Issue: "CORS error"
-**Causa:** Headers de segurança
+**Causa:** Headers de segurança  
 **Solução:** Verificar CORS config no backend
 
 ### Issue: "XSS injection não é bloqueada"
-**Causa:** SanitizeInterceptor não está funcionando
+**Causa:** SanitizeInterceptor não está funcionando  
 **Solução:** Verificar se interceptor está registrado em app.config.ts
 
 ---
@@ -302,17 +302,17 @@ console.error('Erro ao criar agendamento público:', err);
 
 ## ✨ 10. Conclusão
 
-✅ **Frontend completamente integrado com backend**
-✅ **Segurança implementada em camadas**
-✅ **Componentes públicos e privados separados**
-✅ **Error handling robusto**
-✅ **Pronto para testes e validação**
+✅ **Frontend completamente integrado com backend**  
+✅ **Segurança implementada em camadas**  
+✅ **Componentes públicos e privados separados**  
+✅ **Error handling robusto**  
+✅ **Pronto para testes e validação**  
 
 🎯 **Próximo passo:** Executar testes e documentar descobertas
 
 ---
 
-**Documentação gerada em:** 18 de Maio de 2026
-**Status:** 🟢 Ready for QA
-**Owner:** Frontend Team
+**Documentação gerada em:** 18 de Maio de 2026  
+**Status:** 🟢 Ready for QA  
+**Owner:** Frontend Team  
 **Reviewer:** Tech Lead
