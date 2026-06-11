@@ -122,3 +122,15 @@ Observacoes:
 - Rever URLs finais do frontend em producao, pois o upstream frontend aponta para `http://localhost:3000/api` em `environment.ts`.
 - Validar migrations Prisma em uma base descartavel antes de aplicar em producao.
 - Evitar commitar arquivos de upload reais em ciclos futuros, mesmo que tenham vindo rastreados no backend de origem.
+
+## Correcao de deploy Render em 11/06/2026
+
+O deploy do commit `e4fab38` falhou no Render com `P3009`, porque o banco de producao tinha a migration `20260527000000_add_password_reset_and_notificacao` registrada como falhada desde `2026-06-03 15:48:21 UTC`.
+
+O `render.yaml` foi ajustado para executar uma resolucao idempotente antes do `migrate deploy`. O script consulta `_prisma_migrations` e so executa `migrate resolve` se a migration estiver registrada como falhada:
+
+```bash
+npm install --include=dev && npx prisma generate && npm run prisma:resolve-failed && npx prisma migrate deploy && npm run build
+```
+
+Observacao importante: o log do Render mostrou que o servico esta usando um build command configurado no painel, diferente do `render.yaml` que estava no repositorio. Se o Render continuar ignorando o `render.yaml`, aplique o comando acima diretamente no dashboard do servico antes de disparar novo deploy.

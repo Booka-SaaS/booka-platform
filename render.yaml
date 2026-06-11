@@ -3,7 +3,7 @@ services:
     name: booka-api
     env: node
     rootDir: backend
-    buildCommand: npm ci && npm run prisma:generate && npm run prisma:deploy && npm run build
+    buildCommand: npm install --include=dev && npx prisma generate && npm run prisma:resolve-failed && npx prisma migrate deploy && npm run build
     startCommand: npm start
     healthCheckPath: /health
     envVars:
