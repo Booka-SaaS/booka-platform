@@ -20,23 +20,13 @@ import { buildBloqueiosRouter } from './modules/bloqueios/bloqueios.controller';
 import { buildDisponibilidadeRouter } from './modules/disponibilidade/disponibilidade.controller';
 import { buildUploadRouter } from './modules/upload/upload.controller';
 
-const isAllowedOrigin = (origin: string) =>
-  env.CLIENT_ORIGINS.includes(origin) || /^https:\/\/[a-z0-9-]+\.vercel\.app$/i.test(origin);
-
 export function buildApp() {
   const app = express();
 
   app.use(helmet());
   app.use(
     cors({
-      origin(origin, callback) {
-        if (!origin || isAllowedOrigin(origin)) {
-          callback(null, true);
-          return;
-        }
-
-        callback(new Error('Origem nao permitida pelo CORS.'));
-      },
+      origin: true,
     }),
   );
   app.use(
