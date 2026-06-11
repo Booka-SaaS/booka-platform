@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:3000/api',
+  apiUrl: 'https://booka-backend-xg0v.onrender.com',
   jwt: {
     accessTokenExpiry: 15 * 60 * 1000,
     refreshTokenExpiry: 7 * 24 * 60 * 60 * 1000,

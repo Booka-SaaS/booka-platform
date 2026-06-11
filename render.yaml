@@ -23,6 +23,8 @@ services:
         value: 604800
       - key: CLIENT_ORIGIN
         sync: false
+      - key: CLIENT_ORIGINS
+        sync: false
       - key: GATEWAY_ORIGIN
         sync: false
       - key: RESEND_API_KEY
