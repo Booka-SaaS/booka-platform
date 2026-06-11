@@ -9,6 +9,7 @@
     "dev:core": "tsx watch src/server.ts",
     "dev:gateway": "tsx watch services/api-gateway/server.ts",
     "dev:notifications": "tsx watch services/notification-service/src/main.ts",
+    "postinstall": "node scripts/resolve-failed-migration.cjs",
     "build": "tsc -p tsconfig.json",
     "build:core": "tsc -p tsconfig.json",
     "start": "node dist/src/server.js",

@@ -127,7 +127,7 @@ Observacoes:
 
 O deploy do commit `e4fab38` falhou no Render com `P3009`, porque o banco de producao tinha a migration `20260527000000_add_password_reset_and_notificacao` registrada como falhada desde `2026-06-03 15:48:21 UTC`.
 
-O `render.yaml` foi ajustado para executar uma resolucao idempotente antes do `migrate deploy`. O script consulta `_prisma_migrations` e so executa `migrate resolve` se a migration estiver registrada como falhada:
+O `render.yaml` foi ajustado para executar uma resolucao idempotente antes do `migrate deploy`. O mesmo script tambem roda em `postinstall` somente no Render, porque o deploy log indicou que o servico pode estar usando um build command manual no painel. O script consulta `_prisma_migrations` e so executa `migrate resolve` se a migration estiver registrada como falhada:
 
 ```bash
 npm install --include=dev && npx prisma generate && npm run prisma:resolve-failed && npx prisma migrate deploy && npm run build
