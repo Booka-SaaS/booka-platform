@@ -13,7 +13,7 @@ Este documento consolida os 10 itens solicitados para a entrega academica do Boo
 | 5. Autorizacao e autenticacao | Implementado | JWT Bearer, roles, guards/middlewares, login tradicional e login Google |
 | 6. Testes unitarios | Implementado | Jest no backend; Karma/Jasmine no frontend; testes Android/JUnit no mobile |
 | 7. Testes de integracao | Implementado para o MVP | Jest integration no backend e Cypress/E2E no frontend/mobile |
-| 8. Automacao de testes | Implementado | Workflows em `backend/.github/workflows/ci.yml` e `frontend/.github/workflows/ci.yml` |
+| 8. Automacao de testes | Implementado | Workflows na raiz em `.github/workflows/backend-ci.yml` e `.github/workflows/frontend-ci.yml` |
 | 9. Seguranca/aplicacao web e mobile | Implementado | Helmet, rate limit, CORS, JWT, RBAC, Zod, DOMPurify, interceptor JWT e mobile Capacitor |
 | 10. Arquitetura e design de microsservicos | Implementado | Gateway + core API + notification-service + RabbitMQ + PostgreSQL/Prisma |
 
@@ -128,10 +128,10 @@ Frontend/mobile:
 
 ## 8. Automacao de testes
 
-Workflows:
+Workflows na raiz do monorepo:
 
-- `backend/.github/workflows/ci.yml`.
-- `frontend/.github/workflows/ci.yml`.
+- `.github/workflows/backend-ci.yml`.
+- `.github/workflows/frontend-ci.yml`.
 
 Automacoes previstas:
 
