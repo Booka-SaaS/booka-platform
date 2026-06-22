@@ -1,0 +1,454 @@
+\documentclass[12pt,a4paper]{article}
+
+% ---------------------------------------------------------------------------
+% Relatorio de Entrega Final de Projeto Scrum
+% Compilacao: pdflatex no Overleaf
+% Edite os campos entre colchetes conforme os dados reais do projeto.
+% ---------------------------------------------------------------------------
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{lmodern}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage[most]{tcolorbox}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{enumitem}
+\usepackage{float}
+\usepackage{setspace}
+
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric}
+\pgfplotsset{compat=1.18}
+
+% ---------------------------------------------------------------------------
+% Configuracoes visuais
+% ---------------------------------------------------------------------------
+\geometry{
+  a4paper,
+  left=2.5cm,
+  right=2.5cm,
+  top=2.5cm,
+  bottom=2.5cm
+}
+
+\definecolor{PrimaryBlue}{HTML}{1F4E79}
+\definecolor{DarkBlue}{HTML}{17365D}
+\definecolor{SoftBlue}{HTML}{EAF2F8}
+\definecolor{SoftGray}{HTML}{F4F6F7}
+\definecolor{MediumGray}{HTML}{5D6D7E}
+\definecolor{SuccessGreen}{HTML}{2E7D32}
+\definecolor{SoftGreen}{HTML}{E8F5E9}
+\definecolor{AlertGold}{HTML}{F9E79F}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=PrimaryBlue,
+  urlcolor=PrimaryBlue,
+  citecolor=PrimaryBlue,
+  pdftitle={Relatorio de Entrega Final de Projeto Scrum},
+  pdfauthor={[Nome/Papel]}
+}
+
+\setstretch{1.18}
+\setlength{\parskip}{0.45em}
+\setlength{\parindent}{0pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\textcolor{MediumGray}{Relatorio Final Scrum}}
+\rhead{\textcolor{MediumGray}{[Nome do Projeto]}}
+\cfoot{\textcolor{MediumGray}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{PrimaryBlue}\leaders\hrule height \headrulewidth\hfill}}
+
+\titleformat{\section}
+  {\Large\bfseries\color{DarkBlue}}
+  {\thesection.}
+  {0.6em}
+  {}
+
+\titleformat{\subsection}
+  {\large\bfseries\color{PrimaryBlue}}
+  {\thesubsection}
+  {0.6em}
+  {}
+
+\renewcommand{\arraystretch}{1.35}
+
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+\tcbset{
+  enhanced,
+  boxrule=0.6pt,
+  arc=2mm,
+  left=3mm,
+  right=3mm,
+  top=2mm,
+  bottom=2mm
+}
+
+\newtcolorbox{infobox}[1]{
+  colback=SoftBlue,
+  colframe=PrimaryBlue,
+  title=\textbf{#1},
+  coltitle=white,
+  colbacktitle=PrimaryBlue,
+  fonttitle=\bfseries
+}
+
+\newtcolorbox{successbox}[1]{
+  colback=SoftGreen,
+  colframe=SuccessGreen,
+  title=\textbf{#1},
+  coltitle=white,
+  colbacktitle=SuccessGreen,
+  fonttitle=\bfseries
+}
+
+\newtcolorbox{notebox}[1]{
+  colback=SoftGray,
+  colframe=MediumGray,
+  title=\textbf{#1},
+  coltitle=white,
+  colbacktitle=MediumGray,
+  fonttitle=\bfseries
+}
+
+\newcommand{\statusdone}{\textcolor{SuccessGreen}{\textbf{Concluido}}}
+\newcommand{\statusreplaced}{\textcolor{PrimaryBlue}{\textbf{Substituido}}}
+\newcommand{\placeholder}[1]{\textcolor{MediumGray}{[#1]}}
+
+% ---------------------------------------------------------------------------
+% Documento
+% ---------------------------------------------------------------------------
+\begin{document}
+
+% ---------------------------------------------------------------------------
+% Capa
+% ---------------------------------------------------------------------------
+\begin{titlepage}
+  \thispagestyle{empty}
+  \begin{tikzpicture}[remember picture, overlay]
+    \fill[DarkBlue] (current page.north west) rectangle ([yshift=-5.5cm]current page.north east);
+    \fill[PrimaryBlue] ([yshift=-5.5cm]current page.north west) rectangle ([yshift=-5.75cm]current page.north east);
+  \end{tikzpicture}
+
+  \vspace*{1.2cm}
+  {\color{white}\Huge\bfseries Relatorio de Entrega Final de Projeto}\\[0.35cm]
+  {\color{white}\LARGE\bfseries Scrum}\\[1.6cm]
+
+  \begin{tcolorbox}[
+    colback=white,
+    colframe=PrimaryBlue,
+    width=\textwidth,
+    boxrule=0.8pt,
+    arc=3mm
+  ]
+    \Large\textbf{Dados do Documento}\\[0.4cm]
+    \begin{tabularx}{\textwidth}{@{}L{5cm}Y@{}}
+      \textbf{Nome do Projeto:} & \placeholder{Nome do Projeto} \\
+      \textbf{Periodo de Execucao:} & \placeholder{Mes/Ano} a \placeholder{Mes/Ano} \\
+      \textbf{Duracao:} & 6 meses \\
+      \textbf{Data de Emissao:} & \placeholder{Data} \\
+      \textbf{Responsavel:} & \placeholder{Nome/Papel, ex: Scrum Master / Product Owner} \\
+    \end{tabularx}
+  \end{tcolorbox}
+
+  \vfill
+  \begin{flushright}
+    \textcolor{MediumGray}{Documento academico/corporativo para consolidacao das entregas, metricas, retrospectiva e encerramento do ciclo principal do projeto.}
+  \end{flushright}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% ---------------------------------------------------------------------------
+\section{Executivo e Sumario do Projeto}
+
+Este relatorio consolida as entregas realizadas ao longo de seis meses de execucao do projeto utilizando o framework Scrum. O documento apresenta a evolucao do escopo, as principais entregas, os indicadores de performance do time, os marcos do cronograma, as licoes aprendidas e os proximos passos recomendados para sustentacao e evolucao continua.
+
+\begin{infobox}{Resumo Executivo do Projeto}
+  \begin{tabularx}{\textwidth}{@{}L{5cm}Y@{}}
+    \textbf{Nome do Projeto:} & \placeholder{Nome do Projeto} \\
+    \textbf{Visao do Produto:} & \placeholder{Ex: Desenvolver uma plataforma web para automatizar a gestao de agentes de IA para empresas parceiras} \\
+    \textbf{Data de Inicio:} & \placeholder{DD/MM/AAAA} \\
+    \textbf{Data de Termino:} & \placeholder{DD/MM/AAAA} \\
+    \textbf{Total de Sprints Realizadas:} & \placeholder{Ex: 12 sprints de 2 semanas} \\
+    \textbf{Responsavel:} & \placeholder{Nome/Papel} \\
+  \end{tabularx}
+\end{infobox}
+
+O proposito do projeto foi entregar uma solucao capaz de gerar valor direto ao cliente final por meio da digitalizacao de processos, melhoria da experiencia de uso e aumento da eficiencia operacional. Ao final do ciclo principal, o produto apresenta um conjunto de funcionalidades validado em incrementos sucessivos, com adaptacoes realizadas conforme feedbacks dos stakeholders e prioridades do negocio.
+
+% ---------------------------------------------------------------------------
+\section{Escopo Entregue vs. Objetivos do Produto}
+
+A tabela a seguir apresenta a relacao entre os objetivos planejados, o status final e o valor gerado para o produto. Os itens podem ser ajustados conforme o backlog real do projeto.
+
+\begin{table}[H]
+  \centering
+  \caption{Escopo entregue e valor gerado}
+  \begin{tabularx}{\textwidth}{@{}Y C{3cm} Y@{}}
+    \toprule
+    \textbf{Objetivo do Produto / Epico / Feature} & \textbf{Status} & \textbf{Impacto / Valor Gerado} \\
+    \midrule
+    Integracao de APIs de IA & \statusdone & Permite automacao em tempo real para o cliente final. \\
+    Dashboard de Metricas & \statusdone & Oferece visualizacao clara dos dados para apoio a tomada de decisao. \\
+    Modulo de Relatorios Avancados & \statusreplaced & Alterado no backlog por prioridade de seguranca durante a Sprint 8. \\
+    Autenticacao e Seguranca & \statusdone & Aumenta a protecao de acesso e reduz riscos operacionais. \\
+    Melhorias de UI/UX & \statusdone & Melhora a experiencia dos usuarios finais. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{notebox}{Nota do Product Owner}
+  \placeholder{Inserir breves consideracoes sobre as mudancas de escopo ao longo dos seis meses, destacando a adaptabilidade do framework Scrum para responder as necessidades do mercado, feedbacks dos usuarios e prioridades do negocio.}
+\end{notebox}
+
+% ---------------------------------------------------------------------------
+\section{Metricas de Performance do Time -- Agile KPIs}
+
+\subsection{Entrega e Produtividade}
+
+\begin{infobox}{Indicadores de Entrega}
+  \begin{tabularx}{\textwidth}{@{}L{6cm}Y@{}}
+    \textbf{Total de Story Points Planejados:} & \placeholder{X pontos} \\
+    \textbf{Total de Story Points Entregues -- Done:} & \placeholder{Y pontos} \\
+    \textbf{Taxa de Entrega -- Say-Do Ratio:} & \placeholder{X\%} \\
+    \textbf{Velocidade Media do Time -- Velocity:} & \placeholder{X pontos por Sprint} \\
+  \end{tabularx}
+\end{infobox}
+
+\begin{table}[H]
+  \centering
+  \caption{Metricas de produtividade}
+  \begin{tabularx}{\textwidth}{@{}L{6.2cm}C{3.2cm}Y@{}}
+    \toprule
+    \textbf{Metrica} & \textbf{Valor} & \textbf{Interpretacao} \\
+    \midrule
+    Story Points Planejados & \placeholder{X} & Volume total estimado para o ciclo de seis meses. \\
+    Story Points Entregues -- Done & \placeholder{Y} & Trabalho efetivamente aceito conforme Definition of Done. \\
+    Say-Do Ratio & \placeholder{X\%} & Relação entre compromisso assumido e entrega concluida. \\
+    Velocity Media & \placeholder{X pontos/Sprint} & Media de entrega por sprint, usada para previsibilidade futura. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[
+      ybar,
+      width=\textwidth,
+      height=8cm,
+      bar width=12pt,
+      ymin=0,
+      ymax=45,
+      ylabel={Story Points Entregues},
+      xlabel={Sprint},
+      title={Velocidade do Time por Sprint},
+      symbolic x coords={S1,S2,S3,S4,S5,S6,S7,S8,S9,S10,S11,S12},
+      xtick=data,
+      x tick label style={rotate=45, anchor=east},
+      nodes near coords,
+      nodes near coords align={vertical},
+      grid=major,
+      major grid style={draw=SoftGray},
+      axis line style={draw=MediumGray},
+      tick style={draw=MediumGray},
+      every axis plot/.append style={fill=PrimaryBlue, draw=DarkBlue}
+    ]
+      \addplot coordinates {
+        (S1,20) (S2,24) (S3,28) (S4,25) (S5,30) (S6,32)
+        (S7,31) (S8,35) (S9,34) (S10,36) (S11,38) (S12,40)
+      };
+    \end{axis}
+  \end{tikzpicture}
+  \caption{Valores ficticios editaveis para demonstracao da evolucao da velocidade.}
+\end{figure}
+
+\subsection{Qualidade e Bugs}
+
+\begin{table}[H]
+  \centering
+  \caption{Indicadores de qualidade}
+  \begin{tabularx}{\textwidth}{@{}L{6.5cm}Y@{}}
+    \toprule
+    \textbf{Indicador} & \textbf{Resultado} \\
+    \midrule
+    Debito Tecnico Mapeado & \placeholder{X\% do backlog total ou X cards} \\
+    Bugs reportados pos-release em producao & \placeholder{X incidentes} \\
+    SLA de correcao & \placeholder{Cumprido / Parcial / Nao cumprido} \\
+    Incidentes criticos & \placeholder{X} \\
+    Testes executados & \placeholder{X casos de teste} \\
+    Taxa de aprovacao dos testes & \placeholder{X\%} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+Os indicadores de qualidade demonstram a estabilidade do incremento entregue e ajudam a orientar a etapa de sustentacao do produto. A leitura conjunta de bugs, incidentes, testes e debito tecnico permite priorizar melhorias sem comprometer o valor ja disponibilizado ao usuario final.
+
+% ---------------------------------------------------------------------------
+\section{Cronograma de Entregas Importantes -- Milestones}
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[
+    timeline/.style={draw=PrimaryBlue, line width=1.2pt},
+    milestone/.style={circle, draw=PrimaryBlue, fill=SoftBlue, minimum size=8mm, font=\bfseries\small},
+    labelbox/.style={rectangle, rounded corners=2mm, draw=MediumGray, fill=SoftGray, text width=4.2cm, align=left, font=\small}
+  ]
+    \draw[timeline] (0,0) -- (14,0);
+
+    \foreach \x/\num/\mes/\texto in {
+      0/1/Mes 1/{Sprints 1--2\\Ambiente, arquitetura base e MVP da interface},
+      2.8/2/Mes 2/{Sprints 3--4\\Primeiro modulo core em homologacao},
+      5.6/3/Mes 3/{Sprints 5--6\\Primeira release em producao e beta interna},
+      8.4/4/Mes 4/{Sprints 7--8\\Feedbacks e performance},
+      11.2/5/Mes 5/{Sprints 9--10\\Seguranca e relatorios},
+      14/6/Mes 6/{Sprints 11--12\\Carga, UI/UX e rollout final}
+    }{
+      \node[milestone] at (\x,0) {\num};
+      \node[font=\bfseries\small, text=DarkBlue] at (\x,0.75) {\mes};
+      \node[labelbox, anchor=north] at (\x,-0.75) {\texto};
+    }
+  \end{tikzpicture}
+  \caption{Linha do tempo de milestones em seis meses e doze sprints.}
+\end{figure}
+
+\begin{longtable}{@{}L{2.4cm}L{2.4cm}L{6.1cm}L{2.5cm}C{2.2cm}@{}}
+  \caption{Cronograma complementar de entregas importantes}\\
+  \toprule
+  \textbf{Periodo} & \textbf{Sprint} & \textbf{Entrega Principal} & \textbf{Ambiente} & \textbf{Status} \\
+  \midrule
+  \endfirsthead
+  \toprule
+  \textbf{Periodo} & \textbf{Sprint} & \textbf{Entrega Principal} & \textbf{Ambiente} & \textbf{Status} \\
+  \midrule
+  \endhead
+  Mes 1 & Sprints 1 e 2 & Configuracao do ambiente, arquitetura base e MVP da interface. & Desenvolvimento & Concluido \\
+  Mes 2 & Sprints 3 e 4 & Liberacao do primeiro modulo core para ambiente de homologacao. & Homologacao & Concluido \\
+  Mes 3 & Sprints 5 e 6 & Primeira release em producao, versao beta interna. & Producao/Beta & Concluido \\
+  Mes 4 & Sprints 7 e 8 & Ajustes de feedback dos usuarios e refatoracao de performance. & Homologacao & Concluido \\
+  Mes 5 & Sprints 9 e 10 & Implementacao de recursos avancados de seguranca e relatorios. & Homologacao/Producao & Concluido \\
+  Mes 6 & Sprints 11 e 12 & Testes de carga, ajustes finais de UI/UX e rollout final. & Producao & Concluido \\
+  \bottomrule
+\end{longtable}
+
+% ---------------------------------------------------------------------------
+\section{Retrospectiva Consolidada -- Licoes Aprendidas}
+
+\subsection{O que funcionou muito bem -- Sucessos}
+
+\begin{successbox}{Sucessos observados no ciclo Scrum}
+  \begin{itemize}[leftmargin=1.2em, itemsep=0.5em]
+    \item \textbf{Alinhamento nas Dailies:} Comunicacao diaria eficiente reduziu impedimentos complexos.
+    \item \textbf{Refinamento Tecnico -- Grooming:} As sprints da metade final do projeto foram melhor estimadas devido ao refinamento robusto.
+    \item \textbf{Envolvimento dos Stakeholders:} Reviews quinzenais com feedbacks construtivos evitaram retrabalho no final.
+    \item \textbf{Priorizacao do Backlog:} O time conseguiu adaptar o escopo conforme valor de negocio e urgencia tecnica.
+  \end{itemize}
+\end{successbox}
+
+\subsection{Desafios Enfrentados e Como Foram Superados}
+
+\begin{longtable}{@{}L{3.1cm}L{2.3cm}L{3.1cm}L{4.1cm}L{3.1cm}@{}}
+  \caption{Desafios, solucoes e resultados}\\
+  \toprule
+  \textbf{Desafio} & \textbf{Periodo} & \textbf{Impacto} & \textbf{Solucao Aplicada} & \textbf{Resultado} \\
+  \midrule
+  \endfirsthead
+  \toprule
+  \textbf{Desafio} & \textbf{Periodo} & \textbf{Impacto} & \textbf{Solucao Aplicada} & \textbf{Resultado} \\
+  \midrule
+  \endhead
+  Gargalo em Code Review & Sprints 3 e 4 & Atraso em entregas & Adocao do Buddy System e primeira hora do dia dedicada a revisoes & Reducao do tempo de revisao. \\
+  Mudanca de Infraestrutura & Mes 4 & Instabilidade temporaria & Criacao de task force focada em DevOps & Pipeline de CI/CD estabilizado. \\
+  Mudancas de Prioridade & Ao longo do projeto & Replanejamento do backlog & Refinamento continuo com PO e stakeholders & Escopo ajustado sem comprometer a entrega principal. \\
+  \bottomrule
+\end{longtable}
+
+% ---------------------------------------------------------------------------
+\section{Proximos Passos -- Proximo Ciclo}
+
+Apos a entrega principal, o produto entra em fase de sustentacao, monitoramento e evolucao continua. Essa etapa deve garantir estabilidade operacional, coleta de feedbacks reais e priorizacao de melhorias para um possivel novo ciclo de desenvolvimento.
+
+\begin{tcolorbox}[
+  colback=white,
+  colframe=PrimaryBlue,
+  title=\textbf{Plano Pos-Entrega},
+  colbacktitle=PrimaryBlue,
+  coltitle=white
+]
+  \begin{minipage}[t]{0.31\textwidth}
+    \begin{successbox}{Suporte e Sustentacao}
+      Definir a equipe responsavel pelo monitoramento do ambiente produtivo, atendimento de chamados, acompanhamento de incidentes e manutencao corretiva/evolutiva.
+    \end{successbox}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[t]{0.31\textwidth}
+    \begin{infobox}{Backlog Remanescente}
+      Consolidar itens despriorizados ao longo dos seis meses, mantendo-os organizados para uma possivel Fase 2 ou novo ciclo de evolucao do produto.
+    \end{infobox}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[t]{0.31\textwidth}
+    \begin{notebox}{Coleta de Feedbacks}
+      Realizar pesquisa de NPS ou satisfacao com os usuarios finais nos primeiros 30 dias de uso da solucao, coletando dados para priorizacao de melhorias futuras.
+    \end{notebox}
+  \end{minipage}
+\end{tcolorbox}
+
+\begin{table}[H]
+  \centering
+  \caption{Acoes recomendadas para o proximo ciclo}
+  \begin{tabularx}{\textwidth}{@{}Y L{3.2cm}L{2.4cm}C{2.4cm}@{}}
+    \toprule
+    \textbf{Acao Recomendada} & \textbf{Responsavel} & \textbf{Prazo} & \textbf{Prioridade} \\
+    \midrule
+    Monitorar ambiente produtivo e incidentes iniciais & \placeholder{Nome/Papel} & \placeholder{30 dias} & Alta \\
+    Consolidar backlog remanescente para Fase 2 & \placeholder{Product Owner} & \placeholder{15 dias} & Media \\
+    Realizar pesquisa de satisfacao/NPS & \placeholder{UX/Produto} & \placeholder{30 dias} & Alta \\
+    Planejar roadmap de evolucao continua & \placeholder{Squad/PO} & \placeholder{45 dias} & Media \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+% ---------------------------------------------------------------------------
+\section{Encerramento e Assinaturas}
+
+Ao assinar este documento, as partes declaram-se cientes e de acordo com a entrega do escopo final acordado, reconhecendo o encerramento do ciclo principal deste projeto e a transicao para a etapa de sustentacao e evolucao continua.
+
+\vspace{1.2cm}
+
+\begin{table}[H]
+  \centering
+  \begin{tabularx}{\textwidth}{@{}C{0.31\textwidth}C{0.31\textwidth}C{0.31\textwidth}@{}}
+    \rule{0.29\textwidth}{0.4pt} & \rule{0.29\textwidth}{0.4pt} & \rule{0.29\textwidth}{0.4pt} \\
+    \placeholder{Nome do Product Owner} & \placeholder{Nome do Scrum Master} & \placeholder{Nome do Stakeholder Principal/Cliente} \\
+    Product Owner & Scrum Master & Sponsor do Projeto \\
+  \end{tabularx}
+\end{table}
+
+\vspace{1.2cm}
+
+\begin{notebox}{Registro de Encerramento}
+  \textbf{Data da assinatura:} \placeholder{DD/MM/AAAA}
+
+  \textbf{Observacoes finais:} \placeholder{Inserir observacoes finais, restricoes, pendencias aceitas ou encaminhamentos formais.}
+\end{notebox}
+
+\end{document}

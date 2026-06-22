@@ -1,0 +1,878 @@
+\documentclass[12pt,a4paper]{article}
+
+% ---------------------------------------------------------------------------
+% Prova Multiplataforma - Documentacao Completa
+% Apostila de revisao para Desenvolvimento Multiplataforma
+% Compilacao recomendada: pdflatex no Overleaf
+% ---------------------------------------------------------------------------
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{lmodern}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[most]{tcolorbox}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{tikz}
+
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\definecolor{azul}{HTML}{1F4E79}
+\definecolor{azulescuro}{HTML}{17365D}
+\definecolor{cinza}{HTML}{F4F6F7}
+\definecolor{cinzatexto}{HTML}{566573}
+\definecolor{verde}{HTML}{2E7D32}
+\definecolor{verdeclaro}{HTML}{E8F5E9}
+\definecolor{codigo}{HTML}{F8F9F9}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=azul,
+  urlcolor=azul,
+  pdftitle={Prova Multiplataforma - Documentacao Completa},
+  pdfauthor={Material de estudo}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\textcolor{cinzatexto}{Desenvolvimento Multiplataforma}}
+\rhead{\textcolor{cinzatexto}{Revisao para Prova}}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+\renewcommand{\arraystretch}{1.3}
+\setlist[itemize]{leftmargin=1.4em}
+\setlist[enumerate]{leftmargin=1.6em}
+
+\titleformat{\section}
+  {\Large\bfseries\color{azulescuro}}
+  {\thesection.}
+  {0.6em}
+  {}
+
+\titleformat{\subsection}
+  {\large\bfseries\color{azul}}
+  {\thesubsection}
+  {0.6em}
+  {}
+
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+\lstdefinestyle{codestyle}{
+  backgroundcolor=\color{codigo},
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{azul}\bfseries,
+  commentstyle=\color{cinzatexto},
+  stringstyle=\color{verde},
+  numbers=left,
+  numberstyle=\tiny\color{cinzatexto},
+  stepnumber=1,
+  numbersep=8pt,
+  showstringspaces=false,
+  breaklines=true,
+  frame=single,
+  rulecolor=\color{cinzatexto},
+  tabsize=2,
+  captionpos=b
+}
+\lstset{style=codestyle}
+
+\newtcolorbox{conceito}[1]{
+  colback=cinza,
+  colframe=azul,
+  coltitle=white,
+  colbacktitle=azul,
+  title=\textbf{#1},
+  arc=2mm,
+  boxrule=0.7pt
+}
+
+\newtcolorbox{exemplo}[1]{
+  colback=verdeclaro,
+  colframe=verde,
+  coltitle=white,
+  colbacktitle=verde,
+  title=\textbf{#1},
+  arc=2mm,
+  boxrule=0.7pt
+}
+
+\newtcolorbox{observacao}[1]{
+  colback=white,
+  colframe=cinzatexto,
+  coltitle=white,
+  colbacktitle=cinzatexto,
+  title=\textbf{#1},
+  arc=2mm,
+  boxrule=0.7pt
+}
+
+\begin{document}
+
+\begin{titlepage}
+  \centering
+  \vspace*{2.2cm}
+  {\Huge\bfseries\color{azulescuro} Prova Multiplataforma}\\[0.35cm]
+  {\LARGE\bfseries\color{azul} Documentacao Completa}\\[1cm]
+  {\large Apostila academica de revisao para a disciplina de Desenvolvimento Multiplataforma}\\[1.5cm]
+
+  \begin{tcolorbox}[colback=cinza,colframe=azul,width=0.86\textwidth,arc=2mm]
+    \textbf{Objetivo do material:} revisar, de forma didatica e organizada, os principais temas cobrados em prova: SOA, Web e Mobile, Web APIs, HTTP/REST, frameworks de API, SOAP, microsservicos, API Gateway, testes, automacao, autenticacao, autorizacao e seguranca.
+  \end{tcolorbox}
+
+  \vfill
+  \textbf{Curso:} Tecnologia da Informacao\\
+  \textbf{Disciplina:} Desenvolvimento Multiplataforma\\
+  \textbf{Aluno(a):} [Nome do aluno]\\
+  \textbf{Professor(a):} [Nome do professor]\\
+  \textbf{Data:} [DD/MM/AAAA]
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\section{Introducao}
+
+Desenvolvimento multiplataforma e a area que estuda tecnicas, arquiteturas, ferramentas e boas praticas para criar sistemas capazes de funcionar em diferentes ambientes, como web, mobile, desktop, APIs e sistemas distribuidos. Em aplicacoes modernas, dificilmente um software existe isolado: um aplicativo mobile pode consumir uma Web API, uma pagina web pode acessar servicos de autenticacao, e um backend pode conversar com outros microsservicos por REST ou mensageria.
+
+Os temas desta apostila sao importantes porque aparecem diretamente na construcao de sistemas reais:
+
+\begin{itemize}
+  \item \textbf{SOA e microsservicos} ajudam a organizar sistemas em servicos independentes.
+  \item \textbf{Web APIs e Web Services} permitem a comunicacao entre aplicacoes diferentes.
+  \item \textbf{HTTP e REST} formam a base da maioria das integracoes web modernas.
+  \item \textbf{Testes e automacao} aumentam confiabilidade e reduzem falhas.
+  \item \textbf{Autenticacao, autorizacao e seguranca} protegem usuarios, dados e operacoes sensiveis.
+\end{itemize}
+
+\begin{conceito}{Ideia central}
+Um sistema multiplataforma bem projetado separa responsabilidades: interfaces web/mobile ficam responsaveis pela experiencia do usuario, enquanto APIs e servicos cuidam das regras de negocio, seguranca, persistencia de dados e integracoes.
+\end{conceito}
+
+\section{Conceitos de SOA -- Service-Oriented Architecture}
+
+SOA, ou \textit{Service-Oriented Architecture}, significa Arquitetura Orientada a Servicos. E um estilo arquitetural em que funcionalidades do sistema sao organizadas como servicos independentes, reutilizaveis e acessiveis por contratos bem definidos.
+
+\subsection{Objetivo da SOA}
+
+O objetivo principal da SOA e permitir que diferentes sistemas, tecnologias e departamentos consigam compartilhar funcionalidades por meio de servicos. Em vez de duplicar logica em varios sistemas, cria-se um servico central para determinada capacidade.
+
+Exemplo: em uma universidade, o servico de autenticacao pode ser usado pelo portal do aluno, sistema de biblioteca, aplicativo mobile e sistema financeiro.
+
+\subsection{Caracteristicas principais}
+
+\begin{itemize}
+  \item \textbf{Servicos reutilizaveis:} um mesmo servico pode atender varios consumidores.
+  \item \textbf{Baixo acoplamento:} consumidores nao precisam conhecer detalhes internos do servico.
+  \item \textbf{Contratos de servico:} a comunicacao e definida por interfaces, rotas, formatos de dados ou WSDL.
+  \item \textbf{Interoperabilidade:} sistemas feitos em linguagens diferentes podem se comunicar.
+  \item \textbf{Composicao:} servicos podem ser combinados para criar processos maiores.
+\end{itemize}
+
+\subsection{SOA vs arquitetura monolitica}
+
+\begin{longtable}{@{}L{4cm}L{5.4cm}L{5.4cm}@{}}
+\toprule
+\textbf{Criterio} & \textbf{SOA} & \textbf{Monolito} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Criterio} & \textbf{SOA} & \textbf{Monolito} \\
+\midrule
+\endhead
+Organizacao & Funcionalidades separadas em servicos. & Tudo concentrado em uma unica aplicacao. \\
+Reutilizacao & Alta, pois servicos podem ser consumidos por varios sistemas. & Menor, pois a logica costuma ficar presa ao sistema. \\
+Manutencao & Pode ser feita por servico, com menor impacto. & Uma alteracao pode afetar o sistema inteiro. \\
+Complexidade & Exige governanca, contratos e integracao. & Mais simples no inicio. \\
+Escalabilidade & Servicos podem escalar separadamente. & Geralmente escala a aplicacao inteira. \\
+\bottomrule
+\end{longtable}
+
+\subsection{Vantagens e desvantagens}
+
+\begin{tabularx}{\textwidth}{@{}Y Y@{}}
+\toprule
+\textbf{Vantagens} & \textbf{Desvantagens} \\
+\midrule
+Reutilizacao de servicos; integracao entre sistemas; maior flexibilidade; escalabilidade por dominio; facilita interoperabilidade. &
+Mais complexidade de arquitetura; necessidade de monitoramento; possiveis problemas de rede; exige padronizacao e governanca. \\
+\bottomrule
+\end{tabularx}
+
+\begin{exemplo}{Exemplo pratico em e-commerce}
+Um e-commerce pode ter servicos separados para catalogo de produtos, pedidos, pagamento, estoque e entrega. O aplicativo mobile e o site consomem os mesmos servicos, evitando duplicacao de regras de negocio.
+\end{exemplo}
+
+\section{Diferencas entre Aplicacoes Web e Mobile}
+
+\subsection{Aplicacao web}
+
+Uma aplicacao web e acessada por navegador, normalmente usando tecnologias como HTML, CSS, JavaScript e frameworks como Angular, React ou Vue. Ela pode ser usada em computadores, tablets e celulares, desde que exista um navegador compativel.
+
+\subsection{Aplicacao mobile}
+
+Uma aplicacao mobile e desenvolvida para dispositivos moveis, como smartphones e tablets. Pode ser nativa, hibrida ou baseada em PWA. Aplicativos nativos usam recursos especificos da plataforma, como camera, GPS, notificacoes e armazenamento local.
+
+\subsection{Principais diferencas}
+
+\begin{longtable}{@{}L{3.2cm}L{3.4cm}L{3.4cm}L{3.4cm}L{3.4cm}@{}}
+\toprule
+\textbf{Criterio} & \textbf{Web} & \textbf{Mobile Nativo} & \textbf{Mobile Hibrido} & \textbf{PWA} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Criterio} & \textbf{Web} & \textbf{Mobile Nativo} & \textbf{Mobile Hibrido} & \textbf{PWA} \\
+\midrule
+\endhead
+Plataforma & Navegador. & Android/iOS. & Web empacotada em app. & Navegador com recursos de app. \\
+Interface & Responsiva. & Segue padroes da plataforma. & Pode simular interface nativa. & Responsiva e instalavel. \\
+Desempenho & Depende do navegador. & Geralmente maior desempenho. & Intermediario. & Bom para muitos cenarios. \\
+Recursos do dispositivo & Limitado, mas evoluindo. & Acesso amplo. & Acesso via plugins. & Acesso parcial via APIs web. \\
+Publicacao & Servidor web. & Lojas de aplicativos. & Lojas de aplicativos. & Web, podendo instalar atalho. \\
+Atualizacao & Imediata no servidor. & Depende de publicacao na loja. & Depende da loja para app, mas conteudo pode atualizar. & Imediata como web. \\
+Seguranca & HTTPS, cookies, tokens. & Permissoes e armazenamento seguro. & Mistura seguranca web e mobile. & HTTPS e service worker seguro. \\
+\bottomrule
+\end{longtable}
+
+\begin{conceito}{Aplicacoes responsivas, hibridas e PWA}
+\textbf{Responsiva} e uma aplicacao web que se adapta a diferentes tamanhos de tela. \textbf{Hibrida} usa tecnologias web dentro de um container mobile, como Ionic/Capacitor. \textbf{PWA} (\textit{Progressive Web App}) e uma aplicacao web com recursos semelhantes a app, como instalacao, cache e funcionamento parcial offline.
+\end{conceito}
+
+\section{Web APIs e Web Services}
+
+\subsection{O que e uma API}
+
+API significa \textit{Application Programming Interface}, ou Interface de Programacao de Aplicacoes. Uma API define como um software pode interagir com outro, especificando operacoes, parametros, formatos de entrada e formatos de saida.
+
+\subsection{Web API}
+
+Uma Web API e uma API acessada pela web, normalmente usando HTTP. Ela permite que sistemas web, mobile, desktop ou outros servicos consumam funcionalidades remotamente.
+
+\subsection{Web Service}
+
+Web Service e um servico acessivel por rede, com foco em interoperabilidade entre sistemas. Pode usar SOAP, REST ou outros padroes. Todo Web Service e uma forma de API, mas nem toda API precisa ser um Web Service.
+
+\subsection{API, Web API e Web Service}
+
+\begin{tabularx}{\textwidth}{@{}L{3.2cm}Y@{}}
+\toprule
+\textbf{Termo} & \textbf{Explicacao} \\
+\midrule
+API & Interface generica para interacao entre softwares. \\
+Web API & API acessada pela web, normalmente com HTTP e JSON. \\
+Web Service & Servico de rede padronizado para comunicacao entre sistemas, podendo usar SOAP/XML ou REST/JSON. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{JSON e XML}
+
+JSON (\textit{JavaScript Object Notation}) e um formato leve, muito usado em APIs REST. XML (\textit{Extensible Markup Language}) e mais verboso, comum em SOAP e sistemas corporativos legados.
+
+\begin{lstlisting}[caption={Exemplo de requisicao JSON para login}]
+POST /api/login
+Content-Type: application/json
+
+{
+  "email": "aluno@exemplo.com",
+  "senha": "123456"
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Exemplo de resposta JSON}]
+{
+  "token": "jwt_gerado_pela_api",
+  "usuario": {
+    "id": 10,
+    "nome": "Aluno Teste",
+    "perfil": "ALUNO"
+  }
+}
+\end{lstlisting}
+
+\section{Protocolo HTTP e Metodos RESTful}
+
+HTTP (\textit{Hypertext Transfer Protocol}) e o protocolo usado na comunicacao entre clientes e servidores na web. Ele funciona por meio de um modelo de requisicao e resposta.
+
+\subsection{Elementos de uma requisicao HTTP}
+
+\begin{itemize}
+  \item \textbf{URL:} endereco do recurso, por exemplo \texttt{https://api.exemplo.com/alunos}.
+  \item \textbf{Endpoint:} rota especifica da API, como \texttt{/alunos/10}.
+  \item \textbf{Headers:} metadados, como \texttt{Authorization} e \texttt{Content-Type}.
+  \item \textbf{Body:} corpo da requisicao, usado para enviar dados.
+  \item \textbf{Status code:} codigo que indica o resultado da resposta.
+\end{itemize}
+
+\subsection{Metodos HTTP}
+
+\begin{longtable}{@{}L{2.4cm}L{5cm}L{5.8cm}@{}}
+\toprule
+\textbf{Metodo} & \textbf{Finalidade} & \textbf{Exemplo de endpoint} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Metodo} & \textbf{Finalidade} & \textbf{Exemplo de endpoint} \\
+\midrule
+\endhead
+GET & Consultar dados. & \texttt{GET /api/produtos} \\
+POST & Criar novo recurso ou executar operacao. & \texttt{POST /api/pedidos} \\
+PUT & Atualizar recurso inteiro. & \texttt{PUT /api/usuarios/5} \\
+PATCH & Atualizar parcialmente um recurso. & \texttt{PATCH /api/usuarios/5/email} \\
+DELETE & Remover recurso. & \texttt{DELETE /api/produtos/9} \\
+\bottomrule
+\end{longtable}
+
+\subsection{Codigos de status}
+
+\begin{tabularx}{\textwidth}{@{}L{2cm}Y@{}}
+\toprule
+\textbf{Codigo} & \textbf{Significado} \\
+\midrule
+200 & Sucesso em requisicao comum. \\
+201 & Criado com sucesso. \\
+204 & Sucesso sem conteudo de resposta. \\
+400 & Requisicao invalida. \\
+401 & Nao autenticado. \\
+403 & Sem permissao. \\
+404 & Recurso nao encontrado. \\
+500 & Erro interno no servidor. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{REST e boas praticas}
+
+REST (\textit{Representational State Transfer}) e um estilo arquitetural para criar APIs baseadas em recursos. Boas praticas incluem:
+
+\begin{itemize}
+  \item Usar substantivos nos endpoints: \texttt{/usuarios}, \texttt{/pedidos}.
+  \item Usar metodos HTTP corretamente.
+  \item Retornar status codes adequados.
+  \item Manter respostas consistentes.
+  \item Usar versionamento quando necessario: \texttt{/api/v1/produtos}.
+\end{itemize}
+
+\section{Desenvolvimento de Web APIs com 2 Frameworks Diferentes}
+
+\subsection{Node.js com Express}
+
+Node.js permite executar JavaScript no servidor. Express e um framework minimalista para criar APIs HTTP com rotas, middlewares e respostas JSON.
+
+\begin{itemize}
+  \item \textbf{Estrutura basica:} arquivo principal, rotas, controllers, services e acesso a banco.
+  \item \textbf{Receber dados:} via parametros de rota, query string ou body JSON.
+  \item \textbf{Retornar JSON:} usando \texttt{res.json()}.
+  \item \textbf{Banco de dados:} pode usar Prisma, Sequelize, TypeORM ou driver nativo.
+\end{itemize}
+
+\begin{lstlisting}[caption={API simples com Node.js e Express}]
+const express = require("express");
+const app = express();
+
+// Middleware para ler JSON no corpo da requisicao
+app.use(express.json());
+
+// Rota GET: retorna uma lista simples
+app.get("/api/alunos", (req, res) => {
+  res.json([
+    { id: 1, nome: "Ana" },
+    { id: 2, nome: "Bruno" }
+  ]);
+});
+
+// Rota POST: recebe dados e simula criacao
+app.post("/api/alunos", (req, res) => {
+  const aluno = req.body;
+  res.status(201).json({
+    mensagem: "Aluno criado com sucesso",
+    aluno
+  });
+});
+
+app.listen(3000, () => {
+  console.log("API rodando em http://localhost:3000");
+});
+\end{lstlisting}
+
+\subsection{ASP.NET Core Web API}
+
+ASP.NET Core Web API e um framework da Microsoft para criar APIs usando C\#. E muito usado em sistemas corporativos, possui forte tipagem, injecao de dependencias, middlewares e integracao com Entity Framework Core.
+
+\begin{itemize}
+  \item \textbf{Estrutura basica:} controllers, models, services, Program.cs e configuracoes.
+  \item \textbf{Receber dados:} via parametros, body JSON e model binding.
+  \item \textbf{Retornar JSON:} controllers retornam objetos serializados automaticamente.
+  \item \textbf{Banco de dados:} comum usar Entity Framework Core.
+\end{itemize}
+
+\begin{lstlisting}[caption={API simples com ASP.NET Core Web API}]
+using Microsoft.AspNetCore.Mvc;
+
+[ApiController]
+[Route("api/[controller]")]
+public class AlunosController : ControllerBase
+{
+    [HttpGet]
+    public IActionResult Listar()
+    {
+        var alunos = new[]
+        {
+            new { Id = 1, Nome = "Ana" },
+            new { Id = 2, Nome = "Bruno" }
+        };
+
+        return Ok(alunos);
+    }
+
+    [HttpPost]
+    public IActionResult Criar([FromBody] AlunoDto aluno)
+    {
+        return Created("/api/alunos/1", aluno);
+    }
+}
+
+public class AlunoDto
+{
+    public string Nome { get; set; } = "";
+}
+\end{lstlisting}
+
+\subsection{Comparacao entre Express e ASP.NET Core}
+
+\begin{tabularx}{\textwidth}{@{}L{3.2cm}Y Y@{}}
+\toprule
+\textbf{Criterio} & \textbf{Express} & \textbf{ASP.NET Core Web API} \\
+\midrule
+Linguagem & JavaScript/TypeScript. & C\#. \\
+Estilo & Minimalista e flexivel. & Estruturado e corporativo. \\
+Tipagem & Opcional com TypeScript. & Forte por padrao. \\
+Curva inicial & Simples para comecar. & Mais formal, mas robusto. \\
+Banco de dados & Prisma, Sequelize, TypeORM etc. & Entity Framework Core, Dapper etc. \\
+Vantagens & Rapidez, simplicidade, ecossistema npm. & Performance, tipagem, ferramentas Microsoft. \\
+Desvantagens & Pode ficar desorganizado sem padrao. & Pode parecer mais verboso para iniciantes. \\
+\bottomrule
+\end{tabularx}
+
+\section{Web Services SOAP e REST}
+
+SOAP (\textit{Simple Object Access Protocol}) e um protocolo formal de Web Services baseado em XML. REST e um estilo arquitetural mais simples e flexivel, normalmente usando HTTP e JSON.
+
+\begin{longtable}{@{}L{3cm}L{5.7cm}L{5.7cm}@{}}
+\toprule
+\textbf{Criterio} & \textbf{SOAP} & \textbf{REST} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Criterio} & \textbf{SOAP} & \textbf{REST} \\
+\midrule
+\endhead
+Formato comum & XML. & JSON, XML ou outros. \\
+Contrato & WSDL formal. & Geralmente OpenAPI/Swagger ou documentacao. \\
+Complexidade & Maior. & Menor. \\
+Uso comum & Bancos, governo, sistemas legados. & Web, mobile, microservicos modernos. \\
+Robustez & Possui padroes formais de seguranca e transacao. & Mais simples e flexivel. \\
+Quando usar & Integracoes corporativas formais e legadas. & APIs web/mobile e servicos modernos. \\
+\bottomrule
+\end{longtable}
+
+\begin{observacao}{WSDL}
+WSDL significa \textit{Web Services Description Language}. Ele descreve as operacoes disponiveis, parametros, tipos de dados e endpoint de um Web Service SOAP.
+\end{observacao}
+
+\section{Microsservicos e API Gateway}
+
+Microsservicos sao uma abordagem arquitetural em que o sistema e dividido em pequenos servicos independentes, cada um responsavel por um dominio de negocio. Diferente de um monolito, em que tudo fica em uma unica aplicacao, os microsservicos podem ser desenvolvidos, implantados e escalados separadamente.
+
+\subsection{Caracteristicas de microsservicos}
+
+\begin{itemize}
+  \item Independencia entre servicos.
+  \item Deploy independente.
+  \item Escalabilidade por servico.
+  \item Times podem trabalhar em dominios separados.
+  \item Cada servico pode ter seu proprio banco de dados.
+  \item Maior necessidade de observabilidade e automacao.
+\end{itemize}
+
+\subsection{API Gateway}
+
+API Gateway e uma camada de entrada entre o cliente e os microsservicos. Em vez de o cliente conhecer todos os servicos internos, ele chama o gateway.
+
+Funcoes comuns:
+
+\begin{itemize}
+  \item Roteamento de requisicoes.
+  \item Autenticacao centralizada.
+  \item Rate limiting.
+  \item Monitoramento e logs.
+  \item Balanceamento.
+  \item Transformacao de requisicoes/respostas.
+\end{itemize}
+
+\begin{conceito}{Exemplo textual de arquitetura}
+\texttt{Cliente -> API Gateway -> Servico de Usuarios}\\
+\texttt{Cliente -> API Gateway -> Servico de Produtos}\\
+\texttt{Cliente -> API Gateway -> Servico de Pagamentos}
+\end{conceito}
+
+\section{Comunicacao entre Microsservicos}
+
+Microsservicos precisam se comunicar para completar processos de negocio. Essa comunicacao pode ser sincronica ou assincronica.
+
+\subsection{Comunicacao sincronica}
+
+Ocorre quando um servico chama outro e espera resposta imediata, geralmente via HTTP/REST ou gRPC. Exemplo: Servico de Pedidos chama Servico de Pagamentos e aguarda confirmacao.
+
+\subsection{Comunicacao assincronica}
+
+Ocorre quando um servico publica uma mensagem ou evento em uma fila, e outro servico processa depois. Exemplo: Servico de Pedidos publica \texttt{PedidoCriado}; Servico de Email consome e envia notificacao.
+
+\begin{longtable}{@{}L{3.5cm}L{5.6cm}L{5.6cm}@{}}
+\toprule
+\textbf{Criterio} & \textbf{Sincronica} & \textbf{Assincronica} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Criterio} & \textbf{Sincronica} & \textbf{Assincronica} \\
+\midrule
+\endhead
+Exemplo & REST entre servicos. & RabbitMQ, Kafka, filas. \\
+Resposta & Imediata. & Posterior. \\
+Vantagem & Simples de entender. & Reduz acoplamento e melhora resiliencia. \\
+Risco & Cascata de falhas e latencia. & Consistencia eventual e maior complexidade. \\
+Uso comum & Consultas diretas e validacoes. & Eventos, notificacoes, processamento em background. \\
+\bottomrule
+\end{longtable}
+
+\begin{observacao}{Problemas comuns}
+Em sistemas distribuidos, podem ocorrer latencia, falhas de rede, indisponibilidade de servicos, duplicidade de mensagens e consistencia eventual. Por isso, e importante usar timeouts, retries, idempotencia e monitoramento.
+\end{observacao}
+
+\section{Testes Unitarios e Testes de Integracao}
+
+Testes de software verificam se o sistema funciona conforme esperado. Eles reduzem regressao, aumentam confiabilidade e facilitam manutencao.
+
+\subsection{Teste unitario}
+
+Teste unitario valida uma pequena unidade de codigo isoladamente, como uma funcao, metodo ou classe. Dependencias externas sao substituidas por mocks ou stubs.
+
+\subsection{Teste de integracao}
+
+Teste de integracao valida se partes diferentes do sistema funcionam juntas, como API + banco de dados, controller + service ou frontend + backend.
+
+\begin{tabularx}{\textwidth}{@{}L{3.5cm}Y Y@{}}
+\toprule
+\textbf{Criterio} & \textbf{Teste Unitario} & \textbf{Teste de Integracao} \\
+\midrule
+Escopo & Pequeno e isolado. & Componentes trabalhando juntos. \\
+Velocidade & Rapido. & Mais lento. \\
+Dependencias & Mocks/stubs. & Pode usar banco, API ou servicos reais. \\
+Objetivo & Validar regra especifica. & Validar fluxo entre partes. \\
+\bottomrule
+\end{tabularx}
+
+\begin{lstlisting}[caption={Exemplo de teste unitario em JavaScript}]
+function somar(a, b) {
+  return a + b;
+}
+
+test("deve somar dois numeros", () => {
+  expect(somar(2, 3)).toBe(5);
+});
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Exemplo conceitual de teste de integracao}]
+test("deve criar usuario pela API", async () => {
+  const resposta = await request(app)
+    .post("/api/usuarios")
+    .send({ nome: "Ana", email: "ana@teste.com" });
+
+  expect(resposta.status).toBe(201);
+  expect(resposta.body.email).toBe("ana@teste.com");
+});
+\end{lstlisting}
+
+\begin{conceito}{Mocks, stubs e dependencias externas}
+\textbf{Mock} simula uma dependencia e permite verificar chamadas. \textbf{Stub} retorna respostas predefinidas. Dependencias externas sao recursos fora da unidade testada, como banco, API de terceiros, fila ou sistema de arquivos.
+\end{conceito}
+
+\section{Automacao de Testes}
+
+Automacao de testes consiste em executar testes por ferramentas, scripts ou pipelines, sem depender de validacao manual repetitiva. Ela e essencial para CI/CD (\textit{Continuous Integration/Continuous Delivery}), pois permite validar cada alteracao antes do deploy.
+
+\subsection{Onde automatizar}
+
+\begin{itemize}
+  \item \textbf{Backend:} testes unitarios, integracao, contratos de API e banco.
+  \item \textbf{Frontend:} componentes, servicos, fluxos de tela e E2E.
+  \item \textbf{Mobile:} testes de tela, comportamento, permissao e integracao com APIs.
+  \item \textbf{Pipeline CI/CD:} execucao automatica a cada push ou pull request.
+\end{itemize}
+
+\subsection{Ferramentas}
+
+\begin{longtable}{@{}L{3.2cm}L{4.5cm}L{6.2cm}@{}}
+\toprule
+\textbf{Ferramenta} & \textbf{Uso comum} & \textbf{Observacao} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Ferramenta} & \textbf{Uso comum} & \textbf{Observacao} \\
+\midrule
+\endhead
+Jest & Testes JavaScript/TypeScript. & Muito usado em backend Node e frontend. \\
+xUnit & Testes em .NET/C\#. & Comum em ASP.NET Core. \\
+Selenium & Testes automatizados em navegador. & Suporta varios browsers. \\
+Cypress & Testes E2E frontend. & Facil de usar e depurar. \\
+Playwright & Testes E2E modernos. & Bom suporte multi-browser. \\
+Postman/Newman & Testes de API. & Newman executa colecoes Postman no CI. \\
+\bottomrule
+\end{longtable}
+
+\subsection{Boas praticas}
+
+\begin{itemize}
+  \item Testar regras criticas primeiro.
+  \item Manter testes independentes.
+  \item Evitar depender de dados instaveis.
+  \item Rodar testes automaticamente no CI.
+  \item Tratar teste quebrado como sinal de risco.
+\end{itemize}
+
+\section{Autenticacao e Autorizacao}
+
+Autenticacao responde a pergunta: \textit{quem e o usuario?} Autorizacao responde: \textit{o que esse usuario pode fazer?}
+
+\subsection{Conceitos principais}
+
+\begin{itemize}
+  \item \textbf{Login e senha:} forma tradicional de autenticacao.
+  \item \textbf{Sessao:} estado mantido no servidor ou em cookie.
+  \item \textbf{Token:} credencial enviada pelo cliente em requisicoes.
+  \item \textbf{JWT:} \textit{JSON Web Token}, token assinado contendo informacoes do usuario.
+  \item \textbf{OAuth2:} protocolo de autorizacao usado, por exemplo, em login com Google.
+  \item \textbf{Refresh Token:} token usado para renovar acesso sem novo login.
+  \item \textbf{RBAC:} \textit{Role-Based Access Control}, controle baseado em papeis.
+\end{itemize}
+
+\subsection{Exemplo de perfis}
+
+Em um sistema academico:
+
+\begin{itemize}
+  \item \textbf{Administrador:} gerencia usuarios, cursos e permissoes.
+  \item \textbf{Professor:} cadastra notas e atividades.
+  \item \textbf{Aluno:} consulta notas, materiais e frequencia.
+  \item \textbf{Usuario comum:} acessa areas publicas ou limitadas.
+\end{itemize}
+
+\begin{conceito}{Fluxo de autenticacao}
+Usuario faz login $\rightarrow$ API valida credenciais $\rightarrow$ API gera token $\rightarrow$ usuario acessa rota protegida enviando \texttt{Authorization: Bearer <token>} $\rightarrow$ API valida token e permissoes.
+\end{conceito}
+
+\section{Seguranca em Aplicacoes Web e Mobile}
+
+Seguranca e fundamental para proteger dados, usuarios e operacoes. Em sistemas web e mobile, ataques podem ocorrer no frontend, backend, banco, rede, APIs ou no armazenamento local do dispositivo.
+
+\subsection{Praticas importantes}
+
+\begin{itemize}
+  \item Usar HTTPS para trafego criptografado.
+  \item Armazenar senhas com hash forte e salt.
+  \item Validar entradas no frontend e principalmente no backend.
+  \item Proteger contra SQL Injection, XSS e CSRF.
+  \item Aplicar rate limiting em endpoints sensiveis.
+  \item Armazenar tokens de forma segura.
+  \item Usar principio do menor privilegio.
+  \item Manter logs e monitoramento.
+\end{itemize}
+
+\begin{longtable}{@{}L{3.2cm}L{5.7cm}L{5.7cm}@{}}
+\toprule
+\textbf{Vulnerabilidade} & \textbf{Explicacao} & \textbf{Prevencao} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Vulnerabilidade} & \textbf{Explicacao} & \textbf{Prevencao} \\
+\midrule
+\endhead
+SQL Injection & Insercao de comandos SQL maliciosos em campos de entrada. & Queries parametrizadas, ORM, validacao de entrada. \\
+XSS & Execucao de script malicioso no navegador da vitima. & Sanitizacao, escape de HTML, Content Security Policy. \\
+CSRF & Acao indesejada executada em nome do usuario autenticado. & Tokens CSRF, SameSite cookies, validacao de origem. \\
+Forca bruta & Tentativas repetidas de login. & Rate limiting, bloqueio temporario, MFA. \\
+Token exposto & Roubo de token no cliente. & HTTPS, armazenamento seguro, expiracao curta, refresh token protegido. \\
+Permissao excessiva & Usuario acessa mais do que deveria. & RBAC, principio do menor privilegio, revisao de permissoes. \\
+\bottomrule
+\end{longtable}
+
+\begin{observacao}{Seguranca mobile}
+Em mobile, deve-se evitar salvar tokens em texto puro, validar certificados HTTPS, reduzir exposicao de chaves no app e considerar armazenamento seguro oferecido pela plataforma.
+\end{observacao}
+
+\section{Resumo Geral para Prova}
+
+\begin{conceito}{Mapa mental textual}
+\begin{itemize}
+  \item \textbf{SOA:} servicos reutilizaveis, contratos, interoperabilidade e baixo acoplamento.
+  \item \textbf{Web vs Mobile:} web roda no navegador; mobile roda em dispositivos; hibrido e PWA aproximam os mundos.
+  \item \textbf{API:} interface de comunicacao entre softwares; Web API usa HTTP.
+  \item \textbf{HTTP:} requisicao/resposta, metodos, headers, body e status codes.
+  \item \textbf{REST:} recursos, endpoints claros, uso correto de metodos HTTP.
+  \item \textbf{Express vs ASP.NET Core:} ambos criam APIs; um e minimalista, outro e fortemente estruturado.
+  \item \textbf{SOAP vs REST:} SOAP e formal/XML/WSDL; REST e simples/flexivel/JSON.
+  \item \textbf{Microsservicos:} servicos pequenos, independentes e escalaveis.
+  \item \textbf{API Gateway:} entrada central, roteamento, autenticacao e controle.
+  \item \textbf{Comunicacao:} sincronica espera resposta; assincronica usa filas/eventos.
+  \item \textbf{Testes:} unitario testa unidade; integracao testa componentes juntos.
+  \item \textbf{Automacao:} testes em pipelines reduzem regressao.
+  \item \textbf{Auth:} autenticacao identifica; autorizacao controla acesso.
+  \item \textbf{Seguranca:} HTTPS, hash, validacao, RBAC, logs e protecoes contra ataques.
+\end{itemize}
+\end{conceito}
+
+\section{Questoes de Revisao}
+
+\begin{enumerate}
+  \item \textbf{Objetiva:} Qual alternativa melhor define SOA?
+  \begin{enumerate}[label=\alph*)]
+    \item Uma linguagem de programacao para mobile.
+    \item Uma arquitetura baseada em servicos reutilizaveis e contratos.
+    \item Um banco de dados distribuido.
+    \item Um protocolo exclusivo de navegadores.
+  \end{enumerate}
+
+  \item \textbf{Discursiva:} Explique duas diferencas entre uma aplicacao web e uma aplicacao mobile nativa.
+
+  \item \textbf{Verdadeiro ou falso:} Uma PWA pode ser acessada pelo navegador e tambem instalada como atalho no dispositivo.
+
+  \item \textbf{Objetiva:} Em uma API REST, qual metodo HTTP e mais adequado para consultar uma lista de produtos?
+  \begin{enumerate}[label=\alph*)]
+    \item POST
+    \item GET
+    \item DELETE
+    \item PATCH
+  \end{enumerate}
+
+  \item \textbf{Cenario pratico:} Um usuario tentou acessar \texttt{/api/notas}, mas nao enviou token. Qual status code e mais adequado?
+
+  \item \textbf{Associacao:} Associe os termos:
+  \begin{enumerate}[label=\roman*)]
+    \item JSON
+    \item XML
+    \item WSDL
+    \item JWT
+  \end{enumerate}
+  com: formato comum em REST; formato comum em SOAP; contrato SOAP; token assinado.
+
+  \item \textbf{Discursiva:} Diferencie API, Web API e Web Service.
+
+  \item \textbf{Objetiva:} Qual caracteristica e mais associada ao SOAP?
+  \begin{enumerate}[label=\alph*)]
+    \item Uso informal sem contrato.
+    \item WSDL e mensagens XML.
+    \item Apenas JSON.
+    \item Exclusivo para apps mobile.
+  \end{enumerate}
+
+  \item \textbf{Discursiva:} Cite duas vantagens e duas desvantagens de microsservicos.
+
+  \item \textbf{Cenario pratico:} Em um e-commerce, o app mobile precisa chamar usuarios, produtos e pagamentos. Explique como um API Gateway ajudaria.
+
+  \item \textbf{Verdadeiro ou falso:} Comunicacao assincronica exige que o servico consumidor responda imediatamente ao servico produtor.
+
+  \item \textbf{Objetiva:} RabbitMQ e Kafka sao exemplos de ferramentas geralmente usadas para:
+  \begin{enumerate}[label=\alph*)]
+    \item Renderizar interfaces.
+    \item Mensageria e eventos.
+    \item Criar folhas de estilo.
+    \item Substituir HTTP em navegadores.
+  \end{enumerate}
+
+  \item \textbf{Discursiva:} Explique a diferenca entre teste unitario e teste de integracao.
+
+  \item \textbf{Objetiva:} Qual ferramenta e muito usada para testes E2E de frontend?
+  \begin{enumerate}[label=\alph*)]
+    \item Cypress
+    \item Prisma
+    \item PostgreSQL
+    \item RabbitMQ
+  \end{enumerate}
+
+  \item \textbf{Cenario pratico:} Uma funcao calcula o desconto de um pedido. Que tipo de teste e mais indicado para validar apenas essa funcao?
+
+  \item \textbf{Discursiva:} Explique a diferenca entre autenticacao e autorizacao.
+
+  \item \textbf{Objetiva:} RBAC significa:
+  \begin{enumerate}[label=\alph*)]
+    \item Controle de acesso baseado em papeis.
+    \item Banco relacional automatico.
+    \item Cache de requisicoes backend.
+    \item Certificado de seguranca mobile.
+  \end{enumerate}
+
+  \item \textbf{Verdadeiro ou falso:} Senhas devem ser armazenadas em texto puro para facilitar recuperacao.
+
+  \item \textbf{Cenario pratico:} Um formulario aceita texto e exibe esse texto em uma pagina. Que ataque pode ocorrer se nao houver sanitizacao?
+
+  \item \textbf{Discursiva:} Explique por que HTTPS e importante em APIs web e mobile.
+
+  \item \textbf{Associacao:} Associe:
+  \begin{enumerate}[label=\roman*)]
+    \item 201
+    \item 404
+    \item 500
+    \item 403
+  \end{enumerate}
+  com: criado; nao encontrado; erro interno; sem permissao.
+
+  \item \textbf{Cenario pratico:} Uma pipeline executa build e testes a cada push. Qual requisito da disciplina isso atende?
+\end{enumerate}
+
+\section{Gabarito Comentado}
+
+\begin{enumerate}
+  \item \textbf{b.} SOA organiza sistemas em servicos reutilizaveis, com contratos e baixo acoplamento.
+  \item Web roda no navegador e atualiza no servidor; mobile nativo roda no sistema operacional do aparelho e tem maior acesso a recursos como camera e GPS.
+  \item \textbf{Verdadeiro.} PWAs podem ser acessadas como sites e instaladas como experiencia semelhante a app.
+  \item \textbf{b.} GET e usado para consulta de recursos.
+  \item \textbf{401 Unauthorized.} O usuario nao enviou credencial valida.
+  \item JSON: formato comum em REST; XML: formato comum em SOAP; WSDL: contrato SOAP; JWT: token assinado.
+  \item API e interface entre softwares; Web API e acessada via web/HTTP; Web Service e um servico de rede padronizado, como SOAP ou REST.
+  \item \textbf{b.} SOAP usa XML e geralmente possui contrato WSDL.
+  \item Vantagens: escalabilidade independente e deploy separado. Desvantagens: maior complexidade, rede, observabilidade e consistencia de dados.
+  \item O API Gateway fornece uma entrada unica, roteia chamadas para os servicos corretos, pode validar token, aplicar rate limiting e centralizar logs.
+  \item \textbf{Falso.} Na comunicacao assincronica, o produtor publica mensagem/evento e nao precisa esperar processamento imediato.
+  \item \textbf{b.} RabbitMQ e Kafka sao usados para filas, mensageria e eventos.
+  \item Teste unitario valida uma unidade isolada; teste de integracao valida partes trabalhando juntas.
+  \item \textbf{a.} Cypress e usado para testes E2E de frontend.
+  \item Teste unitario, pois o foco e validar uma funcao isolada.
+  \item Autenticacao identifica quem e o usuario; autorizacao define o que ele pode acessar ou executar.
+  \item \textbf{a.} RBAC e controle de acesso baseado em papeis.
+  \item \textbf{Falso.} Senhas devem ser armazenadas com hash forte e salt.
+  \item XSS, pois script malicioso pode ser inserido e executado no navegador.
+  \item HTTPS criptografa os dados em transito, reduzindo risco de interceptacao de senhas, tokens e informacoes sensiveis.
+  \item 201: criado; 404: nao encontrado; 500: erro interno; 403: sem permissao.
+  \item Atende ao requisito de automacao de testes e CI/CD, pois valida automaticamente o codigo a cada alteracao.
+\end{enumerate}
+
+\section{Conclusao}
+
+Os conhecimentos revisados nesta apostila sao essenciais para o desenvolvimento moderno de sistemas web, mobile e distribuidos. Aplicacoes atuais dependem de APIs bem projetadas, comunicacao segura, arquiteturas escalaveis, testes automatizados e boas praticas de autenticacao, autorizacao e seguranca.
+
+Dominar esses conceitos permite compreender como sistemas reais sao construidos, integrados, testados e mantidos. Para a prova, e importante nao apenas decorar definicoes, mas tambem entender quando aplicar cada conceito em cenarios praticos, como sistemas academicos, e-commerce, bancos, aplicativos de entrega e plataformas empresariais.
+
+\end{document}
