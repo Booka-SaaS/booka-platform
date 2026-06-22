@@ -61,7 +61,7 @@ Este repositorio agora tambem contem:
 - SOAP em `/soap/notifications`.
 - Docker Compose com Postgres, RabbitMQ, core API, gateway e notification-service.
 
-Documento de evidencia: [docs/ARQUITETURA_MVP_ACADEMICO.md](./docs/ARQUITETURA_MVP_ACADEMICO.md).
+Documento de evidencia academica: [`../docs/CHECKLIST_PROFESSOR.md`](../docs/CHECKLIST_PROFESSOR.md).
 
 ## Variaveis de ambiente
 

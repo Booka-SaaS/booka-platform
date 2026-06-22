@@ -177,10 +177,6 @@ api-gateway Express
               RabbitMQ booking.created
 ```
 
-Documento arquitetural detalhado:
-
-- `backend/docs/ARQUITETURA_MVP_ACADEMICO.md`
-
 ## Como demonstrar
 
 1. Subir backend completo com Docker Compose:

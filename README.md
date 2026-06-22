@@ -161,8 +161,6 @@ Nao insira secrets reais nos exemplos.
 - `https://github.com/TrueTrailBlazer/booka-frontend`
 - `https://github.com/RubensGJ/BookaBackendV2`
 
-Detalhes de branches, commits e decisoes estao em `docs/SINCRONIZACAO_REPOSITORIOS.md`.
-
 ## Checklist academico
 
 O checklist solicitado pelo professor esta consolidado em `docs/CHECKLIST_PROFESSOR.md`, com status e evidencias dos 10 itens: Web API com dois frameworks, SOAP/REST, microsservicos, API Gateway, autenticacao/autorizacao, testes, automacao, seguranca e arquitetura.
