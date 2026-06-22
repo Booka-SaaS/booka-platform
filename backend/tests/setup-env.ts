@@ -5,5 +5,6 @@ process.env.DATABASE_URL ??= 'postgresql://postgres:postgres@127.0.0.1:5434/book
 process.env.DIRECT_URL ??= process.env.DATABASE_URL;
 process.env.JWT_SECRET ??= 'booka-v2-local-secret-change-me';
 process.env.JWT_TTL_SECONDS ??= '604800';
+process.env.GOOGLE_CLIENT_ID ??= 'google-client-id-test.apps.googleusercontent.com';
 process.env.RABBITMQ_URL ??= 'amqp://guest:guest@127.0.0.1:5672';
 process.env.NOTIFICATION_SERVICE_PORT ??= '3002';

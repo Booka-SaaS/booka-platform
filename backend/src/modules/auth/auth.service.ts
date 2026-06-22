@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs';
+import { randomUUID } from 'crypto';
 import jwt from 'jsonwebtoken';
 import { Prisma, UserRole } from '@prisma/client';
 import { env } from '../../config/env';
@@ -10,6 +11,13 @@ type RegisterInput = {
   email: string;
   password: string;
   role: UserRole;
+};
+
+type GoogleTokenInfo = {
+  aud: string;
+  email: string;
+  email_verified: string | boolean;
+  name?: string;
 };
 
 function normalizeEmail(email: string) {
@@ -62,6 +70,27 @@ function mapLojaContext(loja: {
     nome: loja.nome,
     onboardingConcluido: loja.onboardingConcluido,
   };
+}
+
+async function verifyGoogleCredential(credential: string): Promise<GoogleTokenInfo> {
+  if (!env.GOOGLE_CLIENT_ID) {
+    throw new AppError('Login com Google nao configurado.', 503);
+  }
+
+  const response = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(credential)}`);
+
+  if (!response.ok) {
+    throw new AppError('Credencial do Google invalida.', 401);
+  }
+
+  const tokenInfo = (await response.json()) as GoogleTokenInfo;
+  const emailVerified = tokenInfo.email_verified === true || tokenInfo.email_verified === 'true';
+
+  if (tokenInfo.aud !== env.GOOGLE_CLIENT_ID || !tokenInfo.email || !emailVerified) {
+    throw new AppError('Credencial do Google invalida.', 401);
+  }
+
+  return tokenInfo;
 }
 
 export async function register(input: RegisterInput) {
@@ -134,6 +163,33 @@ export async function login(emailInput: string, password: string) {
 
   if (!passwordMatches) {
     throw new AppError('Credenciais invalidas.', 401);
+  }
+
+  return {
+    token: buildToken(user),
+    user: mapAuthUser(user),
+  };
+}
+
+export async function loginWithGoogle(credential: string) {
+  const tokenInfo = await verifyGoogleCredential(credential);
+  const email = normalizeEmail(tokenInfo.email);
+
+  let user = await prisma.usuario.findUnique({
+    where: { email },
+  });
+
+  if (!user) {
+    const passwordHash = await bcrypt.hash(randomUUID(), 10);
+
+    user = await prisma.usuario.create({
+      data: {
+        nome: tokenInfo.name?.trim() || email.split('@')[0],
+        email,
+        passwordHash,
+        role: 'CLIENTE',
+      },
+    });
   }
 
   return {
