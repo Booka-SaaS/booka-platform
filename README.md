@@ -163,6 +163,10 @@ Nao insira secrets reais nos exemplos.
 
 Detalhes de branches, commits e decisoes estao em `docs/SINCRONIZACAO_REPOSITORIOS.md`.
 
+## Checklist academico
+
+O checklist solicitado pelo professor esta consolidado em `docs/CHECKLIST_PROFESSOR.md`, com status e evidencias dos 10 itens: Web API com dois frameworks, SOAP/REST, microsservicos, API Gateway, autenticacao/autorizacao, testes, automacao, seguranca e arquitetura.
+
 ## Status atual
 
 Estado sincronizado e validado em 11/06/2026 na branch `chore/atualizacao-completa-monorepo`. O frontend e o backend receberam commits novos dos repositorios de origem; o mobile foi conferido e permanece no mesmo commit ja consolidado anteriormente.
